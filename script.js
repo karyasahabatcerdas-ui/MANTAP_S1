@@ -3175,7 +3175,7 @@ function renderAssetTableIncremental(sheetPass, data) {
  //  const newDataLength = data.length;
 // }  
 
-  for (let i = 1; a < data.length; i++) {
+  for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const rowIdx = a - 1;
     
