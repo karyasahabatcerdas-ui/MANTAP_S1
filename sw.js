@@ -1,10 +1,10 @@
 const CACHE_NAME = 'mantap-ksc-Sv1';
 const urlsToCache = [
-  '/MANTAP_S/',
-  '/MANTAP_S/index.html',
-  '/MANTAP_S/manifest.json',
-  '/MANTAP_S/icon-192.png',
-  '/MANTAP_/icon-512.png'
+  '/MANTAP_S1/',
+  '/MANTAP_S1/index.html',
+  '/MANTAP_S1/manifest.json',
+  '/MANTAP_S1/icon-192.png',
+  '/MANTAP_S1/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
