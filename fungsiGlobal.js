@@ -31,7 +31,7 @@ window._LOCKED_BLOB = "";
 
   // 1. DEFINISIKAN URL LENGKAP (Pastikan ada tanda / dan ?t= di akhir)
   //const GITHUB_URL = `${GITHUB_BASE}?t=${new Date().getTime()}`;
-  const GITHUB_BASE = "https://raw.githubusercontent.com/karyasahabatcerdas-ui/MANTAP_S/main/mainframe_data.json";
+  const GITHUB_BASE = "https://raw.githubusercontent.com/karyasahabatcerdas-ui/MANTAP_S1/main/mainframe_data.json";
 
 
 // ===============================[AWAL HELPER PENERJEMAH RAM]=========================
