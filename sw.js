@@ -3,8 +3,8 @@ const urlsToCache = [
   '/MANTAP_S1/',
   '/MANTAP_S1/index.html',
   '/MANTAP_S1/manifest.json',
-  '/MANTAP_S1/icon-192.png',
-  '/MANTAP_S1/icon-512.png'
+  '/MANTAP_S1/assets/icons/ptksc192.ico',
+  '/MANTAP_S1/assets/icons/ptksc256.ico'
 ];
 
 self.addEventListener('install', event => {
