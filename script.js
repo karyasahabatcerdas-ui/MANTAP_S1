@@ -3177,7 +3177,7 @@ function renderAssetTableIncremental(sheetPass, data) {
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
-    const rowIdx = a - 1;
+    const rowIdx = i - 1;
     
     // cek jika sheetpass =""
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
