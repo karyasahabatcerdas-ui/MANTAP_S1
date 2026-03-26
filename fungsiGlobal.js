@@ -1,5 +1,5 @@
 // Variabel Global
-const urlGAS = APPSCRIPT_URL;
+const urlGAS = APPSCRIPT_URL; // Gunakan URL yang dibentuk dari APPSCRIPT_ID di index.html
 let cachedAssetTypes = null; 
 currentCategory = '';  // deteksi kamera QR atau QR
 html5QrCode = null; // Instance Html5Qrcode untuk scan file QR
@@ -19,8 +19,6 @@ let activeRowData = []; // Global variable
 let dataToImport = []; // Memory penampung sementara
 let lastValidatedData = []; 
 let assetImages = [];
-
-const GAS_URL = APPSCRIPT_URL; // Gunakan URL yang dibentuk dari APPSCRIPT_ID di index.html
 
 // 1. Variabel Utama (Hanya simpan bungkus Base64)
 window.APP_STORE_BLOB = ""; 
