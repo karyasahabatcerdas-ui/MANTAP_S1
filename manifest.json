@@ -8,19 +8,19 @@
   "theme_color": "#4285f4",
   "icons": [
     {
-      "src": "https://lh3.googleusercontent.com/d/1d5nqmdS0tQh3gGQaGn2Cm-PdOue8dz6V=s192?.ico",
+      "src": "./assets/icons/ptksc192.ico.ico",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://lh3.googleusercontent.com/d/1d5nqmdS0tQh3gGQaGn2Cm-PdOue8dz6V=s192?.ico",
+      "src": "./assets/icons/ptksc192.ico",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://lh3.googleusercontent.com/d/1SEU6SxoP1ASqKx6ZvECrp2idpwN63bVG=s512?.ico",
+      "src": "./assets/icons/ptksc256.ico",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
