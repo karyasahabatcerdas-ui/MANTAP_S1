@@ -3378,6 +3378,7 @@ async function loadAssetDataView(sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Mengambil data dan meratakannya
     let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
+    //let dataRaw = getAsset()
 
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
     data = dataRaw.filter((row, index) => {

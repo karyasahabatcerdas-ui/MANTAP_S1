@@ -149,7 +149,7 @@ Object.defineProperty(window, 'APP_STORE', {
 
 // 4. Helper (Tetap panggil bongkarRAM agar On-Demand)
 const getAsset = (name) => (bongkarRAM().assets || {})[name] || [];
-const getRef   = (name) => (bongkarRAM().sellect || bongkarRAM().assets || {})[name] || []; //sdh pakai spreadsheet sendiri
+const getRef   = (name) => (bongkarRAM().select || bongkarRAM().assets || {})[name] || []; //sdh pakai spreadsheet sendiri
 const getMaint = (name) => (bongkarRAM().maintenance || bongkarRAM().assets || {})[name] || [];
 const getApp   = (name) => (bongkarRAM().app || bongkarRAM().assets || {})[name] || [];
 
