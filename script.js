@@ -3163,6 +3163,7 @@ try {
 function renderAssetTableIncremental(sheetPass, data) {
   const tbody = document.getElementById('assetBody');
   const masterCheck = document.getElementById('checkAllAsset');
+  const idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
   const typeRefs = getRef("Type_Asset").slice(1); 
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
@@ -3174,21 +3175,25 @@ function renderAssetTableIncremental(sheetPass, data) {
  //  const newDataLength = data.length;
 // }  
 
-  for (let i = 1; i < data.length; i++) {
+  for (let i = 1; a < data.length; i++) {
     const rowData = data[i];
-    const rowIdx = i - 1;
+    const rowIdx = a - 1;
+    
     // cek jika sheetpass =""
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
     if (!sheetPass) {
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
-      const firstLetter = (rowData[0] || "").charAt(0).toLowerCase();
+      idName =rowData[0] ;
+      const firstLetter = (idName || "").charAt(0).toLowerCase();
       
       // Cari di Type_Asset mana yang kodenya cocok
       const match = typeRefs.find(ref => ref[0].toLowerCase() === firstLetter);
-      sheetName = match ? match[1] : "Unknown"; 
+      sheetName = match ? match[1] : "Unknown";
+
     
     } else {
       sheetName = sheetPass;
+      idName = rowData[0]
     }
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
@@ -3204,11 +3209,11 @@ function renderAssetTableIncremental(sheetPass, data) {
 
     // B. PASTIKAN CLASS SAMA (Gunakan 'assetCheck' sesuai fungsi toggle kita)
     const rowHtml = `
-      <td style="padding:5px; text-align:center;"><input type="checkbox" class="asetCheck" value="${i+1}"></td>
+      <td style="padding:5px; text-align:center;"><input type="checkbox" class="asetCheck" value="${a+1}"></td>
       <td style="padding:5px; font-weight:bold;"> ${rowData[0]} <br>${rowData[2]}<br></td>
       <td style="padding:5px;"> ${rowData[3]} </td>      
       <td style="padding:5px;">
-        <button onclick="openAssetDetail('${sheetName}', ${i+1})" style="background:${badgeColor}; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer;">
+        <button onclick="openAssetDetail('${sheetName}', ${idName})" style="background:${badgeColor}; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer;">
           <i class="fas fa-eye"></i> 
           Detil
           <span style="background:${badgeColor}; color:white;">${rowData[4]}</span>
@@ -3527,7 +3532,7 @@ function renderViewDropdown(types) {
 /**
  * [FUNGSI UTAMA: BUKA MODAL DETIL ASET - VERSI GET]
  */
-async function openAssetDetail(sheetName, row) {
+async function openAssetDetail(sheetName, idName) {
   // --- 1. RESET & PERSIAPAN UI ---
   const btnSave = document.getElementById('btnSaveAsset');
   const btnBatal = document.getElementById('btnCancelAsset');
@@ -3555,27 +3560,8 @@ async function openAssetDetail(sheetName, row) {
   document.getElementById('as_status').disabled = false;
 
   // Set ID baris ke hidden input agar tahu baris mana yang akan di-update nanti
-  document.getElementById('assetRowIdx').value = row;
+  //document.getElementById('assetRowIdx').value = row;
   document.getElementById('as_type').value = sheetName;
-
-  // --- 2. AMBIL DATA DARI DATABASE (GOOGLE APPS SCRIPT) ---
-  // Pastikan variabel global APPSCRIPT_URL sudah ada
-  //if (typeof APPSCRIPT_URL === 'undefined' || !APPSCRIPT_URL) {
-  //    return alert("Error: URL Script (GAS) tidak ditemukan!");
-  //}
-
-  // Kita tidak perlu baseUrl dari iframe lagi, langsung pakai variabel global
-  //const urlGAS = APPSCRIPT_URL;
-  
-  // Susun Query Parameter untuk doGet
-  //const params = new URLSearchParams({
-  //  action: 'getSingleAssetData',
-  //  sheetName: sheetName,
-  //  row: row
-  //});
-
-  //const finalUrl = `${urlGAS}?${params.toString()}`;
-  //console.log("Fetching Data (GET):", finalUrl);
 
   // Indikator loading pada input nama
   const inputNama = document.getElementById('as_nama');
@@ -3583,16 +3569,10 @@ async function openAssetDetail(sheetName, row) {
   inputNama.value = "Memuat data...";
 
   try {
-    //const response = await fetch(finalUrl);
+       
     
-    //if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
-
-    const data = getAsset(sheetName)[row-1];
-    //console.log("Data aset untuk view:", data);
-    //console.log('namasheet :', sheetName);
-    //const data = await response.json();
-    //console.log("table data di openassetdetai: ");
-    //console.table(data);
+    const dataRaw = getAsset(sheetName);
+    const data = dataRaw.filter(item => item[0] === idName);
 
     // Cek jika data kosong atau ada error dari server
     if (!data || data.length === 0 || data.error) {
