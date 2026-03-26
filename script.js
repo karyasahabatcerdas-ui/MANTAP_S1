@@ -3213,7 +3213,7 @@ function renderAssetTableIncremental(sheetPass, data) {
       <td style="padding:5px; font-weight:bold;"> ${rowData[0]} <br>${rowData[2]}<br></td>
       <td style="padding:5px;"> ${rowData[3]} </td>      
       <td style="padding:5px;">
-        <button onclick="openAssetDetail('${sheetName}', ${idName})" style="background:${badgeColor}; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer;">
+        <button onclick="openAssetDetail('${sheetName}', '${idName}')" style="background:${badgeColor}; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer;">
           <i class="fas fa-eye"></i> 
           Detil
           <span style="background:${badgeColor}; color:white;">${rowData[4]}</span>
@@ -3568,8 +3568,7 @@ async function openAssetDetail(sheetName, idName) {
   const originalPlaceholder = inputNama.placeholder;
   inputNama.value = "Memuat data...";
 
-  try {
-       
+  try {      
     
     const dataRaw = getAsset(sheetName);
     const data = dataRaw.filter(item => item[0] === idName);
