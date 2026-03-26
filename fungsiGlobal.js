@@ -129,7 +129,7 @@ function bukaGembokSakti(unlockCode) {
 
 // 2. Mesin Pembongkar (Internal)
 const bongkarRAM = () => {
-  if (!window.APP_STORE_BLOB) return { assets: {}, app: {}, reference: {} };
+  if (!window.APP_STORE_BLOB) return { assets: {}, app: {}, maint: {}, sellect: {} };
   try {
     // Bongkar Base64 (atob) dan ubah jadi Objek (JSON.parse)
     // Kita panggil data 'blob' dari dalam JSON hasil fetch GitHub
@@ -137,7 +137,7 @@ const bongkarRAM = () => {
     return JSON.parse(dataMentah);
   } catch (e) {
     console.error("Gagal bongkar sandi RAM:", e);
-    return { assets: {}, app: {}, reference: {} };
+    return { assets: {}, app: {}, maint :{}, sellect: {} };
   }
 };
 
@@ -149,7 +149,7 @@ Object.defineProperty(window, 'APP_STORE', {
 
 // 4. Helper (Tetap panggil bongkarRAM agar On-Demand)
 const getAsset = (name) => (bongkarRAM().assets || {})[name] || [];
-const getRef   = (name) => (bongkarRAM().reference || bongkarRAM().assets || {})[name] || [];
+const getRef   = (name) => (bongkarRAM().sellect || bongkarRAM().assets || {})[name] || []; //sdh pakai spreadsheet sendiri
 const getMaint = (name) => (bongkarRAM().maintenance || bongkarRAM().assets || {})[name] || [];
 const getApp   = (name) => (bongkarRAM().app || bongkarRAM().assets || {})[name] || [];
 
