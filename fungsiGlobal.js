@@ -318,7 +318,7 @@ async function populateAllDropdowns() {
 
     const sheetName = DROPDOWN_MAP[id];
     // Ambil data dari gudang RAM kita
-    const data = window.APP_STORE.reference[sheetName] || []; 
+    const data = window.APP_STORE.select[sheetName] || []; 
 
     if (data && data.length > 1) {
       let options = `<option value="">-- Pilih ${sheetName.replace(/_/g, ' ')} --</option>`;
