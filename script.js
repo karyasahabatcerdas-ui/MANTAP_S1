@@ -3266,8 +3266,6 @@ async function updateQRCode(type, id) {
   // 1. Sanitasi: Ambil bagian pertama saja jika ada tanda "-" (Mencegah Tipe-ID-Tipe-ID)
   let cleanType = type.split('-')[0].trim();
   let cleanId = id.toString().split('-')[0].trim();
-  console.log("type :", type);
-  console.log("id :", id);
   
   // 2. Bentuk string QR yang baku
   const code = cleanType + "-" + cleanId;
@@ -3557,8 +3555,8 @@ async function openAssetDetail(sheetName, idName) {
   }
 
   // Buka kunci input (Editable mode)
-  document.getElementById('as_nama').readOnly = false;
-  document.getElementById('as_lokasi').readOnly = false;
+  document.getElementById('as_nama').disabled = false;
+  document.getElementById('as_lokasi').disabled = false;
   document.getElementById('as_status').disabled = false;
 
   // Set ID baris ke hidden input agar tahu baris mana yang akan di-update nanti
@@ -3585,7 +3583,7 @@ async function openAssetDetail(sheetName, idName) {
     document.getElementById('as_id').value     = data[0] || ""; 
     document.getElementById('as_nama').value   = data[2] || "";   
     document.getElementById('as_lokasi').value = data[3] || ""; 
-    document.getElementById('as_status').value = data[4] || "Baik";
+    document.getElementById('as_status').value = data[4].toLowerCase() || "baik";
 
     // Mapping Foto (Kolom F / Index 5)
     const photoString = data[5] ? data[5].toString() : ""; 
