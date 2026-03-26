@@ -3209,7 +3209,7 @@ function renderAssetTableIncremental(sheetPass, data) {
 
     // B. PASTIKAN CLASS SAMA (Gunakan 'assetCheck' sesuai fungsi toggle kita)
     const rowHtml = `
-      <td style="padding:5px; text-align:center;"><input type="checkbox" class="asetCheck" value="${a+1}"></td>
+      <td style="padding:5px; text-align:center;"><input type="checkbox" class="asetCheck" value="${i+1}"></td>
       <td style="padding:5px; font-weight:bold;"> ${rowData[0]} <br>${rowData[2]}<br></td>
       <td style="padding:5px;"> ${rowData[3]} </td>      
       <td style="padding:5px;">
