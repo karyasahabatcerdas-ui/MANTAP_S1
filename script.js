@@ -3571,7 +3571,8 @@ async function openAssetDetail(sheetName, idName) {
   try {      
     
     const dataRaw = getAsset(sheetName);
-    const data = dataRaw.filter(item => item[0] === idName);
+    //const data = dataRaw.filter(item => item[0] === idName);
+     const data = dataRaw.find(item => item[0] === idName);
 
     // Cek jika data kosong atau ada error dari server
     if (!data || data.length === 0 || data.error) {
