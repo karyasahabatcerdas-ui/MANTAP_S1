@@ -3092,8 +3092,8 @@ function renderAllTypeDropdowns(types) {
  * ====================================================================================================================
  */
 async function loadAssetData(sheetName_val) {
-  let data; // Siapkan variabel penampung
-  let sheetName; // Variabel untuk nama sheet yang akan dipakai di render
+  let data=[]; // Siapkan variabel penampung
+  let sheetName=""; // Variabel untuk nama sheet yang akan dipakai di render
   const tbody = document.getElementById('assetBody');
 
   if (!sheetName_val) {
@@ -3163,7 +3163,7 @@ try {
 function renderAssetTableIncremental(sheetPass, data) {
   const tbody = document.getElementById('assetBody');
   const masterCheck = document.getElementById('checkAllAsset');
-  const idName ="" ; //ID_Asset
+  let idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
   const typeRefs = getRef("Type_Asset").slice(1); 
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
