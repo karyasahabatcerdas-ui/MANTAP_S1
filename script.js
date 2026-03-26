@@ -3266,6 +3266,8 @@ async function updateQRCode(type, id) {
   // 1. Sanitasi: Ambil bagian pertama saja jika ada tanda "-" (Mencegah Tipe-ID-Tipe-ID)
   let cleanType = type.split('-')[0].trim();
   let cleanId = id.toString().split('-')[0].trim();
+  console.log("type :", type);
+  console.log("id :", id);
   
   // 2. Bentuk string QR yang baku
   const code = cleanType + "-" + cleanId;
@@ -3595,7 +3597,8 @@ async function openAssetDetail(sheetName, idName) {
     if (typeof updateImageSlider === 'function') updateImageSlider();
     if (typeof updateQRCode === 'function') {
       // data[0] adalah ID Aset untuk generate QR
-      updateQRCode(sheetName, data[0]);
+      //updateQRCode(sheetName, data[0]);
+      updateQRCode(sheetName, idName);
     }
 
     // Tampilkan Modal setelah semua data siap
