@@ -1,0 +1,267 @@
+/* ==========================================================================
+   MASTER CSS: LEFTBAR - INDUSTRIAL STEALTH
+   ========================================================================== */
+
+/* --- [2. leftbar MAIN CONTAINER] --- */
+.leftbar-container {
+  position: relative;
+  background: var(--bg-main);
+  border-radius: 0 !important;
+  z-index: 10;
+  border-right: 1px solid rgba(56, 189, 248, 0.1);
+  overflow: visible;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 !important;
+  margin: 0;
+  transition: width var(--transition-speed) ease;
+  width: 180px; /* Lebar default saat terbuka */
+}
+
+
+/* State saat mengecil */
+.leftbar-container.collapsed {
+  width: 80px;
+  min-width: 80px;
+}
+
+/* Layer penutup agar teks tidak tertutup cahaya dari bawah */
+.leftbar-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: -1;
+  border-radius: 0;
+}
+
+.leftbar-container::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  right: -4px; 
+  width: 8px;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(56, 189, 248, 1) 15%,  /* Opacity 1 agar padat */
+    rgba(72, 255, 0, 1) 30%,
+    rgba(122, 0, 255, 1) 45%,
+    rgba(255, 0, 0, 1) 60%,
+    transparent 75%            /* Jarak transparan diperkecil */
+  );
+  background-size: 100% 200%;
+  filter: blur(1px);           /* Blur dikurangi agar cahaya lebih tegas/padat */
+  opacity: 1;                  /* Full solid */
+  /* UBAH: linear agar kecepatan stabil, bukan ease-in-out */
+  animation: patroli-cahaya 3s linear infinite; 
+}
+
+@keyframes patroli-cahaya {
+  /* UBAH: Dari posisi -100% ke 100% agar mengalir searah */
+  from { background-position-y: -100%; }
+  to { background-position-y: 100%; }
+}
+
+
+/* Flash effect saat navigasi (diaktifkan via JS) */
+.side-glow-flash::before {
+  opacity: 1 !important;
+  filter: blur(8px) !important;
+  width: 15px !important;
+  right: -8px !important;
+  background: linear-gradient(
+    to bottom, 
+    transparent 0%, 
+    #38bdf8 10%, 
+    #48ff00 20%, 
+    #7a00ff 30%, 
+    #ff0000 40%, 
+    transparent 50%
+  ) !important;
+  transition: 0s !important;
+}
+
+
+/* --- [4. HEADER & PROFILE SETTINGS] --- */
+.leftbar-header-title {
+  color: var(--neon-blue);
+  font-weight: 500;
+  padding: 20px;
+  background: rgba(30, 41, 59, 0.5);
+  margin: 0;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.profile-wrapper {
+  text-align: center; 
+  margin: 15px 0;
+}
+
+.profile-img-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2980b9;
+  display: block;
+  margin: 0 auto;
+  transition: all var(--transition-speed) ease;
+}
+
+/* --- [5. MENU ITEMS & HOVER EFFECTS] --- */
+.menu-group { display: flex; flex-direction: column; }
+.bottom-nav { margin-top: auto; }
+
+.menu-item {
+  color: var(--neon-blue);
+  font-weight: 500;
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  
+}
+
+.menu-item:hover {
+  background: rgba(56, 75, 248, 0.329);
+  /*color: var(--text-bright);*/
+  border-left: 3px solid var(--neon-blue);
+  color: var(--neon-blue); opacity: 0.7;
+  opacity: 1; filter: drop-shadow(0 0 5px var(--neon-blue));
+}
+
+.menu-item.active {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--neon-blue);
+  border-left: 3px solid var(--neon-blue);
+  font-weight: 900;
+  opacity: 1; filter: drop-shadow(0 0 5px var(--neon-blue));
+}
+
+.menu-item i {
+  width: 20px; text-align: center; font-size: 18px;
+  color: var(--neon-blue); opacity: 0.7;
+}
+
+.menu-item:hover i {
+  opacity: 1; filter: drop-shadow(0 0 5px var(--neon-blue));
+}
+
+.menu-item:active {
+  background: rgba(52, 152, 219, 0.3) !important;
+  box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+/* --- [6. BADGES & SPECIAL BUTTONS] --- */
+.badge-admin { background: #ef4444; color: #fff; padding: 2px 5px; border-radius: 4px; font-size: 10px; margin-left: 5px; }
+.badge-sys { background: orange; color: #fff; padding: 2px 4px; border-radius: 4px; font-size: 9px; margin-left: 5px; }
+
+.btn-ui-toggle {
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--neon-blue);
+  padding: 15px; width: 100%; border: none; cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-logout {
+  background: var(--neon-red) !important;
+  color: var(--text-bright) !important;
+  margin-top: auto; border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-logout:hover { background: var(--neon-red-glow) !important; }
+
+/* --- [7. COLLAPSED ADJUSTMENTS] --- */
+.collapsed .leftbar-header-title, 
+.collapsed span, 
+.collapsed sup { display: none !important; }
+
+.collapsed .profile-img-container { width: 35px !important; height: 35px !important; }
+
+/*.collapsed .menu-item, */
+.collapsed .btn-ui-toggle, 
+.collapsed .btn-logout {
+  justify-content: center; padding: 15px 0;
+}
+
+/* --- [8. RESPONSIVE MOBILE SETTINGS] --- */
+/* Default: Sembunyikan toggle mobile di PC */
+/* --- [8. RESPONSIVE MOBILE: DRAWER MODE] --- */
+/* Sembunyikan Floating Profile Toggle secara default di PC */
+.mobile-only-toggle { display: none; }
+
+.admin-section{
+  display: none;
+
+}
+
+
+   /* Responsif Mobile Portrait */
+  @media (max-width: 768px) {
+
+  /* 2. Ubah leftbar Menjadi Drawer Samping */
+  .leftbar-container {
+    position: fixed !important;
+    left: -120px; /* Sembunyi di luar layar kiri niar kelihatan light glownya makin besar minus makin ilang*/
+    top: 0;
+    width: 130px !important; /* Lebar mantap untuk jari di HP */
+    height: 100vh;
+    z-index: 1000;
+    /* Gunakan fallback jika color-mix tidak jalan di HP lama */
+    background-color: var(--bg-main) !important; 
+    opacity: 0.85; /* Alternatif jika color-mix gagal */ 
+  }
+  
+    /* 2. Item Menu (Anak) */
+  .leftbar-container .menu-item {
+    display: flex !important;         /* Gunakan flex agar ikon & teks bisa diatur */
+    flex-direction: row !important;    /* Ikon dan Teks sejajar ke samping */
+    width: 100% !important;           /* Area sentuh FULL ke kanan */
+    justify-content: flex-start !important; /* PAKSA SEMUA KE KIRI */
+    align-items: center !important;    /* Tengah secara vertikal */
+    padding: 12px 10px !important;    /* Beri jarak dari pinggir kiri */
+    box-sizing: border-box;           /* Penting agar padding tidak merusak 100% */
+    text-align: left !important;      /* Fallback untuk teks */
+  }
+  
+  /* Munculkan leftbar saat Active */
+  .leftbar-container.mobile-open {
+    left: 0 !important;
+    padding-bottom: 200px !important; /* Agar menu logout tidak tertutup jari, makin besar makin ke atas*/
+  }
+
+  /* 3. PERBAIKAN VISUAL: Paksa Teks Muncul di HP */
+  /* Meskipun di PC sedang mode '.collapsed' (ikon saja), 
+     di HP kita paksa teks 'span' dan judul 'h3' tetap muncul lebar. */
+  .leftbar-container.collapsed span { display: inline !important; }
+  .leftbar-container.collapsed h3 { display: block !important; }
+  
+  /* Paksa Foto Profil Atas Kembali Besar agar Tidak Kekecilan */
+  /*
+  .leftbar-container.collapsed .profile-img-container {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 15px auto !important;
+  }*/
+
+  /* 4. Sembunyikan Tombol Panah Atas (<<<) di HP */
+  /* Kita tidak butuh ini di HP karena sudah ada Floating Profile di bawah. */
+  .btn-ui-toggle { display: none !important; }
+
+  .leftbar-header-title{
+    font-size: 0.85rem;
+
+  }
+
+}
+
+    
