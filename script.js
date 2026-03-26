@@ -3583,7 +3583,12 @@ async function openAssetDetail(sheetName, idName) {
     document.getElementById('as_id').value     = data[0] || ""; 
     document.getElementById('as_nama').value   = data[2] || "";   
     document.getElementById('as_lokasi').value = data[3] || ""; 
-    document.getElementById('as_status').value = data[4].toLowerCase() || "baik";
+    document.getElementById('as_status').value = data[4] || "baik";
+
+    console.log("isi data[0] : ",data[0]);
+    console.log("isi data[2] : ",data[2]);
+    console.log("isi data[3] : ",data[3]);
+    console.log("isi data[4] : ",data[4]);
 
     // Mapping Foto (Kolom F / Index 5)
     const photoString = data[5] ? data[5].toString() : ""; 
