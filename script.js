@@ -3168,12 +3168,8 @@ function renderAssetTableIncremental(sheetPass, data) {
   const typeRefs = getRef("Type_Asset").slice(1); 
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
   if (masterCheck) masterCheck.checked = false;
-  // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong lagi.
-// if (sheetPass !== "") {
+  // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
     const newDataLength = data.length - 1;
-//  } else {
- //  const newDataLength = data.length;
-// }  
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
@@ -3193,7 +3189,7 @@ function renderAssetTableIncremental(sheetPass, data) {
     
     } else {
       sheetName = sheetPass;
-      idName = rowData[0]
+      idName = rowData[0];
     }
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
@@ -3206,7 +3202,6 @@ function renderAssetTableIncremental(sheetPass, data) {
     };
     // 3. Tentukan warna (Default ke abu-abu jika status tidak dikenal)
     let badgeColor = colors[status] || "#7f8c8d";
-
     // B. PASTIKAN CLASS SAMA (Gunakan 'assetCheck' sesuai fungsi toggle kita)
     const rowHtml = `
       <td style="padding:5px; text-align:center;"><input type="checkbox" class="asetCheck" value="${i+1}"></td>
@@ -3441,15 +3436,11 @@ async function loadAssetDataView(sheetName_val) {
 function renderAssetTableIncrementalView(sheetPass, data) {
   const tbody = document.getElementById('viewAssetBody');
   const existingRows = tbody.rows;
+  let idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
   const typeRefs = getRef("Type_Asset").slice(1); 
-    // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong lagi.
-  //if (sheetPass !== "") {
+    // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
       const newDataLength = data.length - 1;
-   // } else {
-   // const newDataLength = data.length;
- // }  
-
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
@@ -3458,7 +3449,8 @@ function renderAssetTableIncrementalView(sheetPass, data) {
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
     if (!sheetPass) {
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
-      const firstLetter = (rowData[0] || "").charAt(0).toLowerCase();
+      idName =rowData[0] ;
+      const firstLetter = (idName  || "").charAt(0).toLowerCase();
       
       // Cari di Type_Asset mana yang kodenya cocok
       const match = typeRefs.find(ref => ref[0].toLowerCase() === firstLetter);
@@ -3466,6 +3458,7 @@ function renderAssetTableIncrementalView(sheetPass, data) {
     
     } else {
       sheetName = sheetPass;
+      idName = rowData[0];
     }
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
@@ -3482,7 +3475,7 @@ function renderAssetTableIncrementalView(sheetPass, data) {
     const rowHtml = `
       <td>${rowData[0]}</td><td>${rowData[2]}</td><td>${rowData[3]}</td>
       <td>
-        <button onclick="openAssetDetailView('${sheetName}', ${i+1})" style="background:${badgeColor}; color:white; border:none; padding:5px; border-radius:3px; cursor:pointer;">
+        <button onclick="openAssetDetailView('${sheetName}','${idName}')" style="background:${badgeColor}; color:white; border:none; padding:5px; border-radius:3px; cursor:pointer;">
           <i class="fas fa-search"></i> 
           Lihat
           <span style="background:${badgeColor}; color:white;">${rowData[4]}</span>
@@ -3586,10 +3579,10 @@ async function openAssetDetail(sheetName, idName) {
     document.getElementById('as_lokasi').value = data[3] || ""; 
     document.getElementById('as_status').value = data[4] || "baik";
 
-    console.log("isi data[0] : ",data[0]);
-    console.log("isi data[2] : ",data[2]);
-    console.log("isi data[3] : ",data[3]);
-    console.log("isi data[4] : ",data[4]);
+    //console.log("isi data[0] : ",data[0]);
+    //console.log("isi data[2] : ",data[2]);
+    //console.log("isi data[3] : ",data[3]);
+    //console.log("isi data[4] : ",data[4]);
 
     // Mapping Foto (Kolom F / Index 5)
     const photoString = data[5] ? data[5].toString() : ""; 
@@ -3626,9 +3619,9 @@ async function openAssetDetail(sheetName, idName) {
  * Pastikan fungsi openAssetDetail sudah benar-benar berjalan dan mengisi semua data sebelum kita kunci inputnya, jadi kita beri sedikit jeda (setTimeout) untuk memastikan urutan eksekusi yang benar.
  *==========================================================================
  */
-function openAssetDetailView(sheetName, row) {
+function openAssetDetailView(sheetName, idName) {
   // 1. Jalankan fungsi load data utama dulu
-  openAssetDetail(sheetName, row);
+  openAssetDetail(sheetName, idName);
 
   // 2. Gunakan sedikit jeda (100ms) agar fungsi utama selesai merender, 
   // baru kemudian kita "Sikat" tombol-tombolnya untuk mode View
@@ -3636,8 +3629,8 @@ function openAssetDetailView(sheetName, row) {
     console.log("🔒 Mengaktifkan Mode Read-Only...");
 
     // Kunci Input
-    document.getElementById('as_nama').readOnly = true;
-    document.getElementById('as_lokasi').readOnly = true;
+    document.getElementById('as_nama').disabled = true;
+    document.getElementById('as_lokasi').disabled = true;
     document.getElementById('as_status').disabled = true;
     
     const btnSave = document.getElementById('btnSaveAsset');
@@ -3666,7 +3659,7 @@ function openAssetDetailView(sheetName, row) {
       const label = gallery.querySelector('label');
       if (label) label.innerText = "DOKUMENTASI FOTO (VIEW ONLY)";
     }
-  }, 2000); // 200ms cukup untuk memastikan openAssetDetail sudah jalan
+  }, 200); // 200ms cukup untuk memastikan openAssetDetail sudah jalan
 }
 
 
@@ -4161,7 +4154,7 @@ function prevAssetImg() {
 }
 
 function closeAssetModal() {
-  document.getElementById('assetDetailModal').style.display = 'none';
+  //document.getElementById('assetDetailModal').style.display = 'none';
 
   const btnSave = document.getElementById('btnSaveAsset');
   const btnBatal = document.getElementById('btnCancelAsset');
@@ -4176,8 +4169,8 @@ function closeAssetModal() {
   }
 
   // Balikkan input ke mode Edit
-  document.getElementById('as_nama').readOnly = false;
-  document.getElementById('as_lokasi').readOnly = false;
+  document.getElementById('as_nama').disabled = false;
+  document.getElementById('as_lokasi').disabled = false;
   document.getElementById('as_status').disabled = false;
 
   // --- BUKA/RESET KUNCI DI SINI ---
@@ -4188,6 +4181,8 @@ function closeAssetModal() {
     const label = gallery.querySelector('label');
     if (label) label.innerText = "KELOLA FOTO ASET";
   }
+
+  document.getElementById('assetDetailModal').style.display = 'none';
 }
 
 
