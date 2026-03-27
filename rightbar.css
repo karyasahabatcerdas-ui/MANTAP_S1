@@ -52,7 +52,7 @@
 .page h3 {
   /* --- TAMBAHKAN INI --- */
   position: sticky; /* Membuatnya menempel */
-  top: 10;           /* Menempel di bagian paling atas kontainer .page 
+  top: 3.5rem;           /* Menempel di bagian paling atas kontainer .page 
                         agak ke bawah sedikit */
   z-index: 10;      /* Angka lebih tinggi agar berada di atas isi tabel saat di-scroll */
   /* --------------------- */
