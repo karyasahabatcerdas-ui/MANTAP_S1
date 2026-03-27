@@ -296,7 +296,7 @@ const DROPDOWN_MAP = {
   'm_state':            'Status_Maint',
   'maint_id_jadwal':    'ID_Jadwal',
   'as_status':          'Status_Asset',
-  'm_status':           'Status_Maint'
+  'm_status':           'Status_User'
 };
 
 

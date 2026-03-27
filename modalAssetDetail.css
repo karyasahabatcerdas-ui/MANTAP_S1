@@ -37,7 +37,7 @@
 
 /* TOMBOL TIMBUL LOGIC (SESUAI ROOT) */
 .btn-timbul {
-  border: none; border-radius: 8px; padding: 12px;
+  border: none; border-radius: 8px; padding: 5px;
   font-weight: bold; cursor: pointer; color: #fff;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: transform 0.2s, box-shadow 0.2s;
