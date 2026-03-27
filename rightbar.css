@@ -168,7 +168,8 @@
   /* GANTI INI: Agar bisa scroll di dalam container ini */
   overflow-y: auto;
   /* overflow: hidden; */
-  margin-top: 1rem;
+  margin-top: 0rem;
+  height: 600px;
 }
 
 .tabel-main-content {
@@ -177,7 +178,7 @@
   border-collapse: collapse;
   /* border-spacing: 0;  */
   background: transparent;
-  height: 600px;
+  
 }
 
 .tabel-main-content thead th {
