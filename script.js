@@ -3283,9 +3283,9 @@ async function updateQRCode(type, id) {
 
 async function openAddAssetModal() {
   // 1. Ambil Tipe Aset yang dipilih
-  const type = document.getElementById('assetTypeSelect')?.value || "";
+  const typeVal = document.getElementById('assetTypeSelect')?.value || "";
 
-  if (!type) {
+  if (!typeVal) {
     return Swal.fire({
       title: "Pilih Tipe!",
       text: "Pilih Tipe Aset dulu bos!",
@@ -3294,6 +3294,11 @@ async function openAddAssetModal() {
       background: "#0f172a", color: "#fff"
     });
   }
+
+  //tambahkan ini untuk memeilih text yang dipilih
+const selectElement = document.getElementById('assetTypeSelect');
+const type = selectElement?.options[selectElement.selectedIndex]?.text || "";
+
 
   try {
     // 2. LOGIKA HITUNG ID DARI RAM (window.APP_STORE)
@@ -3555,7 +3560,7 @@ async function openAssetDetail(sheetName, idName) {
   // Set ID baris ke hidden input agar tahu baris mana yang akan di-update nanti
   //document.getElementById('assetRowIdx').value = row;
   document.getElementById('as_type').value = sheetName;
-  
+
   // Indikator loading pada input nama
   const inputNama = document.getElementById('as_nama');
   const originalPlaceholder = inputNama.placeholder;
