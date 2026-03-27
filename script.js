@@ -3555,7 +3555,7 @@ async function openAssetDetail(sheetName, idName) {
   // Set ID baris ke hidden input agar tahu baris mana yang akan di-update nanti
   //document.getElementById('assetRowIdx').value = row;
   document.getElementById('as_type').value = sheetName;
-
+  
   // Indikator loading pada input nama
   const inputNama = document.getElementById('as_nama');
   const originalPlaceholder = inputNama.placeholder;
@@ -3632,6 +3632,8 @@ function openAssetDetailView(sheetName, idName) {
     document.getElementById('as_nama').disabled = true;
     document.getElementById('as_lokasi').disabled = true;
     document.getElementById('as_status').disabled = true;
+    document.getElementById('as_id').disabled = true;
+    document.getElementById('as_type').disabled = true;
     
     const btnSave = document.getElementById('btnSaveAsset');
     const btnBatal = document.getElementById('btnCancelAsset');
