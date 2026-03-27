@@ -177,6 +177,7 @@
   border-collapse: collapse;
   /* border-spacing: 0;  */
   background: transparent;
+  height: 600px;
 }
 
 .tabel-main-content thead th {
