@@ -45,15 +45,23 @@
 
 /* --- JUDUL HALAMAN (H3) DENGAN RGB ROTATE --- */
 .page h3 {
-  position: relative;
+  /* --- TAMBAHKAN INI --- */
+  position: sticky; /* Membuatnya menempel */
+  top: 0;           /* Menempel di bagian paling atas kontainer .page */
+  z-index: 10;      /* Angka lebih tinggi agar berada di atas isi tabel saat di-scroll */
+  /* --------------------- */
+
+  /* position: relative; */
   background: var(--bg-card);
   color: var(--text-bright) !important;
   font-size: 1.2rem;
   padding: 0.9rem 1.25rem;
   border-radius: 8px;
+  border: 1px solid var(--border-dim);
 
   /* Logika Full Width & Center */
-  display: flex; 
+  display: flex;
+  display: inline-flex;
   justify-content: center; /* Tulisan ke tengah secara horizontal */
   align-items: center;
   width: 100%; /* Memenuhi lebar kontainer */
@@ -61,11 +69,7 @@
 
   margin-bottom: 0.75rem !important; /* Jarak ke komponen di bawahnya dikurangi */
   gap: 12px;
-  z-index: 1;
-  border: 1px solid var(--border-dim);
-
-  display: inline-flex;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .page h3::before {
