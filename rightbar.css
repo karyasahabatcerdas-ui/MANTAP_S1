@@ -165,18 +165,27 @@
   border: 1px solid var(--border-dim);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  /* GANTI INI: Agar bisa scroll di dalam container ini */
+  overflow-y: auto;
+  /* overflow: hidden; */
   margin-top: 1rem;
 }
 
 .tabel-main-content {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  /* border-collapse: separate; */
+  border-collapse: collapse;
+  /* border-spacing: 0;  */
   background: transparent;
 }
 
 .tabel-main-content thead th {
+   /* TAMBAHKAN INI */
+  position: sticky;
+  top: 1.0rem;
+  z-index: 10;
+  /* -------------- */
+
   background: var(--bg-card) !important;
   color: var(--neon-blue);
   font-size: 0.7rem; /* ~11px */
@@ -200,6 +209,15 @@
   color: var(--neon-blue) !important;
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
   cursor: pointer;
+}
+
+/* Biar scrollbar custom muncul juga di tabel (bukan cuma inner-content) */
+.table-responsive-aset::-webkit-scrollbar {
+  width: 6px;
+}
+.table-responsive-aset::-webkit-scrollbar-thumb {
+  background: var(--border-dim);
+  border-radius: 10px;
 }
 
 /* --- CUSTOM SCROLLBAR (Agar Tidak Kaku) --- */
