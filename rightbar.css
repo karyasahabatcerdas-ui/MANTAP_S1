@@ -165,12 +165,19 @@
   border: 1px solid var(--border-dim);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  /* GANTI INI: Agar bisa scroll di dalam container ini */
   overflow-y: auto;
-  /* overflow: hidden; */
   margin-top: 0rem;
-  height: 600px;
+
+  /* SOLUSI DINAMIS: */
+  /* 100vh adalah tinggi layar penuh, kurangi jarak elemen di atasnya */
+  /* Misal tinggi (H3 + Action Bar + Margin) = 250px. 
+     Maka 250px + 25px (jarak bawah) = 275px */
+  height: calc(100vh - 275px); 
+  
+  /* Tambahkan ini agar tidak mepet banget ke bawah layar */
+  margin-bottom: 25px; 
 }
+
 
 .tabel-main-content {
   width: 100%;
