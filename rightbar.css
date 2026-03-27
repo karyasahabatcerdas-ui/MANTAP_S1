@@ -47,7 +47,8 @@
 .page h3 {
   /* --- TAMBAHKAN INI --- */
   position: sticky; /* Membuatnya menempel */
-  top: 0;           /* Menempel di bagian paling atas kontainer .page */
+  top: 10;           /* Menempel di bagian paling atas kontainer .page 
+                        agak ke bawah sedikit */
   z-index: 10;      /* Angka lebih tinggi agar berada di atas isi tabel saat di-scroll */
   /* --------------------- */
 
@@ -95,19 +96,16 @@
   100% { filter: hue-rotate(360deg); }
 }
 
-/**
-.rightbar-action-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 1.5rem;
-  align-items: center;
-}
-*/
-/*awl modif untuk tombol select, search supaya berdampingan */
-
 /* 1. Pastikan Container Utama Bersih */
 .rightbar-action-bar {
+    /* --- LOGIKA STICKY --- */
+  position: sticky;
+  top: 3.5rem; /* Sesuaikan angka ini agar pas di bawah h3 (misal: tinggi h3 + margin) */
+  z-index: 9;  /* Sedikit di bawah z-index h3 (tadi h3 kita set 10) */
+  background: var(--bg-main, #fff); /* WAJIB ada background agar data tabel di bawahnya tidak tembus pandang */
+  padding-bottom: 10px; /* Jarak halus ke data tabel di bawahnya */
+  /* --------------------- */
+
   display: flex;
   flex-wrap: wrap;
   gap: 12px; /* Jarak antar komponen */
