@@ -209,31 +209,47 @@ var Vault = {
   SELECT: {}
 };
 
+var SHEETS = {}; // Biarkan kosong dulu
+
 /**
- * FUNGSI PULLER (Client Side)
- * Menarik satu sheet dan menaruhnya di Vault sesuai Group-nya.
+ * LANGKAH 1: Ambil Definisi Sheet lewat Jalur Resmi
+ */
+async function loadDefinitions() {
+  console.log("🔍 Meminta izin akses daftar sheet via PanggilGAS...");
+  
+  // Gunakan fungsi PanggilGAS milikmu
+  const res = await PanggilGAS({ action: "getDefinitions" });
+
+  if (res && res.status === "success") {
+    SHEETS = res.data; 
+    console.log("✅ Gerbang Terbuka! Daftar Sheet diterima:", SHEETS);
+    return true;
+  } else {
+    console.error("🚫 Akses Ditolak atau Sesi Habis:", res ? res.message : "No Response");
+    return false;
+  }
+}
+
+/**
+ * LANGKAH 2: Pull ke Vault lewat Jalur Resmi
  */
 async function pullToVault(group, sheetName) {
   try {
-    const response = await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "readSheetDirect",
-        payload: { group: group, sheetName: sheetName }
-      })
+    // PanggilGAS otomatis menyertakan userData/token kamu
+    const res = await PanggilGAS({
+      action: "readSheetDirect",
+      payload: { group: group, sheetName: sheetName }
     });
 
-    const res = await response.json();
-    
-    if (res.status === "success") {
-      // Simpan data TERENKRIPSI (Gembok) ke dalam Group yang sesuai
+    if (res && res.status === "success") {
       Vault[group][sheetName] = res.data; 
-      console.log(`📥 [${group}] ${sheetName} tersimpan di Vault.`);
+      console.log(`📥 [${group}] ${sheetName} Berhasil Masuk Vault.`);
     }
   } catch (e) {
-    console.error(`❌ Gagal menarik ${sheetName}:`, e);
+    console.error(`❌ Gagal tarik ${sheetName}:`, e);
   }
 }
+
 
 /**
  * FUNGSI BULK LOAD (Awal Login)
@@ -251,33 +267,7 @@ async function initialSyncAll() {
   console.log("✅ Vault Terisi! Semua data terenkripsi siap di RAM.");
 }
 
-var SHEETS = {}; // Biarkan kosong dulu
 
-async function loadDefinitions() {
-  console.log("🔍 Menghubungi Server di:", APPSCRIPT_URL);
-  
-  try {
-    const response = await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "getDefinitions" })
-    });
-
-    const res = await response.json();
-    console.log("📦 Respon Mentah dari GAS:", res); // LIHAT DI SINI
-
-    if (res.status === "success" && res.data) {
-      SHEETS = res.data; // Sekarang SHEETS di client berisi objek dari GAS
-      console.log("✅ Variabel SHEETS Terisi:", SHEETS);
-      return true;
-    } else {
-      console.warn("⚠️ GAS membalas, tapi status bukan success atau data kosong.");
-      return false;
-    }
-  } catch (e) {
-    console.error("❌ Koneksi Gagal atau URL Salah:", e);
-    return false;
-  }
-}
 
 /**
  * [CLIENT: MESIN RE-AUTH CERDAS - TIME WINDOW + INDIKATOR AURA PROFIL]
@@ -394,11 +384,11 @@ async function panggilGAS(action, payload = {}) {
       return null;
     }
 
-    console.log("panggilGAS dieksekusi" );
-    console.log("status di panggilgas :", res.status);
-    console.log("status di panggilgas :", res.message);
-    console.log("isis payloagd di panggilGAS :", payload);
-    console.table(payload);
+    //console.log("panggilGAS dieksekusi" );
+    //console.log("status di panggilgas :", res.status);
+    //console.log("status di panggilgas :", res.message);
+    //console.log("isis payloagd di panggilGAS :", payload);
+    //console.table(payload);
     return res; 
   } catch (err) {
     console.error("Gagal kontak server:", err);
