@@ -3790,7 +3790,7 @@ if (temp_Asset_Files && temp_Asset_Files.length > 0) {
       assetPayload,
       userData: dataArray // Kita kirim dataArray sebagai userData tambahan untuk di-inject ke sheet
     });
-    console.log("pesan dari server :", res.msg);
+    console.log("pesan dari server :", res.message);
     console.log("pesan dari server :", res.status);
     console.log("assetpayload :",assetPayload);
     console.table(assetPayload);
@@ -3799,7 +3799,7 @@ if (temp_Asset_Files && temp_Asset_Files.length > 0) {
       await Swal.fire({
         title: "Sukses",
         //text: res.data.msg || "Aset berhasil disimpan!",
-        text: res.msg || "Aset berhasil disimpan!",
+        text: res.message || "Aset berhasil disimpan!",
         icon: "success",
         width: '80%',
         background: "#0f172a", color: "#fff"
