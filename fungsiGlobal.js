@@ -218,8 +218,8 @@ async function loadDefinitions() {
   console.log("🔍 Meminta izin akses daftar sheet via PanggilGAS...");
   
   // Gunakan fungsi PanggilGAS milikmu
-  const res = await panggilGAS("getDefinitions", {}
-  );
+  const res = await panggilGAS("getDefinitions", {    
+  });
 
   if (res && res.status === "success") {
     SHEETS = res.data; 
@@ -237,9 +237,10 @@ async function loadDefinitions() {
 async function pullToVault(group, sheetName) {
   try {
     // PanggilGAS otomatis menyertakan userData/token kamu
-    const res = await panggilGAS("readSheetDirect",
-      { group: group, sheetName: sheetName }
-    );
+    const res = await panggilGAS("readSheetDirect", { 
+      group: group, 
+      sheetName: sheetName 
+    });
 
     if (res && res.status === "success") {
       Vault[group][sheetName] = res.data; 
@@ -250,11 +251,84 @@ async function pullToVault(group, sheetName) {
   }
 }
 
+/**
+ * FUNGSI BULK LOAD + PROGRESS BAR + LABEL
+ */
+async function initialSyncAll() {
+  let totalSheet = 0;
+  for (const g in SHEETS) totalSheet += SHEETS[g].length;
+  
+  let progresSekarang = 0;
 
+  // Tampilkan Swal Loading
+  Swal.fire({
+    title: 'Sinkronisasi Database',
+    // Ganti bagian html di Swal.fire tadi dengan ini:
+      html: `
+        <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
+        <div style="width: 100%; background-color: #e9ecef; border-radius: 5px; overflow: hidden; border: 1px solid #ccc;">
+          <div id="swal-progress-bar" style="width: 0%; height: 20px; background-color: #28a745; color: white; text-align: center; transition: width 0.3s;">0%</div>
+        </div>
+        <div id="swal-counter" style="margin-top: 10px;">Memuat data: <b>0</b> / ${totalSheet}</div>
+      `,
+    /*
+    html: `
+      <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
+      <div class="progress" style="height: 20px; margin-bottom: 10px;">
+        <div id="swal-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+             role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+      <div id="swal-counter">Memuat data: <b>0</b> / ${totalSheet}</div>
+    `,
+    */
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  for (const group in SHEETS) {
+    // Tarik data secara paralel per group
+    const janji = SHEETS[group].map(async (name) => {
+      // Update label di Swal tiap kali satu proses mulai
+      const label = document.getElementById('swal-label');
+      if (label) label.innerText = `Sedang mengambil: ${name}...`;
+
+      const ok = await pullToVault(group, name);
+      
+      if (ok) {
+        progresSekarang++;
+        const persen = Math.round((progresSekarang / totalSheet) * 100);
+        
+        // Update Progress Bar & Counter
+        const pb = document.getElementById('swal-progress-bar');
+        const count = document.querySelector('#swal-counter b');
+        if (pb) {
+          pb.style.width = `${persen}%`;
+          pb.innerText = `${persen}%`;
+        }
+        if (count) count.textContent = progresSekarang;
+      }
+    });
+    
+    await Promise.all(janji);
+  }
+
+  // Selesai, tampilkan tombol OK
+  Swal.fire({
+    icon: 'success',
+    title: 'Sinkronisasi Selesai',
+    text: `Berhasil memuat ${progresSekarang} database ke dalam Vault.`,
+    confirmButtonText: 'Lanjutkan ke Dashboard',
+    confirmButtonColor: '#3085d6'
+  });
+}
 /**
  * FUNGSI BULK LOAD (Awal Login)
  * Melakukan perulangan otomatis berdasarkan konstanta SHEETS kamu.
  */
+/*
 async function initialSyncAll() {
   console.log("⏳ Memulai sinkronisasi massal per group...");
   
@@ -265,6 +339,41 @@ async function initialSyncAll() {
   }
   
   console.log("✅ Vault Terisi! Semua data terenkripsi siap di RAM.");
+}
+*/
+
+/**
+ * FUNGSI AMBIL DATA (Tanpa variabel window luar)
+ */
+function ambilDataSheet(group, sheetName) {
+  const encryptedBlob = Vault[group][sheetName];
+  //if (!encryptedBlob) return null;
+  const loginData = JSON.parse(localStorage.getItem("userMaint"));
+  if (!loginData || !encryptedBlob) return null;
+  KUNCI_HARIAN = loginData.unlockCode;
+
+  try {
+    // 1. LAPIS 1: XOR (Gunakan logika dari bukaGembokSakti-mu)
+    const binaryString = atob(encryptedBlob);
+    let decryptParse = "";
+    for (let i = 0; i < binaryString.length; i++) {
+      const charCode = binaryString.charCodeAt(i) ^ KUNCI_HARIAN.charCodeAt(i % KUNCI_HARIAN.length);
+      decryptParse += String.fromCharCode(charCode);
+    }
+
+    // 2. LAPIS 2: Parsing JSON Pembungkus
+    const tahap1 = JSON.parse(decryptParse);
+
+    // 3. LAPIS 3: Ambil "Daging" (atob dari .blob atau .data)
+    if (tahap1.data || tahap1.blob) {
+      const rawTable = atob(tahap1.data || tahap1.blob);
+      return JSON.parse(rawTable); // Mengembalikan Array of Array
+    }
+    return null;
+  } catch (e) {
+    console.error("❌ Gagal bongkar data:", e);
+    return null;
+  }
 }
 
 
