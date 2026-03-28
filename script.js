@@ -3790,7 +3790,8 @@ if (temp_Asset_Files && temp_Asset_Files.length > 0) {
       assetPayload,
       userData: dataArray // Kita kirim dataArray sebagai userData tambahan untuk di-inject ke sheet
     });
-    console.log("pesan dari server :", res.msg)
+    console.log("pesan dari server :", res.msg);
+    console.log("pesan dari server :", res.status);
     console.log("assetpayload :",assetPayload);
     console.table(assetPayload);
 
