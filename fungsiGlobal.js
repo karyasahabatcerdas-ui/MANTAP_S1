@@ -277,8 +277,8 @@ async function initialSyncAll() {
     title: 'Sinkronisasi Database',
     html: `
       <div id="swal-label" style="display:flex; align-items:center; amargin-bottom: 8px; font-weight: bold; ">Mempersiapkan...</div>
-      <div style="width: 95%; align-items ;border-radius: 10px; position: relative ;">
-        <div id="swal-progress-bar" style="width: 0%; height: 20px; transition: width 0.5s; text-align: center; color: white; background: #375b79ff; line-height: 20px; font-size: 12px;">0%</div>
+      <div style="width: 95%; align-items ;border-radius: 25px; position: relative ;">
+        <div id="swal-progress-bar" style="width: 0%; height: 30px; transition: width 0.5s; text-align: center; color: white; background: #f59e0b; line-height: 20px; font-size: 12px;">0%</div>
       </div>
       <div style="margin-top: 8px;">Memuat: <span id="swal-cnt">0</span> / ${totalSheet}</div>
     `,
