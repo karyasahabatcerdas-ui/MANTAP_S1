@@ -264,6 +264,7 @@ async function initialSyncAll() {
   Swal.fire({
     title: 'Sinkronisasi Database',
     // Ganti bagian html di Swal.fire tadi dengan ini:
+    /*
       html: `
         <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
         <div style="width: 100%; background-color: #e9ecef; border-radius: 5px; overflow: hidden; border: 1px solid #ccc;">
@@ -271,7 +272,7 @@ async function initialSyncAll() {
         </div>
         <div id="swal-counter" style="margin-top: 10px;">Memuat data: <b>0</b> / ${totalSheet}</div>
       `,
-    /*
+    */
     html: `
       <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
       <div class="progress" style="height: 20px; margin-bottom: 10px;">
@@ -280,7 +281,7 @@ async function initialSyncAll() {
       </div>
       <div id="swal-counter">Memuat data: <b>0</b> / ${totalSheet}</div>
     `,
-    */
+    
     allowOutsideClick: false,
     showConfirmButton: false,
     didOpen: () => {
