@@ -309,7 +309,7 @@ async function initialSyncAll() {
     }
     
     // Beri sedikit nafas untuk browser update tampilan
-    await new Promise(r => setTimeout(r, 50));
+    await new Promise(r => setTimeout(r, 20));
   }
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
@@ -334,43 +334,36 @@ async function initialSyncAll() {
 
 /**
  * FUNGSI AMBIL DATA (Tanpa variabel window luar)
+ * FUNGSI AMBIL DATA (FINAL)
+ * Mengambil data dari Vault dan membongkarnya menjadi Array siap pakai.
  */
 function ambilDataSheet(group, sheetName) {
-  const encryptedBlob = Vault[group][sheetName];
-  const loginData = JSON.parse(localStorage.getItem("userMaint"));
-  
-  if (!loginData) { console.error("❌ Sesi Login Tidak Ditemukan di LocalStorage"); return null; }
-  if (!encryptedBlob) { console.error(`❌ Data ${sheetName} tidak ada di Vault`); return null; }
-  
-  const KUNCI_HARIAN = loginData.unlockCode;
-
   try {
-    // 1. XOR Logic
-    const binaryString = atob(encryptedBlob);
-    let decryptParse = "";
-    for (let i = 0; i < binaryString.length; i++) {
-      const charCode = binaryString.charCodeAt(i) ^ KUNCI_HARIAN.charCodeAt(i % KUNCI_HARIAN.length);
-      decryptParse += String.fromCharCode(charCode);
-    }
+    const encryptedBlob = Vault[group][sheetName];
+    const loginData = JSON.parse(localStorage.getItem("userMaint"));
 
-    // 2. Cek Hasil XOR (Harusnya jadi JSON String)
-    const tahap1 = JSON.parse(decryptParse);
-    
-    // 3. Ambil Daging
-    const encodedData = tahap1.data || tahap1.blob;
-    if (encodedData) {
-      const rawTable = atob(encodedData);
-      return JSON.parse(rawTable); 
-    } else {
-      console.warn("⚠️ Struktur data Lapis 3 tidak ditemukan (data/blob kosong)");
+    if (!encryptedBlob) {
+      console.warn(`⚠️ Data ${sheetName} tidak ditemukan di Vault.`);
       return null;
     }
-  } catch (e) {
-    console.error(`❌ Gagal Bongkar ${sheetName}:`, e.message);
+
+    const KUNCI = loginData.unlockCode;
+    const binary = atob(encryptedBlob);
+    
+    // Proses XOR Lapis Terakhir
+    let decrypted = "";
+    for (let i = 0; i < binary.length; i++) {
+      decrypted += String.fromCharCode(binary.charCodeAt(i) ^ KUNCI.charCodeAt(i % KUNCI.length));
+    }
+
+    // Berdasarkan hasil console kamu, ini langsung di-parse jadi Array
+    return JSON.parse(decrypted); 
+
+  } catch (err) {
+    console.error(`❌ Gagal membongkar ${sheetName}:`, err);
     return null;
   }
 }
-
 
 
 /**
