@@ -215,7 +215,7 @@ var Vault = {
  */
 async function pullToVault(group, sheetName) {
   try {
-    const response = await fetch(GAS_URL, {
+    const response = await fetch(APPSCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({
         action: "readSheetDirect",
@@ -254,7 +254,7 @@ async function initialSyncAll() {
 var SHEETS = {}; // Biarkan kosong dulu
 
 async function loadDefinitions() {
-  const response = await fetch(GAS_URL, {
+  const response = await fetch(APPSCRIPT_URL, {
     method: "POST",
     body: JSON.stringify({ action: "getDefinitions" })
   });
