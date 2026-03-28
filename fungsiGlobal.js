@@ -294,43 +294,6 @@ async function initialSyncAll() {
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
 }
-
-  for (const group in SHEETS) {
-    // Tarik data secara paralel per group
-    const janji = SHEETS[group].map(async (name) => {
-      // Update label di Swal tiap kali satu proses mulai
-      const label = document.getElementById('swal-label');
-      if (label) label.innerText = `Sedang mengambil: ${name}...`;
-
-      const ok = await pullToVault(group, name);
-      
-      if (ok) {
-        progresSekarang++;
-        const persen = Math.round((progresSekarang / totalSheet) * 100);
-        
-        // Update Progress Bar & Counter
-        const pb = document.getElementById('swal-progress-bar');
-        const count = document.querySelector('#swal-counter b');
-        if (pb) {
-          pb.style.width = `${persen}%`;
-          pb.innerText = `${persen}%`;
-        }
-        if (count) count.textContent = progresSekarang;
-      }
-    });
-    
-    await Promise.all(janji);
-  }
-
-  // Selesai, tampilkan tombol OK
-  Swal.fire({
-    icon: 'success',
-    title: 'Sinkronisasi Selesai',
-    text: `Berhasil memuat ${progresSekarang} database ke dalam Vault.`,
-    confirmButtonText: 'Lanjutkan ke Dashboard',
-    confirmButtonColor: '#3085d6'
-  });
-}
 /**
  * FUNGSI BULK LOAD (Awal Login)
  * Melakukan perulangan otomatis berdasarkan konstanta SHEETS kamu.
