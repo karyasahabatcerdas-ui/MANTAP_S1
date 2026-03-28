@@ -310,7 +310,7 @@ async function initialSyncAll() {
     }
     
     // Beri sedikit nafas untuk browser update tampilan
-    await new Promise(r => setTimeout(r, 1));
+    //await new Promise(r => setTimeout(r, 1));
   }
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
