@@ -3760,21 +3760,25 @@ async function saveAssetEdit() {
     allFiles: [] 
   };
 
-  // 5. PROSES FOTO DARI LACI (temp_Asset_Files)
-  if (window.temp_Asset_Files && window.temp_Asset_Files.length > 0) {
-    if (btn) btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Memproses Foto...";
-    try {
-      const filePromises = window.temp_Asset_Files.map(file => getBase64(file));
-      assetPayload.allFiles = await Promise.all(filePromises);
-    } catch (e) {
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = "SIMPAN PERUBAHAN";
-      }
-      await Swal.fire({ title: "Gagal Memproses Foto", text: e.toString(), icon: "error", width: '80%', background: "#0f172a", color: "#fff" });
-      return;
+  // 5. PROSES FOTO DARI LACI (temp_Asset_Files) dengan KOMPRESI WEBP
+if (window.temp_Asset_Files && window.temp_Asset_Files.length > 0) {
+  if (btn) btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Mengompres Foto...";
+  try {
+    // Gunakan map untuk menjalankan kompresi secara paralel
+    const filePromises = window.temp_Asset_Files.map(file => compressToWebP(file, 0.75)); 
+    assetPayload.allFiles = await Promise.all(filePromises);
+    
+    // Log untuk debugging (opsional)
+    console.log(`Berhasil mengompres ${assetPayload.allFiles.length} foto ke WebP.`);
+  } catch (e) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = "SIMPAN PERUBAHAN";
     }
+    await Swal.fire({ title: "Gagal Kompres", text: e.toString(), icon: "error" });
+    return;
   }
+}
 
   // 6. TRANSMISI VIA panggilGAS (Interceptor Sakti)
   if (btn) btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Mengunggah...";
@@ -3782,14 +3786,18 @@ async function saveAssetEdit() {
   try {
     // panggilGAS otomatis menyelipkan 'userData' (username & sessionId)
     const res = await panggilGAS("saveAssetEnterpriseWithQR", {
-      payload: assetPayload,
+      //payload: assetPayload,
+      assetPayload,
       userData: dataArray // Kita kirim dataArray sebagai userData tambahan untuk di-inject ke sheet
     });
+
+
 
     if (res && res.status === "success") {
       await Swal.fire({
         title: "Sukses",
-        text: res.data.msg || "Aset berhasil disimpan!",
+        //text: res.data.msg || "Aset berhasil disimpan!",
+        text: res.msg || "Aset berhasil disimpan!",
         icon: "success",
         width: '80%',
         background: "#0f172a", color: "#fff"
@@ -3827,6 +3835,57 @@ async function saveAssetEdit() {
   }
 }
 
+/**
+ * Kompres file gambar ke format WebP
+ * @param {File} file - File asli dari input atau array
+ * @param {number} quality - Kualitas 0.0 sampai 1.0 (default 0.7)
+ * @returns {Promise<Object>} - Mengembalikan object {base64, mimeType}
+ */
+async function compressToWebP(file, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        // Buat Canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Tentukan ukuran (bisa ditambah logika resize jika gambar terlalu raksasa)
+        // Contoh: Maksimal lebar 1200px untuk menghemat storage Drive
+        let width = img.width;
+        let height = img.height;
+        const maxResolution = 1200;
+
+        if (width > height && width > maxResolution) {
+          height *= maxResolution / width;
+          width = maxResolution;
+        } else if (height > maxResolution) {
+          width *= maxResolution / height;
+          height = maxResolution;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Gambar ulang ke canvas
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Export ke WebP Base64
+        const webpBase64 = canvas.toDataURL('image/webp', quality);
+        
+        resolve({
+          base64: webpBase64,
+          mimeType: 'image/webp'
+        });
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+}
 
 /**
  * [FUNGSI CLIENT GITHUB: HAPUS ASET MASSAL]
