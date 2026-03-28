@@ -232,22 +232,31 @@ async function loadDefinitions() {
 }
 
 /**
- * LANGKAH 2: Pull ke Vault lewat Jalur Resmi
+ * LANGKAH 2: Pull ke Vault lewat Jalur Resmi (UPGRADED)
  */
 async function pullToVault(group, sheetName) {
   try {
     // PanggilGAS otomatis menyertakan userData/token kamu
     const res = await panggilGAS("readSheetDirect", { 
       group: group, 
-      sheetName: sheetName 
+      sheetName: sheetName,
+      kirimgithub: false // Pastikan ini dikirim agar GAS kencang
     });
 
     if (res && res.status === "success") {
+      // Simpan data TERENKRIPSI ke dalam Vault
       Vault[group][sheetName] = res.data; 
       console.log(`📥 [${group}] ${sheetName} Berhasil Masuk Vault.`);
+      
+      // CRITICAL: Harus return true agar progress bar di initialSyncAll bisa nambah
+      return true; 
+    } else {
+      console.warn(`⚠️ Respons GAS untuk ${sheetName} tidak sukses:`, res ? res.message : "Tanpa pesan");
+      return false;
     }
   } catch (e) {
     console.error(`❌ Gagal tarik ${sheetName}:`, e);
+    return false;
   }
 }
 
@@ -255,41 +264,52 @@ async function pullToVault(group, sheetName) {
  * FUNGSI BULK LOAD + PROGRESS BAR + LABEL
  */
 async function initialSyncAll() {
-  let totalSheet = 0;
-  for (const g in SHEETS) totalSheet += SHEETS[g].length;
+  // Hitung ulang total
+  let daftar = [];
+  for (const g in SHEETS) {
+    SHEETS[g].forEach(s => daftar.push({ group: g, name: s }));
+  }
+  const totalSheet = daftar.length;
   let progresSekarang = 0;
 
   Swal.fire({
     title: 'Sinkronisasi Database',
     html: `
       <div id="swal-label" style="margin-bottom: 8px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
-      <div style="width: 100%; background: #eee; border-radius: 5px; border: 1px solid #ccc;">
-        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #28a745; transition: width 0.2s; text-align: center; color: white;">0%</div>
+      <div style="width: 100%; background: #eee; border-radius: 5px; border: 1px solid #ccc; position: relative;">
+        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #28a745; transition: width 0.3s; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
       </div>
-      <div id="swal-counter" style="margin-top: 8px;">Memuat: <b>0</b> / ${totalSheet}</div>
+      <div style="margin-top: 8px;">Memuat: <span id="swal-cnt">0</span> / ${totalSheet}</div>
     `,
     showConfirmButton: false, allowOutsideClick: false,
     didOpen: () => { Swal.showLoading(); }
   });
 
-  for (const group in SHEETS) {
-    for (const name of SHEETS[group]) { // Gunakan for...of agar label terlihat satu per satu
-      const label = document.getElementById('swal-label');
-      if (label) label.innerText = `Mengambil: ${name}...`;
+  // JALANKAN ANTREAN (Satu per satu agar label & bar sinkron)
+  for (const item of daftar) {
+    const label = document.getElementById('swal-label');
+    if (label) label.innerText = `Mengambil: ${item.name}...`;
 
-      const ok = await pullToVault(group, name);
+    // PASTI KAN pullToVault return TRUE jika berhasil
+    const sukses = await pullToVault(item.group, item.name);
+    
+    if (sukses) {
+      progresSekarang++;
+      const persen = Math.round((progresSekarang / totalSheet) * 100);
       
-      if (ok) {
-        progresSekarang++;
-        const persen = Math.round((progresSekarang / totalSheet) * 100);
-        const pb = document.getElementById('swal-progress-bar');
-        const count = document.querySelector('#swal-counter b');
-        if (pb) { pb.style.width = persen + "%"; pb.innerText = persen + "%"; }
-        if (count) count.textContent = progresSekarang;
+      // Update UI secara manual
+      const pb = document.getElementById('swal-progress-bar');
+      const txt = document.getElementById('swal-cnt');
+      
+      if (pb) {
+        pb.style.width = persen + "%";
+        pb.innerText = persen + "%";
       }
-      // Tambahkan delay 50ms agar animasi progress bar terlihat mulus
-      await new Promise(resolve => setTimeout(resolve, 50));
+      if (txt) txt.innerText = progresSekarang;
     }
+    
+    // Beri sedikit nafas untuk browser update tampilan
+    await new Promise(r => setTimeout(r, 50));
   }
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
@@ -319,33 +339,34 @@ function ambilDataSheet(group, sheetName) {
   const encryptedBlob = Vault[group][sheetName];
   const loginData = JSON.parse(localStorage.getItem("userMaint"));
   
-  if (!loginData || !encryptedBlob) {
-    console.warn(`⚠️ Data ${sheetName} tidak ditemukan atau sesi hilang.`);
-    return null;
-  }
+  if (!loginData) { console.error("❌ Sesi Login Tidak Ditemukan di LocalStorage"); return null; }
+  if (!encryptedBlob) { console.error(`❌ Data ${sheetName} tidak ada di Vault`); return null; }
   
   const KUNCI_HARIAN = loginData.unlockCode;
 
   try {
-    // 1. Lapis 1: XOR
+    // 1. XOR Logic
     const binaryString = atob(encryptedBlob);
-    const codeArray = Array.from(binaryString).map((char, i) => {
-      return String.fromCharCode(char.charCodeAt(0) ^ KUNCI_HARIAN.charCodeAt(i % KUNCI_HARIAN.length));
-    });
-    const decryptParse = codeArray.join("");
+    let decryptParse = "";
+    for (let i = 0; i < binaryString.length; i++) {
+      const charCode = binaryString.charCodeAt(i) ^ KUNCI_HARIAN.charCodeAt(i % KUNCI_HARIAN.length);
+      decryptParse += String.fromCharCode(charCode);
+    }
 
-    // 2. Lapis 2: Parsing JSON Pembungkus
+    // 2. Cek Hasil XOR (Harusnya jadi JSON String)
     const tahap1 = JSON.parse(decryptParse);
-
-    // 3. Lapis 3: Ambil Daging (atob dari .data atau .blob)
+    
+    // 3. Ambil Daging
     const encodedData = tahap1.data || tahap1.blob;
     if (encodedData) {
-      // Dekode daging dan parsing ke Array of Array
-      return JSON.parse(atob(encodedData));
+      const rawTable = atob(encodedData);
+      return JSON.parse(rawTable); 
+    } else {
+      console.warn("⚠️ Struktur data Lapis 3 tidak ditemukan (data/blob kosong)");
+      return null;
     }
-    return null;
   } catch (e) {
-    console.error(`❌ Gagal bongkar ${sheetName}:`, e);
+    console.error(`❌ Gagal Bongkar ${sheetName}:`, e.message);
     return null;
   }
 }
