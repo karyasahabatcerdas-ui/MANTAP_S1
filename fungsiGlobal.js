@@ -309,7 +309,7 @@ async function initialSyncAll() {
     }
     
     // Beri sedikit nafas untuk browser update tampilan
-    await new Promise(r => setTimeout(r, 20));
+    await new Promise(r => setTimeout(r, 5));
   }
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
@@ -357,6 +357,7 @@ function ambilDataSheet(group, sheetName) {
     }
 
     // Berdasarkan hasil console kamu, ini langsung di-parse jadi Array
+    console.table(JSON.parse(decrypted));
     return JSON.parse(decrypted); 
 
   } catch (err) {
