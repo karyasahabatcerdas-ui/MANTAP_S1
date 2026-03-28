@@ -277,9 +277,10 @@ async function panggilGAS(action, payload = {}) {
       logout(); 
       return null;
     }
+
     console.log("panggilGAS dieksekusi" );
-    console.log("status di panggilgas :". res.status);
-    console.log("status di panggilgas :". res.message);
+    console.log("status di panggilgas :", res.status);
+    console.log("status di panggilgas :", res.message);
     console.log("isis payloagd di panggilGAS :", payload);
     console.table(payload);
     return res; 
