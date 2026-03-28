@@ -254,15 +254,21 @@ async function initialSyncAll() {
 var SHEETS = {}; // Biarkan kosong dulu
 
 async function loadDefinitions() {
-  const response = await fetch(APPSCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ action: "getDefinitions" })
-  });
-  const res = await response.json();
-  if (res.status === "success") {
-    SHEETS = res.sheets;
-    console.log("✅ Daftar Sheet berhasil ditarik dari GAS!");
+  try{
+    const response = await fetch(APPSCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "getDefinitions" })
+    });
+    const res = await response.json();
+    if (res.status === "success") {
+      SHEETS = res.sheets;
+      console.log("✅ Daftar Sheet berhasil ditarik dari GAS!");
+      return true;
+    }
+  } catch (e) {
+    console.error("❌ Gagal load definitions:", e);
   }
+  return false;
 }
 
 /**
