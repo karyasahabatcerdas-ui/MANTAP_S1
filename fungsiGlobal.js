@@ -254,6 +254,10 @@ async function panggilGAS(action, payload = {}) {
       body: JSON.stringify(paketLengkap)
     });
     
+    if (!response.ok) {
+      throw new Error("Gagal kontak server! Status: " + response.status);
+    }
+
     const res = await response.json();
 
     // 1. CEK SINYAL MAINTENANCE
@@ -274,6 +278,10 @@ async function panggilGAS(action, payload = {}) {
       return null;
     }
     console.log("panggilGAS dieksekusi" );
+    console.log("status di panggilgas :". res.status);
+    console.log("status di panggilgas :". res.message);
+    console.log("isis payloagd di panggilGAS :", payload);
+    console.table(payload);
     return res; 
   } catch (err) {
     console.error("Gagal kontak server:", err);
