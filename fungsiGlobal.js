@@ -218,7 +218,10 @@ async function loadDefinitions() {
   console.log("🔍 Meminta izin akses daftar sheet via PanggilGAS...");
   
   // Gunakan fungsi PanggilGAS milikmu
-  const res = await panggilGAS({ action: "getDefinitions" });
+  const res = await panggilGAS({ 
+    action: "getDefinitions",
+    payload: {}
+  });
 
   if (res && res.status === "success") {
     SHEETS = res.data; 
