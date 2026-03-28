@@ -218,10 +218,8 @@ async function loadDefinitions() {
   console.log("🔍 Meminta izin akses daftar sheet via PanggilGAS...");
   
   // Gunakan fungsi PanggilGAS milikmu
-  const res = await panggilGAS({ 
-    action: "getDefinitions",
-    payload: {}
-  });
+  const res = await panggilGAS("getDefinitions", {}
+  );
 
   if (res && res.status === "success") {
     SHEETS = res.data; 
@@ -239,10 +237,9 @@ async function loadDefinitions() {
 async function pullToVault(group, sheetName) {
   try {
     // PanggilGAS otomatis menyertakan userData/token kamu
-    const res = await panggilGAS({
-      action: "readSheetDirect",
-      payload: { group: group, sheetName: sheetName }
-    });
+    const res = await panggilGAS("readSheetDirect",
+      { group: group, sheetName: sheetName }
+    );
 
     if (res && res.status === "success") {
       Vault[group][sheetName] = res.data; 
