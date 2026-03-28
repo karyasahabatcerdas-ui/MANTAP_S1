@@ -3791,7 +3791,7 @@ if (temp_Asset_Files && temp_Asset_Files.length > 0) {
       userData: dataArray // Kita kirim dataArray sebagai userData tambahan untuk di-inject ke sheet
     });
     console.log("pesan res", res);
-    console.log("pesan dari server :", res.message);
+    console.log("pesan dari server :", res.message || res.data );
     console.log("pesan dari server :", res.status);
     console.log("assetpayload :",assetPayload);
     console.table(assetPayload);
