@@ -218,7 +218,8 @@ async function loadDefinitions() {
   console.log("🔍 Meminta izin akses daftar sheet via PanggilGAS...");
   
   // Gunakan fungsi PanggilGAS milikmu
-  const res = await panggilGAS("getDefinitions", {    
+  const res = await panggilGAS("getDefinitions", {   
+    kirimgithub: false //Pastikan ini dikirim agar GAS kencang //skip gaskegithub 
   });
 
   if (res && res.status === "success") {
@@ -277,7 +278,7 @@ async function initialSyncAll() {
     html: `
       <div id="swal-label" style="margin-bottom: 8px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
       <div style="width: 100%; background: #eee; border-radius: 5px; border: 1px solid #ccc; position: relative;">
-        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #28a745; transition: width 0.3s; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
+        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #28a745; transition: width 0.2s; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
       </div>
       <div style="margin-top: 8px;">Memuat: <span id="swal-cnt">0</span> / ${totalSheet}</div>
     `,
@@ -309,7 +310,7 @@ async function initialSyncAll() {
     }
     
     // Beri sedikit nafas untuk browser update tampilan
-    await new Promise(r => setTimeout(r, 5));
+    await new Promise(r => setTimeout(r, 1));
   }
 
   Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
