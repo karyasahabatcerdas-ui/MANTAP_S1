@@ -254,21 +254,29 @@ async function initialSyncAll() {
 var SHEETS = {}; // Biarkan kosong dulu
 
 async function loadDefinitions() {
-  try{
+  console.log("🔍 Menghubungi Server di:", APPSCRIPT_URL);
+  
+  try {
     const response = await fetch(APPSCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({ action: "getDefinitions" })
     });
+
     const res = await response.json();
-    if (res.status === "success") {
-      SHEETS = res.sheets;
-      console.log("✅ Daftar Sheet berhasil ditarik dari GAS!");
+    console.log("📦 Respon Mentah dari GAS:", res); // LIHAT DI SINI
+
+    if (res.status === "success" && res.data) {
+      SHEETS = res.data; // Sekarang SHEETS di client berisi objek dari GAS
+      console.log("✅ Variabel SHEETS Terisi:", SHEETS);
       return true;
+    } else {
+      console.warn("⚠️ GAS membalas, tapi status bukan success atau data kosong.");
+      return false;
     }
   } catch (e) {
-    console.error("❌ Gagal load definitions:", e);
+    console.error("❌ Koneksi Gagal atau URL Salah:", e);
+    return false;
   }
-  return false;
 }
 
 /**
