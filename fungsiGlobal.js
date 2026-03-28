@@ -264,15 +264,15 @@ async function initialSyncAll() {
   Swal.fire({
     title: 'Sinkronisasi Database',
     // Ganti bagian html di Swal.fire tadi dengan ini:
-    /*
+    
       html: `
         <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
         <div style="width: 100%; background-color: #e9ecef; border-radius: 5px; overflow: hidden; border: 1px solid #ccc;">
-          <div id="swal-progress-bar" style="width: 0%; height: 20px; background-color: #28a745; color: white; text-align: center; transition: width 0.3s;">0%</div>
+          <div id="swal-progress-bar" style="width: 0%; height: 20px; background-color: #28a745; color: white; text-align: center; transition: width 0.5s;">0%</div>
         </div>
         <div id="swal-counter" style="margin-top: 10px;">Memuat data: <b>0</b> / ${totalSheet}</div>
       `,
-    */
+    /*
     html: `
       <div id="swal-label" style="margin-bottom: 10px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
       <div class="progress" style="height: 20px; margin-bottom: 10px;">
@@ -281,7 +281,7 @@ async function initialSyncAll() {
       </div>
       <div id="swal-counter">Memuat data: <b>0</b> / ${totalSheet}</div>
     `,
-    
+    */
     allowOutsideClick: false,
     showConfirmButton: false,
     didOpen: () => {
@@ -350,7 +350,7 @@ function ambilDataSheet(group, sheetName) {
   const encryptedBlob = Vault[group][sheetName];
   //if (!encryptedBlob) return null;
   const loginData = JSON.parse(localStorage.getItem("userMaint"));
-  if (!loginData || !encryptedBlob) return null;
+  if (!loginData || !encryptedBlob) return;
   KUNCI_HARIAN = loginData.unlockCode;
 
   try {
