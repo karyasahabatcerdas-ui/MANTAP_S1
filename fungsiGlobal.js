@@ -276,9 +276,9 @@ async function initialSyncAll() {
   Swal.fire({
     title: 'Sinkronisasi Database',
     html: `
-      <div id="swal-label" style="margin-bottom: 8px; font-weight: bold; color: #007bff;">Mempersiapkan...</div>
-      <div style="width: 90%; background: #eee; border-radius: 5px; border: 1px solid #ccc; position: relative;">
-        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #28a745; transition: width 0.5s; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
+      <div id="swal-label" style="display:flex; align-items:center; amargin-bottom: 8px; font-weight: bold; color: #00d9ffff;">Mempersiapkan...</div>
+      <div style="padding: 10px; width: 100%; align-items background: #051122ff; border-radius: 5px; border: 1px solid #123361ee; position: relative;">
+        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #2aadceff; transition: width 0.5s; text-align: center; color: #2a11b9ff; line-height: 20px; font-size: 12px;">0%</div>
       </div>
       <div style="margin-top: 8px;">Memuat: <span id="swal-cnt">0</span> / ${totalSheet}</div>
     `,
