@@ -3761,11 +3761,11 @@ async function saveAssetEdit() {
   };
 
   // 5. PROSES FOTO DARI LACI (temp_Asset_Files) dengan KOMPRESI WEBP
-if (window.temp_Asset_Files && window.temp_Asset_Files.length > 0) {
+if (temp_Asset_Files && temp_Asset_Files.length > 0) {
   if (btn) btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Mengompres Foto...";
   try {
     // Gunakan map untuk menjalankan kompresi secara paralel
-    const filePromises = window.temp_Asset_Files.map(file => compressToWebP(file, 0.75)); 
+    const filePromises = temp_Asset_Files.map(file => compressToWebP(file, 0.75)); 
     assetPayload.allFiles = await Promise.all(filePromises);
     
     // Log untuk debugging (opsional)
@@ -3807,7 +3807,7 @@ if (window.temp_Asset_Files && window.temp_Asset_Files.length > 0) {
       // SYNC GITHUB & RAM
       await syncDataGhoib(); 
 
-      window.temp_Asset_Files = []; 
+      temp_Asset_Files = []; 
       if (btn) {
         btn.disabled = false;
         btn.innerHTML = "SIMPAN PERUBAHAN";
