@@ -3791,7 +3791,8 @@ if (window.temp_Asset_Files && window.temp_Asset_Files.length > 0) {
       userData: dataArray // Kita kirim dataArray sebagai userData tambahan untuk di-inject ke sheet
     });
 
-
+    console.log("assetpayload :",assetPayload);
+    console.table(assetPayload);
 
     if (res && res.status === "success") {
       await Swal.fire({
