@@ -163,6 +163,95 @@ async function syncDataGhoib() {
   } catch (e) { console.error(e); }
 }
 
+
+
+
+// 6. Fungsi Sedot Data (terenkripsi per-sheet )
+/**
+ * CLIENT SIDE: Fungsi Sakti untuk narik data dari GAS
+ */
+
+/**
+ * MODIFIKASI FUNGSI PEMBUKA (Hanya saat dibutuhkan)
+ * Mengambil data dari Vault dan membongkarnya.
+ */
+function bongkarSheet(group, sheetName, unlockCode) {
+  // 1. Ambil data dari Vault
+  const targetBlob = Vault[group][sheetName];
+  if (!targetBlob) return null;
+
+  try {
+    // LAPIS 1 & 2: XOR Engine (Sesuai Logika bukaGembokSakti kamu)
+    const binaryString = atob(targetBlob);
+    let hasilXOR = "";
+    for (let i = 0; i < binaryString.length; i++) {
+      const charCode = binaryString.charCodeAt(i) ^ unlockCode.charCodeAt(i % unlockCode.length);
+      hasilXOR += String.fromCharCode(charCode);
+    }
+
+    // LAPIS 3 & 4: Parsing JSON & Daging Data
+    const jsonData = JSON.parse(hasilXOR);
+    
+    // Jika format dari GAS adalah {status: "success", data: "..."}
+    // atau sesuai struktur gembokData kamu:
+    return JSON.parse(atob(jsonData.data || jsonData)); 
+
+  } catch (e) {
+    console.error("❌ Gagal bongkar sheet: " + sheetName, e);
+    return null;
+  }
+}
+
+// Database Client (Masih Tergembok)
+var Vault = {
+  ASSET: {},
+  MAINT: {},
+  SELECT: {}
+};
+
+/**
+ * FUNGSI PULLER (Client Side)
+ * Menarik satu sheet dan menaruhnya di Vault sesuai Group-nya.
+ */
+async function pullToVault(group, sheetName) {
+  try {
+    const response = await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "readSheetDirect",
+        payload: { group: group, sheetName: sheetName }
+      })
+    });
+
+    const res = await response.json();
+    
+    if (res.status === "success") {
+      // Simpan data TERENKRIPSI (Gembok) ke dalam Group yang sesuai
+      Vault[group][sheetName] = res.data; 
+      console.log(`📥 [${group}] ${sheetName} tersimpan di Vault.`);
+    }
+  } catch (e) {
+    console.error(`❌ Gagal menarik ${sheetName}:`, e);
+  }
+}
+
+/**
+ * FUNGSI BULK LOAD (Awal Login)
+ * Melakukan perulangan otomatis berdasarkan konstanta SHEETS kamu.
+ */
+async function initialSyncAll() {
+  console.log("⏳ Memulai sinkronisasi massal per group...");
+  
+  // Ambil semua key dari SHEETS (ASSET, MAINT, SELECT)
+  for (const group in SHEETS) {
+    const janji = SHEETS[group].map(name => pullToVault(group, name));
+    await Promise.all(janji);
+  }
+  
+  console.log("✅ Vault Terisi! Semua data terenkripsi siap di RAM.");
+}
+
+
 /**
  * [CLIENT: MESIN RE-AUTH CERDAS - TIME WINDOW + INDIKATOR AURA PROFIL]
  * Hanya aktif memantau kunci saat transisi gembok harian
