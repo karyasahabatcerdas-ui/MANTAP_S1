@@ -276,12 +276,21 @@ async function initialSyncAll() {
   Swal.fire({
     title: 'Sinkronisasi Database',
     html: `
-      <div id="swal-label" style="background: #051122ff; display:flex; align-items:center; amargin-bottom: 8px; font-weight: bold; color: #00d9ffff;">Mempersiapkan...</div>
-      <div style="width: 98%; align-items ; background: #051122ff; border-radius: 5px; border: 1px solid #123361ee; position: relative;">
-        <div id="swal-progress-bar" style="width: 0%; height: 20px; background: #2aadceff; transition: width 0.5s; text-align: center; color: #2a11b9ff; line-height: 20px; font-size: 12px;">0%</div>
+      <div id="swal-label" style="display:flex; align-items:center; amargin-bottom: 8px; font-weight: bold; ">Mempersiapkan...</div>
+      <div style="padding: 10px; width: 100%; align-items ;border-radius: 10px; position: relative;">
+        <div id="swal-progress-bar" style="width: 0%; height: 20px; transition: width 0.5s; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
       </div>
       <div style="margin-top: 8px;">Memuat: <span id="swal-cnt">0</span> / ${totalSheet}</div>
     `,
+    showCancelButton: true,
+    background: "#1e293b",         // Dark Background
+    color: "#f8fafc",              // White Text
+    iconColor: "#f59e0b",          // Amber/Gold Icon
+    width: '85%',
+    padding: '1.5rem',
+    customClass: {
+    popup: 'border-neon-red'   // Opsi: Jika ingin tambah border merah via CSS
+    },
     showConfirmButton: false, allowOutsideClick: false,
     didOpen: () => { Swal.showLoading(); }
   });
@@ -313,7 +322,22 @@ async function initialSyncAll() {
     //await new Promise(r => setTimeout(r, 1));
   }
 
-  Swal.fire({ icon: 'success', title: 'Sinkron Selesai!', confirmButtonText: 'OK' });
+  Swal.fire({ 
+    icon: 'success', 
+    title: 'Sinkron Selesai!', 
+    confirmButtonText: 'OK',
+    showCancelButton: true,
+    confirmButtonColor: "#273d4eff", // Merah Terang (Destructive)
+    background: "#1e293b",         // Dark Background
+    color: "#f8fafc",              // White Text
+    iconColor: "#f59e0b",          // Amber/Gold Icon
+    width: '85%',
+    padding: '1.5rem',
+    customClass: {
+      popup: 'border-neon-red'     // Opsi: Jika ingin tambah border merah via CSS
+    }
+    
+  });
 }
 /**
  * FUNGSI BULK LOAD (Awal Login)
