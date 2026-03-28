@@ -273,7 +273,7 @@ async function panggilGAS(action, payload = {}) {
       logout(); 
       return null;
     }
-
+    console.log("panggilGAS dieksekusi" );
     return res; 
   } catch (err) {
     console.error("Gagal kontak server:", err);
