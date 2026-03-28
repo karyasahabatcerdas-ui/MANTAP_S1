@@ -251,6 +251,19 @@ async function initialSyncAll() {
   console.log("✅ Vault Terisi! Semua data terenkripsi siap di RAM.");
 }
 
+var SHEETS = {}; // Biarkan kosong dulu
+
+async function loadDefinitions() {
+  const response = await fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "getDefinitions" })
+  });
+  const res = await response.json();
+  if (res.status === "success") {
+    SHEETS = res.sheets;
+    console.log("✅ Daftar Sheet berhasil ditarik dari GAS!");
+  }
+}
 
 /**
  * [CLIENT: MESIN RE-AUTH CERDAS - TIME WINDOW + INDIKATOR AURA PROFIL]
