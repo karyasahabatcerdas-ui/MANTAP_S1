@@ -52,6 +52,10 @@ async function saveAssetEdit() {
     });
     //console.table(payload);
     console.log("Cek Respon:", res);
+    console.log("Cek Respon res.status:", res.status);
+    console.log("Cek Respon res.data:", res.status);
+    console.log("Cek Respon res.data.status:", res.data.status);
+    console.log("Cek Respon res.data.message:", res.data.message);
     if (res && res.status === "success") {
       // --- STEP 4: SUKSES (Buka Kunci) ---
       await Swal.fire({
