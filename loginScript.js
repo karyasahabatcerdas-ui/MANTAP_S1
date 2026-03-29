@@ -42,7 +42,7 @@
       userRole = serverData.role;
 
       // --- PERBAIKAN: Pastikan Buka Gembok Berhasil ---
-      const isUnlocked = bukaGembokSakti(serverData.unlockCode);
+      //const isUnlocked = bukaGembokSakti(serverData.unlockCode);
 
       // UI Switch
       document.getElementById('loginOverlay').style.display = 'none';
@@ -50,14 +50,20 @@
       document.getElementById('headerUser').innerText = `${u} (${userRole})`;
       checkSessionAndLogin();
 
+      //fungsi database baru
+      await loadDefinitions();
+      await initialSyncAll(); // Vault berisi database terenkripsi
+      
+
       // Jalankan fungsi awal
       //await syncDataGhoib();
       showPage('history');
       await populateAllDropdowns(); // Pastikan dropdown juga terisi setelah login
       loadProf();
       
+      // update kalau ok
       Swal.fire({ title: "Berhasil!", text: "Sesi aman diaktifkan", icon: "success", timer: 1500, showConfirmButton: false });
-      updateLockStatus(false);
+      updateLockStatus(false); //status di gambar profile "false" kondisi login terenkripsi baik
 
     } else {
       //throw new Error(res.data.message || "Gagal Login");
@@ -127,7 +133,7 @@ async function logout() {
   document.getElementById('pass').value = "";
   loggedInUser = "";
   userRole = "";
-  updateLockStatus(true);
+  updateLockStatus(true); //status di gambar profile kalau data terenkripsi atau tidak
 
   // 5. BERSIHKAN DATA SENSITIF DARI TABEL
   const tableIds = ['userListBody', 'histBody', 'jadwalBody', 'kelolaBody', 'logTableBody'];
