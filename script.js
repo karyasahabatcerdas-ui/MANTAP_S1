@@ -3717,6 +3717,7 @@ function takeAssetPhoto() {
  * Mengirim data aset, QR Code, dan foto massal via Fetch POST
  * =========================================================================
  */
+/*
 async function saveAssetEdit() {
   const asId = document.getElementById('as_id').value;
   const type = document.getElementById('as_type').value;
@@ -3837,7 +3838,7 @@ if (temp_Asset_Files && temp_Asset_Files.length > 0) {
     }
   }
 }
-
+*/
 /**
  * Kompres file gambar ke format WebP
  * @param {File} file - File asli dari input atau array

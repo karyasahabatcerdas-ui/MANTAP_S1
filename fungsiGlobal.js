@@ -389,6 +389,25 @@ function ambilDataSheet(group, sheetName) {
   }
 }
 
+/**
+ * MENCARI SATU ASSET BERDASARKAN ID
+ */
+function cariAssetById(group, sheetName, idAsset) {
+  const data = ambilDataSheet(group, sheetName);
+  if (!data) return null;
+
+  // Cari baris yang kolom pertamanya (index 0) sama dengan idAsset
+  const baris = data.find(row => row[0] === idAsset);
+  
+  if (baris) {
+    // Kita ubah jadi Objek agar gampang dipanggil (misal: hasil.Nama_Asset)
+    const header = data[0];
+    let obj = {};
+    header.forEach((h, i) => obj[h] = baris[i]);
+    return obj;
+  }
+  return null;
+}
 
 /**
  * [CLIENT: MESIN RE-AUTH CERDAS - TIME WINDOW + INDIKATOR AURA PROFIL]
