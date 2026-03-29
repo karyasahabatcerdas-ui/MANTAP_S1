@@ -59,22 +59,21 @@
   // 2. Masukkan ID dari "Deployment Terakhir" (/exec)
   const PROD_ID = "AKfycbyHZR9e8G7jZjgI435IQofkUSgijLIa7C26mMhtKJPg1WWGEkBvSiYtyR9J6IE1z9YG";
 
-  // 3. Logika Deteksi Lebih Luas:
-  // - localhost / 127.0.0.1 (Live Server)
-  // - file: (Klik langsung dari folder komputer)
-  const isLocalEnv = window.location.hostname === "localhost" || 
-                     window.location.hostname === "127.0.0.1" || 
-                     window.location.protocol === "file:";
+  // 3. Logika Deteksi:
+  // Kita pakai nama "isDev" saja biar singkat
+  const isDev = window.location.hostname === "localhost" || 
+                window.location.hostname === "127.0.0.1" || 
+                window.location.protocol === "file:";
 
-  // 4. Inilah Variabel Utama kamu (Isinya berubah otomatis, namanya TETAP)
-  var APPSCRIPT_ID = isDevelopment ? DEV_ID : PROD_ID;
-  var SUFFIX = isDevelopment ? "/dev" : "/exec";
+  // 4. Pastikan variabel di bawah ini memanggil "isDev" yang di atas
+  var APPSCRIPT_ID = isDev ? DEV_ID : PROD_ID;
+  var SUFFIX = isDev ? "/dev" : "/exec";
   
-  // Variabel ini yang dipakai oleh semua kode JS kamu:
+  // Variabel utama yang dipakai semua fungsi
   var APPSCRIPT_URL = "https://script.google.com/macros/s/" + APPSCRIPT_ID + SUFFIX;
 
-  // Log untuk memastikan di Console Browser kamu:
-  console.log("🛠️ App Mode: " + (isDevelopment ? "DEVELOPMENT (Internal)" : "PRODUCTION (Public)"));
+  // Log untuk memastikan di Console Browser (F12)
+  console.log("🛠️ App Mode: " + (isDev ? "DEVELOPMENT (Local/File)" : "PRODUCTION (GitHub)"));
   console.log("🔗 GAS URL Ready: " + APPSCRIPT_URL);
 </script>
 
