@@ -47,7 +47,7 @@ async function saveAssetEdit() {
           document.getElementById('as_lokasi').value,
           document.getElementById('as_status').value
         ],
-        kirimgithub: true // Backup otomatis
+        kirimgithub: false // Backup otomatis
       }
     });
     //console.table(payload);
