@@ -4656,11 +4656,13 @@ async function saveProf() {
   // 4. KIRIM KE SERVER VIA panggilGAS (Interceptor Sakti)
   try {
     // panggilGAS otomatis menambahkan p.userData {username, sessionId}
-    const res = await panggilGAS("universalUpdateUser", payload);
-
+    const res = await panggilGAS("universalUpdateUser",{
+     payload,
+     kirimgithub: false  // agar tidak update dulu 
+  });
     if (res && res.status === "success") {
       await Swal.fire({
-        title: "¡Misión Cumplida!",
+        title: "Update Selesai",
         text: res.data || "Profil berhasil diperbarui",
         icon: "success",
         confirmButtonText: "OK, Señor!",
@@ -4671,7 +4673,7 @@ async function saveProf() {
       await syncDataGhoib();
       window.Temp_Profile = [null, null]; 
       
-      if (typeof loadProfile === 'function') loadProfile(); 
+      //if (typeof loadProfile === 'function') loadProfile(); 
       if (typeof loadProf === 'function') loadProf(); 
 
     } else {
