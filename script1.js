@@ -89,9 +89,9 @@ async function saveAssetEdit() {
  */
 async function initialSyncAllParallel() {
   // 1. Kumpulkan semua Nama Sheet dari konstanta SHEETS kamu
-  const assetKeys = Object.keys(SHEETS.ASSET);
-  const maintKeys = Object.keys(SHEETS.MAINT);
-  const selectKeys = Object.keys(SHEETS.SELECT);
+  const assetKeys = Object(SHEETS.ASSET);
+  const maintKeys = Object(SHEETS.MAINT);
+  const selectKeys = Object(SHEETS.SELECT);
   
   const allTasks = [
     ...assetKeys.map(name => ({ group: 'ASSET', name })),
