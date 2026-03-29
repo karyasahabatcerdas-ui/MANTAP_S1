@@ -13,8 +13,25 @@ self.addEventListener('install', event => {
   );
 });
 
+/*
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(response => response || fetch(event.request))
+  );
+});
+*/
+
+self.addEventListener('fetch', event => {
+  // 🚀 JURUS BYPASS: Jika request menuju ke Google Script, LANGSUNG tembak ke internet.
+  // Jangan biarkan Service Worker (cache) ikut campur.
+  if (event.request.url.includes("script.google.com")) {
+    return; // Keluar dari listener, biarkan browser menangani secara normal
+  }
+
+  // 📦 LOGIKA CACHE BIASA: Untuk file HTML, CSS, JS, dan Icons kamu
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
