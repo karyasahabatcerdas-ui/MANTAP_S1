@@ -53,7 +53,8 @@
       //fungsi database baru
       if (isUnlocked){
       await loadDefinitions();
-      await initialSyncAll(); // Vault berisi database terenkripsi
+      //await initialSyncAll(); // Vault berisi database terenkripsi
+      await initialSyncAllParallel(); // Vault berisi database terenkripsi - metode multi sesi
       } else {
         console.log("datalocal belum ada")
       }
