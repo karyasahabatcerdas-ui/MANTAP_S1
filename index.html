@@ -53,28 +53,28 @@
 </script>
 -->
 <script>
-  // 1. Masukkan ID dari "Test deployments" (/dev)
   const DEV_ID = "AKfycbyFNgkGp2pIC6VLym5APcXbxwg8j0bHQ4KaIytsZDU"; 
-  
-  // 2. Masukkan ID dari "Deployment Terakhir" (/exec)
   const PROD_ID = "AKfycbyHZR9e8G7jZjgI435IQofkUSgijLIa7C26mMhtKJPg1WWGEkBvSiYtyR9J6IE1z9YG";
 
-  // 3. Logika Deteksi:
-  // Kita pakai nama "isDev" saja biar singkat
-  const isDev = window.location.hostname === "localhost" || 
-                window.location.hostname === "127.0.0.1" || 
-                window.location.protocol === "file:";
+  // DETEKSI 1: Cek URL apakah ada ?debug=true atau ?mode=dev
+  const urlParams = new URLSearchParams(window.location.search);
+  const isDebugQuery = urlParams.get('debug') === 'true' || urlParams.get('mode') === 'dev';
 
-  // 4. Pastikan variabel di bawah ini memanggil "isDev" yang di atas
-  var APPSCRIPT_ID = isDev ? DEV_ID : PROD_ID;
-  var SUFFIX = isDev ? "/dev" : "/exec";
+  // DETEKSI 2: Cek apakah di Localhost atau File
+  const isLocal = window.location.hostname === "localhost" || 
+                  window.location.hostname === "127.0.0.1" || 
+                  window.location.protocol === "file:";
+
+  // PENENTUAN MODE: Jika salah satu terpenuhi, masuk mode DEV
+  const isDevMode = isLocal || isDebugQuery;
+
+  var APPSCRIPT_ID = isDevMode ? DEV_ID : PROD_ID;
+  var SUFFIX = isDevMode ? "/dev" : "/exec";
   
-  // Variabel utama yang dipakai semua fungsi
   var APPSCRIPT_URL = "https://script.google.com/macros/s/" + APPSCRIPT_ID + SUFFIX;
 
-  // Log untuk memastikan di Console Browser (F12)
-  console.log("🛠️ App Mode: " + (isDev ? "DEVELOPMENT (Local/File)" : "PRODUCTION (GitHub)"));
-  console.log("🔗 GAS URL Ready: " + APPSCRIPT_URL);
+  console.log("🛠️ Mode: " + (isDevMode ? "DEVELOPMENT" : "PRODUCTION"));
+  console.log("🔗 URL: " + APPSCRIPT_URL);
 </script>
 
 
