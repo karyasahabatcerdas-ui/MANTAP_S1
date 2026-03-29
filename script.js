@@ -4567,44 +4567,37 @@ function toggleSelectAll() {
  * ===================================================================================================
  */
 async function loadProf() {
-  //const urlGAS = APPSCRIPT_URL;
-  
-  // Pastikan variabel 'loggedInUser' tersedia (biasanya dari session/global)
-  if (!loggedInUser) {
-    console.error("Username tidak ditemukan di sesi browser.");
-    return;
-  }
+  if (!loggedInUser) return;
 
   try {
-    const d = getApp("Users").slice(1).find(row=>String(row[0]).trim().toLowerCase()===String(loggedInUser).trim().toLowerCase())
-    //console.table(d);
-    // Struktur: [User, Pass, Role, Phone, Email, Photo, Status, LastLogin, Attempts]
+    // Panggil GAS langsung
+    const res = await panggilGAS("READ_PROFILE",
+      {targetUser: loggedInUser,
+      kirimgithub: false // Pastikan ini agar tidak backup DB
+  });
 
-    // 2. Mapping Data ke Input Profil
-    document.getElementById('set_user').value = d[0] || "-";
-    document.getElementById('set_role').value = (d[2] || "user").toUpperCase();
-    document.getElementById('set_status').value = (d[6] || "aktif").toUpperCase();
-    document.getElementById('set_attempts').value = (d[8] || 0) + " / 5";
-    document.getElementById('set_email').value = d[4] || "";
-    document.getElementById('set_phone').value = d[3] || "";
+    if (res.status !== "success") throw new Error(res.message);
+
+    // Update Field UI
+    document.getElementById('set_user').value = res.username || "-";
+    document.getElementById('set_role').value = (res.role || "user").toUpperCase();
+    document.getElementById('set_status').value = (res.userStatus || "aktif").toUpperCase();
+    document.getElementById('set_attempts').value = (res.attempts || 0) + " / 5";
+    document.getElementById('set_email').value = res.email || "";
+    document.getElementById('set_phone').value = res.phone || "";
     
-    // --- 3. LOGIKA ANTI-CACHE FOTO ---
-    const photoUrl = d[5];
-    const userName = d[0] || "User";
+    // Logika Foto Profil (Anti-Cache)
+    const userName = res.username || "User";
     let finalSrc = "";
 
-    if (photoUrl && photoUrl.includes("http")) {
-      // Tambahkan anti-cache agar foto terbaru langsung muncul
-      const separator = photoUrl.includes("?") ? "&" : "?";
-      finalSrc = photoUrl + separator + "t=" + new Date().getTime();
+    if (res.photo && res.photo.includes("http")) {
+      const sep = res.photo.includes("?") ? "&" : "?";
+      finalSrc = res.photo + sep + "t=" + new Date().getTime();
     } else {
-      // Perbaikan URL UI-Avatars agar valid
-      finalSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=2980b9&color=fff&size=128`;;
+      finalSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=2980b9&color=fff&size=128`;
     }
 
-    // Update semua elemen foto profil (Desktop, Shared, Mobile)
-    const photoElements = ['set_display_photo', 'user_profile_shared', 'user_profile_mobile'];
-    photoElements.forEach(id => {
+    ['set_display_photo', 'user_profile_shared', 'user_profile_mobile'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.src = finalSrc;
     });
