@@ -158,8 +158,10 @@ async function fetchWithRetry(group, sheetName, maxRetries) {
 
       const response = await panggilGAS("readSheetDirect", { 
         group: group, 
-        sheetName: sheetName 
+        sheetName: sheetName,
+        kirimgithub: false
       });
+      console.log("respon dari fetch", response)
       return response;
     } catch (err) {
       if (i === maxRetries - 1) throw err;
