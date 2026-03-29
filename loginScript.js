@@ -42,7 +42,7 @@
       userRole = serverData.role;
 
       // --- PERBAIKAN: Pastikan Buka Gembok Berhasil ---
-      //const isUnlocked = bukaGembokSakti(serverData.unlockCode);
+      const isUnlocked = bukaGembokSakti(serverData.unlockCode);
 
       // UI Switch
       document.getElementById('loginOverlay').style.display = 'none';
@@ -51,9 +51,12 @@
       checkSessionAndLogin();
 
       //fungsi database baru
+      if (isUnlocked){
       await loadDefinitions();
       await initialSyncAll(); // Vault berisi database terenkripsi
-      
+      } else {
+        console.log("datalocal belum ada")
+      }
 
       // Jalankan fungsi awal
       //await syncDataGhoib();
