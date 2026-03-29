@@ -33,20 +33,21 @@ async function saveAssetEdit() {
 
     // --- STEP 3: KIRIM KE GAS ---
     if (label) label.innerText = "Mengunggah & Sinkronisasi Cloud...";
-    
-    const res = await panggilGAS("saveAssetEnterpriseWithQR", {
-     
-        asId: asId,
-        type: type,
-        row: row,
-        qrBase64: qrTeksMurni,
-        allFiles: fotoWebP,
-        dataArray: [
+    const dataArray = [
           asId, "", 
           document.getElementById('as_nama').value,
           document.getElementById('as_lokasi').value,
           document.getElementById('as_status').value
-        ],
+        ]
+    prepayload = {asId: asId,
+        type: type,
+        row: row,
+        qrBase64: qrTeksMurni,
+        allFiles: fotoWebP} ;
+        
+    const res = await panggilGAS("saveAssetEnterpriseWithQR", {     
+        prepayload,
+        userData:dataArray,
         kirimgithub: false // Backup otomatis
       
     });
