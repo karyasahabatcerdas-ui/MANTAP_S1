@@ -50,7 +50,7 @@ async function saveAssetEdit() {
         kirimgithub: true // Backup otomatis
       }
     });
-    console.table(payload);
+    //console.table(payload);
     console.log("Cek Respon:", res);
     if (res && res.status === "success") {
       // --- STEP 4: SUKSES (Buka Kunci) ---
