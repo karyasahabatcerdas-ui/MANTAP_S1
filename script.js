@@ -4623,6 +4623,7 @@ async function saveProf() {
 
   // 1. Susun Payload Utama (Intinya saja)
   let payload = {
+    row:"",
     adminAktif: typeof loggedInUser !== 'undefined' ? loggedInUser : document.getElementById('set_user').value,
     username:   document.getElementById('set_user').value,
     phone:      document.getElementById('set_phone').value,
@@ -4660,6 +4661,8 @@ async function saveProf() {
      payload,
      kirimgithub: false  // agar tidak update dulu 
   });
+
+  console.log("payload di saveprof :", payload);
     if (res && res.status === "success") {
       await Swal.fire({
         title: "Update Selesai",
@@ -4670,7 +4673,7 @@ async function saveProf() {
       });
 
       // UPDATE RAM & UI
-      await syncDataGhoib();
+      //await syncDataGhoib();
       Temp_Profile = [null, null]; 
       
       //if (typeof loadProfile === 'function') loadProfile(); 
