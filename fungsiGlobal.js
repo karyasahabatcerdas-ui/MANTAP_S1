@@ -264,6 +264,7 @@ async function pullToVault(group, sheetName) {
 /**
  * FUNGSI BULK LOAD + PROGRESS BAR + LABEL
  */
+/*
 async function initialSyncAll() {
   // Hitung ulang total
   let daftar = [];
@@ -337,6 +338,7 @@ async function initialSyncAll() {
     
   });
 }
+*/
 /**
  * FUNGSI BULK LOAD (Awal Login)
  * Melakukan perulangan otomatis berdasarkan konstanta SHEETS kamu.
