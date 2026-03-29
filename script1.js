@@ -152,8 +152,13 @@ async function fetchWithRetry(group, sheetName, maxRetries) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       // Mengirim payload yang sesuai dengan 'doPost' kamu
+      //const response = await panggilGAS("readSheetDirect", { 
+     //   payload: { group: group, sheetName: sheetName } 
+     // });
+
       const response = await panggilGAS("readSheetDirect", { 
-        payload: { group: group, sheetName: sheetName } 
+        group: group, 
+        sheetName: sheetName 
       });
       return response;
     } catch (err) {
