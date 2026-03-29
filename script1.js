@@ -163,7 +163,7 @@ async function initialSyncAllParallel() {
     icon: 'success',
     title: 'VAULT TERKUNCI!',
     text: `${total} Database berhasil sinkron ke RAM.`,
-    background: '#1e293b',         // Dark Background
+    background: '#102342ff',         // Dark Background
     color: '#f8fafc',              // White Text
     iconColor: '#f59e0b',          // Amber/Gold (Sesuai tema kamu)
     confirmButtonColor: '#f59e0b', // Tombol Amber
@@ -211,7 +211,7 @@ async function fetchWithRetry(group, sheetName, maxRetries) {
         sheetName: sheetName,
         kirimgithub: false
       });
-      console.log("respon dari fetch", response)
+      //console.log("respon dari fetch", response)
       return response;
     } catch (err) {
       if (i === maxRetries - 1) throw err;

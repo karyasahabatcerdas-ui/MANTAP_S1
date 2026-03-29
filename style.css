@@ -14,11 +14,11 @@
       .select2-container--default .select2-selection--single {
         height: 38px;
         line-height: 38px;
-        z-index :8000;
+        z-index :10000;
       }
         /* Berikan nilai z-index yang sangat tinggi */
         .swal2-container {
-        z-index: 8000 !important;
+        z-index: 10000 !important;
         }
 
 :root {
@@ -179,4 +179,15 @@ html {
 .border-neon-red {
   border: 2px solid #ef4444 !important;
   box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Efek border tipis warna ungu neon untuk popup */
+.border-neon-purple {
+  border: 1px solid #7a00ff !important;
+  box-shadow: 0 0 15px rgba(122, 0, 255, 0.2) !important;
+}
+
+/* Mengubah warna progress bar bawaan Swal (jika pakai timer) menjadi ungu */
+.swal2-timer-progress-bar {
+  background: #7a00ff !important;
 }

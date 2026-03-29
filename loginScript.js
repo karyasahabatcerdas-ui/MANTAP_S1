@@ -66,7 +66,23 @@
       loadProf();
       
       // update kalau ok
-      Swal.fire({ title: "Berhasil!", text: "Sesi aman diaktifkan", icon: "success", timer: 1500, showConfirmButton: false });
+      //Swal.fire({ title: "Berhasil!", text: "Sesi aman diaktifkan", icon: "success", timer: 1500, showConfirmButton: false });
+
+      Swal.fire({
+        title: "BERHASIL!",
+        text: "Sesi aman diaktifkan, Señor!",
+        icon: "success",
+        background: "#0f172a",         // Deep Blue (Sesuai tema kamu)
+        color: "#ffffff",              // White Text
+        iconColor: "#7a00ff",          // Ungu Neon (Aksen ikon)
+        showConfirmButton: false,
+        timer: 1500,
+        width: '80%',
+        // Opsional: Tambahkan sedikit glow ungu di ikon success
+        customClass: {
+          popup: 'border-neon-purple' 
+        }
+      });
       updateLockStatus(false); //status di gambar profile "false" kondisi login terenkripsi baik
 
     } else {
