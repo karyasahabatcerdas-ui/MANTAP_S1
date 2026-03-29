@@ -35,7 +35,7 @@ async function saveAssetEdit() {
     if (label) label.innerText = "Mengunggah & Sinkronisasi Cloud...";
     
     const res = await panggilGAS("saveAssetEnterpriseWithQR", {
-      payload: {
+     
         asId: asId,
         type: type,
         row: row,
@@ -48,14 +48,11 @@ async function saveAssetEdit() {
           document.getElementById('as_status').value
         ],
         kirimgithub: false // Backup otomatis
-      }
+      
     });
     //console.table(payload);
     console.log("Cek Respon:", res);
-    console.log("Cek Respon res.status:", res.status);
-    console.log("Cek Respon res.data:", res.data);
-    console.log("Cek Respon res.data.status:", res.data.status);
-    console.log("Cek Respon res.data.message:", res.data.message);
+
     if (res && res.status === "success") {
       // --- STEP 4: SUKSES (Buka Kunci) ---
       await Swal.fire({
