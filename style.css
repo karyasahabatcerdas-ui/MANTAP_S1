@@ -170,3 +170,13 @@ html {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(0, 210, 255, 0.8);
 }
+
+.border-neon-amber {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3) !important;
+}
+
+.border-neon-red {
+  border: 2px solid #ef4444 !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}

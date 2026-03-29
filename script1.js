@@ -104,16 +104,36 @@ async function initialSyncAllParallel() {
 
   // 2. Tampilkan UI Loading yang informatif
   Swal.fire({
-    title: 'Sinkronisasi Vault...',
-    html: `
-      <div id="sync-msg" style="margin-bottom:10px; font-size: 14px;">Menghubungkan ke Port Data...</div>
-      <div style="width: 100%; background: #e9ecef; border-radius: 10px; overflow: hidden; border: 1px solid #dee2e6;">
-        <div id="sync-bar" style="width: 0%; height: 25px; background: linear-gradient(90deg, #28a745, #2ecc71); text-align: center; color: white; line-height: 25px; font-weight: bold; transition: width 0.4s ease;">0%</div>
+  title: 'SYNCING VAULT',
+  html: `
+    <div id="sync-msg" style="margin-bottom:15px; color: #94a3b8; font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">
+      Inisialisasi Port Data...
+    </div>
+    <div style="width: 100%; background: #334155; border-radius: 4px; overflow: hidden; height: 20px; border: 1px solid #475569;">
+      <div id="sync-bar" style="width: 0%; height: 100%; background: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: width 0.4s ease-out; position: relative;">
+        <div id="sync-pct" style="position: absolute; width: 100%; text-align: center; color: #1e293b; font-size: 11px; line-height: 20px; font-weight: 800;">
+          0%
+        </div>
       </div>
-    `,
-    allowOutsideClick: false,
-    showConfirmButton: false
-  });
+    </div>
+  `,
+  background: '#1e293b',         // Dark Background (Sesuai tema kamu)
+  color: '#f8fafc',              // White Text
+  iconHtml: '<i class="fas fa-sync-alt fa-spin"></i>', // Optional: Icon putar kalau pakai FontAwesome
+  iconColor: '#f59e0b',          // Amber/Gold
+  width: '85%',
+  padding: '1.5rem',
+  allowOutsideClick: false,
+  showConfirmButton: false,
+  customClass: {
+    popup: 'border-neon-amber'   // Kamu bisa buat CSS .border-neon-amber { border: 1px solid #f59e0b; }
+  },
+  didOpen: () => {
+    // Menghilangkan default loader Swal agar fokus ke progress bar buatan kita
+    const loader = document.querySelector('.swal2-loader');
+    if (loader) loader.style.display = 'none';
+  }
+});
 
   try {
     // 3. Eksekusi dengan Pool Limit (Maksimal 6 Sesi Simultan)
@@ -137,11 +157,41 @@ async function initialSyncAllParallel() {
 
     // 4. SELESAI
     console.log("✅ Vault Synchronized:", Vault);
-    Swal.fire({ icon: 'success', title: 'Vault Terkunci!', text: `${total} database aman di RAM.`, timer: 1500, showConfirmButton: false });
+    //Swal.fire({ icon: 'success', title: 'Vault Terkunci!', text: `${total} database aman di RAM.`, timer: 1500, showConfirmButton: false });
+
+    Swal.fire({
+    icon: 'success',
+    title: 'VAULT TERKUNCI!',
+    text: `${total} Database berhasil sinkron ke RAM.`,
+    background: '#1e293b',         // Dark Background
+    color: '#f8fafc',              // White Text
+    iconColor: '#f59e0b',          // Amber/Gold (Sesuai tema kamu)
+    confirmButtonColor: '#f59e0b', // Tombol Amber
+    confirmButtonText: 'LANJUTKAN',
+    timer: 2000,
+    timerProgressBar: true,        // Garis waktu di bawah (opsional, keren lho!)
+    customClass: {
+        popup: 'border-neon-amber'
+    }
+    });
 
   } catch (error) {
     console.error("Critical Sync Error:", error);
-    Swal.fire('Sync Gagal!', 'Terjadi masalah pada salah satu port. Cek Console.', 'error');
+    //Swal.fire('Sync Gagal!', 'Terjadi masalah pada salah satu port. Cek Console.', 'error');
+
+    Swal.fire({
+    icon: 'error',
+    title: 'SYNC GAGAL!',
+    text: 'Terjadi masalah pada salah satu port data. Silakan cek Console (F12).',
+    background: '#1e293b',
+    color: '#f8fafc',
+    iconColor: '#ef4444',          // Merah Terang
+    confirmButtonColor: '#334155', // Tombol Slate (Neutral)
+    confirmButtonText: 'OKE, PAHAM',
+    customClass: {
+        popup: 'border-neon-red'
+    }
+    });
   }
 }
 
@@ -195,9 +245,11 @@ async function asyncPool(limit, array, fn) {
 function updateSyncUI(pct, msg) {
   const bar = document.getElementById('sync-bar');
   const text = document.getElementById('sync-msg');
+  const pctText = document.getElementById('sync-pct');
   if (bar) {
     bar.style.width = pct + "%";
     bar.innerText = pct + "%";
   }
+  if (pctText) pctText.innerText = pct + "%";
   if (text) text.innerText = msg;
 }
