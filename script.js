@@ -4633,9 +4633,9 @@ async function saveProf() {
   };
 
   // 2. Proses Foto jika ada di temp
-  if (window.Temp_Profile && window.Temp_Profile[0]) {
+  if (Temp_Profile && Temp_Profile[0]) {
     try {
-      const file = window.Temp_Profile[0];
+      const file = Temp_Profile[0];
       const fileInfo = await getBase64(file); 
       payload.photoData = fileInfo.base64; 
       payload.mimeType  = fileInfo.mimeType;
@@ -4671,7 +4671,7 @@ async function saveProf() {
 
       // UPDATE RAM & UI
       await syncDataGhoib();
-      window.Temp_Profile = [null, null]; 
+      Temp_Profile = [null, null]; 
       
       //if (typeof loadProfile === 'function') loadProfile(); 
       if (typeof loadProf === 'function') loadProf(); 
@@ -4896,8 +4896,8 @@ async function saveAdminEdit() {
     };
 
     // 4. PROSES FOTO BARU
-    if (window.Temp_Profile && window.Temp_Profile[1]) {
-      const fileInfo = await getBase64(window.Temp_Profile[1]);
+    if (Temp_Profile && Temp_Profile[1]) {
+      const fileInfo = await getBase64(Temp_Profile[1]);
       payload.photoData = fileInfo.base64;
       payload.mimeType = fileInfo.mimeType;
     }
@@ -4918,7 +4918,7 @@ async function saveAdminEdit() {
       // 6. SYNC DATA GITHUB & RAM
       await syncDataGhoib(); 
 
-      if (window.Temp_Profile) window.Temp_Profile[1] = null; 
+      if (Temp_Profile) Temp_Profile[1] = null; 
       if (typeof closeModal === 'function') closeModal(); 
       if (typeof loadUserList === 'function') loadUserList(); 
       
