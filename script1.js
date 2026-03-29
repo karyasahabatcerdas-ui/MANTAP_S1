@@ -59,7 +59,7 @@ async function saveAssetEdit() {
       await Swal.fire({
         icon: "success",
         title: "Berhasil Disimpan",
-        text: res.data || "Data dan Foto berhasil diperbarui.",
+        text: res.data.message || "Data dan Foto berhasil diperbarui.",
         background: "#0f172a", color: "#fff"
       });
 
