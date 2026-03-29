@@ -4663,6 +4663,7 @@ async function saveProf() {
   });
 
   console.log("payload di saveprof :", payload);
+  console.log("isi dari res :", res);
     if (res && res.status === "success") {
       await Swal.fire({
         title: "Update Selesai",

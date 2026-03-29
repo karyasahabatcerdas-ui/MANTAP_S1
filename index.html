@@ -43,13 +43,36 @@
 
 </head>
 <body onload="syncDataGhoib()">
-
+<!--
 <script>
   // Cukup ganti ID ini saja setiap kali deploy ulang
   var APPSCRIPT_ID = "AKfycbyHZR9e8G7jZjgI435IQofkUSgijLIa7C26mMhtKJPg1WWGEkBvSiYtyR9J6IE1z9YG";  
   // URL akan otomatis terbentuk menggunakan ID di atas
   var APPSCRIPT_URL = "https://script.google.com/macros/s/" + APPSCRIPT_ID + "/exec";
   //console.log("🔗 GAS URL Ready: " + APPSCRIPT_URL);
+</script>
+-->
+<script>
+  // 1. Masukkan ID dari "Test deployments" (/dev)
+  const DEV_ID = "AKfycbyFNgkGp2pIC6VLym5APcXbxwg8j0bHQ4KaIytsZDU"; 
+  
+  // 2. Masukkan ID dari "Deployment Terakhir" (/exec)
+  const PROD_ID = "AKfycbyHZR9e8G7jZjgI435IQofkUSgijLIa7C26mMhtKJPg1WWGEkBvSiYtyR9J6IE1z9YG";
+
+  // 3. Logika Deteksi: Jika buka di localhost atau 127.0.0.1 (Live Server)
+  const isDevelopment = window.location.hostname === "localhost" || 
+                        window.location.hostname === "127.0.0.1";
+
+  // 4. Inilah Variabel Utama kamu (Isinya berubah otomatis, namanya TETAP)
+  var APPSCRIPT_ID = isDevelopment ? DEV_ID : PROD_ID;
+  var SUFFIX = isDevelopment ? "/dev" : "/exec";
+  
+  // Variabel ini yang dipakai oleh semua kode JS kamu:
+  var APPSCRIPT_URL = "https://script.google.com/macros/s/" + APPSCRIPT_ID + SUFFIX;
+
+  // Log untuk memastikan di Console Browser kamu:
+  console.log("🛠️ App Mode: " + (isDevelopment ? "DEVELOPMENT (Internal)" : "PRODUCTION (Public)"));
+  console.log("🔗 GAS URL Ready: " + APPSCRIPT_URL);
 </script>
 
 
