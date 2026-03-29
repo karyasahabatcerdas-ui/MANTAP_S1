@@ -59,9 +59,12 @@
   // 2. Masukkan ID dari "Deployment Terakhir" (/exec)
   const PROD_ID = "AKfycbyHZR9e8G7jZjgI435IQofkUSgijLIa7C26mMhtKJPg1WWGEkBvSiYtyR9J6IE1z9YG";
 
-  // 3. Logika Deteksi: Jika buka di localhost atau 127.0.0.1 (Live Server)
-  const isDevelopment = window.location.hostname === "localhost" || 
-                        window.location.hostname === "127.0.0.1";
+  // 3. Logika Deteksi Lebih Luas:
+  // - localhost / 127.0.0.1 (Live Server)
+  // - file: (Klik langsung dari folder komputer)
+  const isLocalEnv = window.location.hostname === "localhost" || 
+                     window.location.hostname === "127.0.0.1" || 
+                     window.location.protocol === "file:";
 
   // 4. Inilah Variabel Utama kamu (Isinya berubah otomatis, namanya TETAP)
   var APPSCRIPT_ID = isDevelopment ? DEV_ID : PROD_ID;
