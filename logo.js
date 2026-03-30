@@ -100,7 +100,7 @@ async function loadCloudLogo() {
   const imgB = document.getElementById('appLogoSecondary');
 
   // 1. Set logo lokal sebagai default (Agar tidak kosong saat loading)
-  if (img) img.src = "./asset/logo/PT-KSC.png"; 
+  if (img) img.src = "./assets/logo/PT-KSC.png"; 
 
   try {
     // 2. Tambahkan mode: 'no-cors' atau redirect: 'follow' untuk jalur /dev
@@ -132,7 +132,7 @@ async function loadCloudLogo() {
     
     // Pastikan path lokal benar jika di atas tadi belum terpasang
     if (img && !img.src.includes('PT-KSC.png')) {
-       img.src = "./asset/logo/PT-KSC.png";
+       img.src = "./assets/logo/PT-KSC.png";
     }
   }
 }
