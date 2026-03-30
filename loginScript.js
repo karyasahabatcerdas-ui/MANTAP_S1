@@ -17,8 +17,14 @@
     // Kita panggil langsung via fetch karena ini 'pintu masuk' pertama
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
-      mode: 'cors', // Pastikan ini ada
-      redirect: 'follow', // <--- INI KUNCINYA untuk jalur /dev
+      // --- MANTRA 1: Izinkan CORS ---
+      mode: 'cors', 
+      // --- MANTRA 2: Wajib Ikuti Pengalihan Google ---
+      redirect: 'follow', 
+      // --- MANTRA 3: Header standar ---
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8', 
+      },
       body: JSON.stringify({
         action: "checkLogin",
         payload: { username: u, password: p }
@@ -38,6 +44,8 @@
         sessionId: serverData.sessionId, // TOKEN SAKTI KITA
         unlockCode: serverData.unlockCode // <--- BARIS INI WAJIB ADA!
       }));
+
+      
 
       // Update Variabel Global
       loggedInUser = u;
