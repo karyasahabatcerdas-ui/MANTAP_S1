@@ -18,6 +18,7 @@
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
       mode: 'cors', // Pastikan ini ada
+      redirect: 'follow', // <--- INI KUNCINYA untuk jalur /dev
       body: JSON.stringify({
         action: "checkLogin",
         payload: { username: u, password: p }
