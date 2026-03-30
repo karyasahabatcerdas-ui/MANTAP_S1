@@ -1,5 +1,3 @@
-
-
 async function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
@@ -18,7 +16,7 @@ async function login() {
 
   try {
     // Kita panggil langsung via fetch karena ini 'pintu masuk' pertama
-    const response = await fetch(DEV_URL_WITH_TOKEN, {
+    const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
       // --- MANTRA 1: Izinkan CORS ---
       mode: 'cors', 
