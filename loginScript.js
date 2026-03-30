@@ -18,7 +18,7 @@
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
       // --- MANTRA 1: Izinkan CORS ---
-      mode: 'cors', 
+      mode: 'no-cors', 
       // --- MANTRA 2: Wajib Ikuti Pengalihan Google ---
       redirect: 'follow', 
       // --- MANTRA 3: Header standar ---
@@ -32,7 +32,7 @@
     });
 
     console.log("respond dari fetch",response);
-    
+
     // --- PERUBAHAN 3: Validasi Response ---
     if (!response.ok) {
        throw new Error("Server Google merespons dengan error (Cek Login GAS kamu)");
