@@ -47,14 +47,26 @@ async function loadComponent(elementId, filePath) {
             
             // --- BAGIAN PENTING: Eksekusi Script ---
             const scripts = container.querySelectorAll("script");
+
             scripts.forEach(oldScript => {
                 const newScript = document.createElement("script");
                 // Copy atribut (src, type, dll)
                 Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
                 // Copy isi script (inline script)
-                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                //newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                // --- PERBAIKAN DI SINI ---
+                // Pakai .text agar karakter seperti ';' atau '>' tidak dianggap error DOM [ini baru]
+                if (oldScript.src) {
+                    // Jika script punya src (eksternal), jangan isi innerHTML
+                } else {
+                    newScript.text = oldScript.innerHTML; 
+                }
                 // Pasang kembali ke DOM agar dijalankan browser
-                oldScript.parentNode.replaceChild(newScript, oldScript);
+                // Pasang kembali ke DOM [ini baru]
+                if (oldScript.parentNode) {
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                }
+                //oldScript.parentNode.replaceChild(newScript, oldScript);
             });
         }
     } catch (error) {
