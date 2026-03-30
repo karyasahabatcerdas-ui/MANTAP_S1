@@ -22,7 +22,7 @@
       // --- MANTRA 2: Wajib Ikuti Pengalihan Google ---
       redirect: 'follow', 
       // --- INI KUNCI RAHASIANYA ---
-      credentials: 'include', // Memaksa browser mengirim Cookie Login Google kamu
+      //credentials: 'include', // Memaksa browser mengirim Cookie Login Google kamu
       // --- MANTRA 3: Header standar ---
       headers: {
         'Content-Type': 'text/plain;charset=utf-8', 
