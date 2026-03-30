@@ -1,10 +1,10 @@
-const MY_GAS_TOKEN = "ya29.a0Aa7MYiqeSVLX-8h7nwalBGDl88Uo4dfEUUpY55Dmcsg2W64qMI_zqBUNuOersvcNljqfw3rF9VpYkzG8lG5veztdhVbkd907PNYJu24E-qRAtNjW3XIt9DfDv4LEQFF7SURRtGjTlXc8uMfadNJZPELvuaOgGRBZo3T5D5SQG554nFK-Fpd7pgCwYLXhg6bMKMU7TtKuaCgYKAf4SARISFQHGX2MiKj1zhD1iwLxoqnfryA7Jzg0207" ;
+
 
 async function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
   const btn = document.getElementById('btnLogin');
-  const DEV_URL_WITH_TOKEN = APPSCRIPT_URL + "?access_token=" + MY_GAS_TOKEN;
+  
   
   if (!u || !p) {
     Swal.fire({ title: "Ops!", text: "User & Pass wajib diisi", icon: "warning" });
