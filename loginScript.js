@@ -31,6 +31,14 @@
       })
     });
 
+    console.log("respond dari fetch",response);
+    
+    // --- PERUBAHAN 3: Validasi Response ---
+    if (!response.ok) {
+       throw new Error("Server Google merespons dengan error (Cek Login GAS kamu)");
+    }
+    
+
     const res = await response.json();
 
     if (res.status === "success" && res.data.success) {
