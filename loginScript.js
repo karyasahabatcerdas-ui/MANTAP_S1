@@ -1,4 +1,6 @@
- async function login() {
+const MY_GAS_TOKEN = "ya29.a0Aa7MYiqeSVLX-8h7nwalBGDl88Uo4dfEUUpY55Dmcsg2W64qMI_zqBUNuOersvcNljqfw3rF9VpYkzG8lG5veztdhVbkd907PNYJu24E-qRAtNjW3XIt9DfDv4LEQFF7SURRtGjTlXc8uMfadNJZPELvuaOgGRBZo3T5D5SQG554nFK-Fpd7pgCwYLXhg6bMKMU7TtKuaCgYKAf4SARISFQHGX2MiKj1zhD1iwLxoqnfryA7Jzg0207" ;
+
+async function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
   const btn = document.getElementById('btnLogin');
@@ -18,14 +20,15 @@
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
       // --- MANTRA 1: Izinkan CORS ---
-      //mode: 'cors', 
+      mode: 'cors', 
       // --- MANTRA 2: Wajib Ikuti Pengalihan Google ---
       redirect: 'follow', 
       // --- INI KUNCI RAHASIANYA ---
       //credentials: 'include', // Memaksa browser mengirim Cookie Login Google kamu
       // --- MANTRA 3: Header standar ---
       headers: {
-        'Content-Type': 'text/plain;charset=utf-8', 
+        'Authorization': 'Bearer ' + MY_GAS_TOKEN, // Pastikan ada spasi setelah 'Bearer'
+        'Content-Type': 'text/plain;charset=utf-8'
       },
       body: JSON.stringify({
         action: "checkLogin",
