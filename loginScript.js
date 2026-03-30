@@ -17,6 +17,7 @@
     // Kita panggil langsung via fetch karena ini 'pintu masuk' pertama
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
+      mode: 'cors', // Pastikan ini ada
       body: JSON.stringify({
         action: "checkLogin",
         payload: { username: u, password: p }
