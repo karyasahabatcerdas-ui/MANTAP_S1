@@ -18,9 +18,11 @@
     const response = await fetch(APPSCRIPT_URL, {
       method: 'POST',
       // --- MANTRA 1: Izinkan CORS ---
-      mode: 'no-cors', 
+      mode: 'cors', 
       // --- MANTRA 2: Wajib Ikuti Pengalihan Google ---
       redirect: 'follow', 
+      // --- INI KUNCI RAHASIANYA ---
+      credentials: 'include', // Memaksa browser mengirim Cookie Login Google kamu
       // --- MANTRA 3: Header standar ---
       headers: {
         'Content-Type': 'text/plain;charset=utf-8', 
