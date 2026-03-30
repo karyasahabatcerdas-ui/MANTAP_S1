@@ -4,6 +4,7 @@ async function login() {
   const u = document.getElementById('user').value;
   const p = document.getElementById('pass').value;
   const btn = document.getElementById('btnLogin');
+  const DEV_URL_WITH_TOKEN = APPSCRIPT_URL + "?access_token=" + MY_GAS_TOKEN;
   
   if (!u || !p) {
     Swal.fire({ title: "Ops!", text: "User & Pass wajib diisi", icon: "warning" });
@@ -17,7 +18,7 @@ async function login() {
 
   try {
     // Kita panggil langsung via fetch karena ini 'pintu masuk' pertama
-    const response = await fetch(APPSCRIPT_URL, {
+    const response = await fetch(DEV_URL_WITH_TOKEN, {
       method: 'POST',
       // --- MANTRA 1: Izinkan CORS ---
       mode: 'cors', 
@@ -27,7 +28,7 @@ async function login() {
       //credentials: 'include', // Memaksa browser mengirim Cookie Login Google kamu
       // --- MANTRA 3: Header standar ---
       headers: {
-        'Authorization': 'Bearer ' + MY_GAS_TOKEN, // Pastikan ada spasi setelah 'Bearer'
+        //'Authorization': 'Bearer ' + MY_GAS_TOKEN, // Pastikan ada spasi setelah 'Bearer'
         'Content-Type': 'text/plain;charset=utf-8'
       },
       body: JSON.stringify({
