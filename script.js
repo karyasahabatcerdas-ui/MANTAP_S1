@@ -4319,7 +4319,7 @@ async function loadUserList() {
       kirimgithub: false
         });
 
-    console.log("respon di user : ",data);
+    console.log("respon di user : ",res);
     //const data = getApp("Users").slice(1);
     const data = res.user;
     
