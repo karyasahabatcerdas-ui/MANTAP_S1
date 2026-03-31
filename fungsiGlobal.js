@@ -568,7 +568,42 @@ const DROPDOWN_MAP = {
   'm_status':           'Status_User'
 };
 
+async function populateAllDropdowns() {
+  console.log("🛠️ Mengisi semua dropdown via ambilDataSheet...");
 
+  for (let id in DROPDOWN_MAP) {
+    const el = document.getElementById(id);
+    if (!el) continue; 
+
+    const sheetName = DROPDOWN_MAP[id];
+    
+    // --- PERUBAHAN DI SINI ---
+    // Memanggil fungsi baru untuk mengambil data berdasarkan sheetName
+    const data = await ambilDataSheet('SELECT', sheetName); 
+    // -------------------------
+
+    if (data && data.length > 0) {
+      // Jika data dari ambilDataSheet sudah bersih (tanpa header), hapus .slice(1)
+      // Jika masih ada header, tetap gunakan .slice(1)
+      let options = `<option value="">-- Pilih ${sheetName.replace(/_/g, ' ')} --</option>`;
+      
+      data.slice(1).forEach(row => {
+        const val = row[0]; 
+        const lab = row[1] || row[0]; 
+        
+        if (val !== undefined && val !== "") {
+          options += `<option value="${val}">${lab}</option>`;
+        }
+      });
+      
+      el.innerHTML = options;
+    }
+  }
+  console.log("✅ Semua dropdown berhasil di-load.");
+  return true;
+}
+
+/*
 async function populateAllDropdowns() {
   console.log("🛠️ Mengisi semua dropdown dari RAM...");
   
@@ -608,7 +643,7 @@ async function populateAllDropdowns() {
   console.log("✅ Semua dropdown berhasil di-load.");
   return true;
 }
-
+*/
 
 /**
  * FUNGSI BERIKUT PERLU PEMANFAATAN LEBIH LUAS
