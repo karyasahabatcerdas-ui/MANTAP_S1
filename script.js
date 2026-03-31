@@ -2630,9 +2630,11 @@ function toggleSelectAllMaint() {
   if (!master) return;
   
   const checkboxes = document.querySelectorAll('.userCheckMaint');
-  checkboxes.forEach(cb => {
-    cb.checked = master.checked;
-  });
+  if (master.checked) {
+    checkboxes.forEach(cb => {
+      cb.checked = master.checked;
+    });
+  }
 }
 
 
@@ -4994,7 +4996,7 @@ async function saveAdminEdit() {
   });
 
     console.log("res dari saveadminedit", res);
-    
+
     if (res && res.status === "success") {
       await Swal.fire({
         title: "SUKSES",
