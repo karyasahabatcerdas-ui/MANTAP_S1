@@ -4988,11 +4988,16 @@ async function saveAdminEdit() {
     }
 
     // 5. EKSEKUSI VIA panggilGAS (Interceptor Otomatis)
-    const res = await panggilGAS("universalUpdateUser", payload);
+    const res = await panggilGAS("universalUpdateUser", 
+      {payload,
+      kirimgithub: false
+  });
 
+    console.log("res dari saveadminedit", res);
+    
     if (res && res.status === "success") {
       await Swal.fire({
-        title: "¡Misión Cumplida!",
+        title: "SUKSES",
         text: res.data || "Data user berhasil diperbarui.",
         icon: "success",
         confirmButtonText: "OK, Señor!",
@@ -5001,7 +5006,7 @@ async function saveAdminEdit() {
       });
 
       // 6. SYNC DATA GITHUB & RAM
-      await syncDataGhoib(); 
+      //await syncDataGhoib(); 
 
       if (Temp_Profile) Temp_Profile[1] = null; 
       if (typeof closeModal === 'function') closeModal(); 
