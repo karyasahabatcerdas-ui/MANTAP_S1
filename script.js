@@ -3425,8 +3425,8 @@ async function loadAssetDataView(sheetName_val) {
     //const dataFinal = [header, ...hasilFilter];
 
     // Lihat hasil akhir
-    console.log(`Ditemukan ${hasilFilter.length} baris dengan awalan 'a'`);
-    console.table(dataFinal);
+    console.log(`Ditemukan ${sheetRow.length} baris dengan awalan 'a'`);
+    console.table(sheetRow);
     
     if (sheetRow) {
       sheetName = sheetRow[1];
