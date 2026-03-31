@@ -3130,9 +3130,9 @@ async function loadAssetData(sheetName_val) {
     // 2. Jika ada value, cari nama sheet yang sesuai di Reference
     //const sheetRef = getRef("Type_Asset").slice(1);
     //const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
-    const dataTanpaHeader = dataRaw.slice(1);
+    //const dataTanpaHeader = dataRaw.slice(1);
       // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
-    let sheetRow = dataTanpaHeader.filter(baris => {
+    let sheetRow = dataRaw.filter(baris => {
       const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
       return kolomPertama.toLowerCase().startsWith(sheetName_val);
     });
@@ -3427,10 +3427,10 @@ async function loadAssetDataView(sheetName_val) {
     
   } else {
     // 2. Pisahkan Header dan Data agar filter tidak membuang judul kolom
-    const dataTanpaHeader = dataRaw.slice(1);
+    //const dataTanpaHeader = dataRaw.slice(1);
 
     // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
-    let sheetRow = dataTanpaHeader.filter(baris => {
+    let sheetRow = dataRaw.filter(baris => {
       const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
       return kolomPertama.toLowerCase().startsWith(sheetName_val);
     });
