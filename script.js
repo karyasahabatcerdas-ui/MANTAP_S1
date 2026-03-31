@@ -3393,8 +3393,8 @@ async function loadAssetDataView(sheetName_val) {
     }, []);
 
     // 2. Tampilkan hasilnya di console
-    console.log("Total baris gabungan:", dataRaw.length);
-    console.table(dataRaw);    
+    //console.log("Total baris gabungan:", dataRaw.length);
+    //console.table(dataRaw);    
     if (!sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
@@ -3407,12 +3407,7 @@ async function loadAssetDataView(sheetName_val) {
     sheetName = sheetName_val; //lempar value selector sheetName
     
   } else {
-    // 2. Jika ada value, cari nama sheet yang sesuai di Reference
-    //const sheetRef = getRef("Type_Asset").slice(1);
-    //const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
-
     // 2. Pisahkan Header dan Data agar filter tidak membuang judul kolom
-    //const header = semuaAsset[0];
     const dataTanpaHeader = dataRaw.slice(1);
 
     // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
@@ -3420,10 +3415,6 @@ async function loadAssetDataView(sheetName_val) {
       const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
       return kolomPertama.toLowerCase().startsWith(sheetName_val);
     });
-
-    // 4. Gabungkan kembali header dengan hasil filter
-    //const dataFinal = [header, ...hasilFilter];
-
     // Lihat hasil akhir
     //console.log(`Ditemukan ${sheetRow.length} baris dengan awalan 'a'`);
     //console.table(sheetRow);
@@ -3484,7 +3475,7 @@ function renderAssetTableIncrementalView(sheetPass, data) {
 
        // cek jika sheetpass =""
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
-    if (!sheetPass) {
+    //if (!sheetPass) {
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
       idName =rowData[0] ;
       const firstLetter = (idName  || "").charAt(0).toLowerCase();
@@ -3493,10 +3484,10 @@ function renderAssetTableIncrementalView(sheetPass, data) {
       const match = typeRefs.find(ref => ref[0].toLowerCase() === firstLetter);
       sheetName = match ? match[1] : "Unknown"; 
     
-    } else {
-      sheetName = sheetPass;
-      idName = rowData[0];
-    }
+    //} else {
+    //  sheetName = sheetPass;
+     // idName = rowData[0];
+    //}
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
     // 2. Mapping Warna (Definisikan 4 kondisimu di sini)
