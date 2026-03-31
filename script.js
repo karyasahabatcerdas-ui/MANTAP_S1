@@ -3100,7 +3100,7 @@ async function loadAssetData(sheetName_val) {
       // Ambil data menggunakan fungsi kamu
       const dataSheet = ambilDataSheet('ASSET', sheetName);
 
-      if (index === 0 && sheetName) {
+      if (index === 0) {
         // Jika ini array pertama (index 0), ambil semuanya (termasuk header)
         return dataSheet;
       } else {
@@ -3159,7 +3159,7 @@ try {
    
     // Reset checkbox master jika ada
     if (masterCheck) masterCheck.checked = false; 
-
+    console.log("data nya :", data)
     // 2. PANGGIL MESIN RENDER INCREMENTAL ANDA
     renderAssetTableIncremental(sheetName, data);
 
@@ -3404,7 +3404,7 @@ async function loadAssetDataView(sheetName_val) {
       // Ambil data menggunakan fungsi kamu
       const dataSheet = ambilDataSheet('ASSET', sheetName);
 
-      if (index === 0 && sheetName) {
+      if (index === 0 ) {
         // Jika ini array pertama (index 0), ambil semuanya (termasuk header)
         return dataSheet;
       } else {
