@@ -24,7 +24,8 @@ async function loadAuditLogs() {
 
     //const logs = await response.json();
 
-    const logs = getMaint("Logs");
+    //const logs = getMaint("Logs");
+    const logs=ambilDataSheet("MAINT", 'Logs');
     // 3. Cek jika data kosong
     if (!logs || logs.length === 0) {
       logContainer.innerHTML = "<tr><td colspan='3' class='text-center text-muted'>Belum ada aktivitas tercatat.</td></tr>";

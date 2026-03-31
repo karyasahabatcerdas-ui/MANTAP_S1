@@ -3189,11 +3189,8 @@ function renderAssetTableIncremental(sheetPass, data) {
   const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
   if (masterCheck) masterCheck.checked = false;
-  // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong
-  //const newDataLength="";
-  //if (!sheetPass)  {  newDataLength = data.length - 1; }
   const newDataLength=data.length - 1  ;
-
+  //geser rowdata ke 0 jika sheetpass ada isinya
   const x=(!sheetPass || sheetPass==="" ) ? 0 : 1 ;
 
   for (let i = 1; i < data.length; i++) {
@@ -3487,12 +3484,10 @@ function renderAssetTableIncrementalView(sheetPass, data) {
   const existingRows = tbody.rows;
   let idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
-  //const typeRefs = getRef("Type_Asset").slice(1); 
   const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
-    // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong 
-  //const newDataLength="";
-  //if (!sheetPass)  {  const newDataLength = data.length - 1; }
   const newDataLength=data.length - 1 ;
+
+  //geser rowdata ke 0 jika sheetpass ada isinya
   const x=(!sheetPass || sheetPass==="" ) ? 0 : 1 ;
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i-x];
