@@ -394,7 +394,7 @@ function ambilDataSheet(group, sheetName) {
     }
 
     // Berdasarkan hasil console kamu, ini langsung di-parse jadi Array
-    console.table(JSON.parse(decrypted));
+    //console.table(JSON.parse(decrypted));
     return JSON.parse(decrypted); 
 
   } catch (err) {

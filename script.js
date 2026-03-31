@@ -3378,15 +3378,8 @@ async function loadAssetDataView(sheetName_val) {
   let data; // Siapkan variabel penampung
   let sheetName; // Variabel untuk nama sheet yang akan dipakai di render
   const tbody = document.getElementById('viewAssetBody');
-  
-    if (!sheetName_val) {
-    // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
-    // Mengambil data dan meratakannya
-    //let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
-    // mengganti fungsi untuk baca vault ::
-    // 1. Satukan semua data ke dalam satu variabel 'semuaAsset'
-    const semuaAsset = SHEETS.ASSET.reduce((hasil, sheetName, index) => {
-      
+
+  let dataRaw = SHEETS.ASSET.reduce((hasil, sheetName, index) => {      
       // Ambil data menggunakan fungsi kamu
       const dataSheet = ambilDataSheet('ASSET', sheetName);
 
@@ -3399,14 +3392,11 @@ async function loadAssetDataView(sheetName_val) {
       }
     }, []);
 
-    let dataRaw = semuaAsset;
     // 2. Tampilkan hasilnya di console
     console.log("Total baris gabungan:", semuaAsset.length);
-    console.table(semuaAsset);
-
-
-    
-
+    console.table(semuaAsset);    
+    if (!sheetName_val) {
+    // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
     data = dataRaw.filter((row, index) => {
       // Jika ini baris pertama (index 0), JANGAN dihapus (return true)
@@ -3418,8 +3408,25 @@ async function loadAssetDataView(sheetName_val) {
     
   } else {
     // 2. Jika ada value, cari nama sheet yang sesuai di Reference
-    const sheetRef = getRef("Type_Asset").slice(1);
-    const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
+    //const sheetRef = getRef("Type_Asset").slice(1);
+    //const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
+
+    // 2. Pisahkan Header dan Data agar filter tidak membuang judul kolom
+    //const header = semuaAsset[0];
+    const dataTanpaHeader = dataRaw.slice(1);
+
+    // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
+    let sheetRow = dataTanpaHeader.filter(baris => {
+      const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
+      return kolomPertama.toLowerCase().startsWith(sheetName_val);
+    });
+
+    // 4. Gabungkan kembali header dengan hasil filter
+    //const dataFinal = [header, ...hasilFilter];
+
+    // Lihat hasil akhir
+    console.log(`Ditemukan ${hasilFilter.length} baris dengan awalan 'a'`);
+    console.table(dataFinal);
     
     if (sheetRow) {
       sheetName = sheetRow[1];
