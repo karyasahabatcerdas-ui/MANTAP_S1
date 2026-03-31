@@ -3190,9 +3190,9 @@ function renderAssetTableIncremental(sheetPass, data) {
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
   if (masterCheck) masterCheck.checked = false;
   // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong
-  const newDataLength="";
-  if (!sheetPass)  {  newDataLength = data.length - 1; }
-
+  //const newDataLength="";
+  //if (!sheetPass)  {  newDataLength = data.length - 1; }
+  const newDataLength=!sheetPass? data.length - 1 : data.length ;
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const rowIdx = i - 1;
@@ -3487,8 +3487,9 @@ function renderAssetTableIncrementalView(sheetPass, data) {
   //const typeRefs = getRef("Type_Asset").slice(1); 
   const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
     // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong 
-    const newDataLength="";
-  if (!sheetPass)  {  const newDataLength = data.length - 1; }
+  //const newDataLength="";
+  //if (!sheetPass)  {  const newDataLength = data.length - 1; }
+  const newDataLength=!sheetPass? data.length - 1 : data.length ;
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
