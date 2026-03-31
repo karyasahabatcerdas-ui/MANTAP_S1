@@ -4877,12 +4877,100 @@ function uploadPhotoFromAdmin(input) {
   }
 }
 
+/**
+ * [FUNGSI CLIENT: EKSPOR USER KE CSV ]
+ * Membuat file CSV langsung dari Server.
+ */
+
+async function downloadCSV() {
+  try {
+    Swal.fire({ 
+      title: 'Menyusun Laporan...', 
+      text: 'Mengambil data terbaru dari server, Señor.',
+      allowOutsideClick: false, 
+      didOpen: () => Swal.showLoading(),
+      background: "#0f172a", color: "#fff"
+    });
+
+    // 1. AMBIL DATA DARI GAS
+    const res = await panggilGAS("getAllUsers", { kirimgithub: false });
+    const rawData = res.users; // Ini adalah Array(12) yang berisi objek-objek user
+
+    if (!rawData || rawData.length === 0) {
+      throw new Error("Data tidak ditemukan atau kosong!");
+    }
+
+    // 2. LOGIKA PENYUSUNAN CSV (Otomatis Header dari Keys Objek Pertama)
+    // headers akan berisi: ["username", "role", "phone", "email", "photo", ...]
+    const headers = Object.keys(rawData[0]); 
+    
+    // Gabungkan nama-nama key menjadi baris Header (Baris 1)
+    const csvHeaderRow = headers.join(",");
+
+    // Mapping isi data (Baris 2 sampai 12)
+    const csvDataRows = rawData.map(user => {
+      return headers.map(key => {
+        // Ambil nilai berdasarkan key (misal: user['phone'])
+        // Gunakan ?? "" untuk menangani nilai null/undefined
+        let cellValue = user[key] ?? ""; 
+        
+        // Pastikan jadi String dan bersihkan tanda kutip ganda agar tidak merusak CSV
+        let cleanCell = String(cellValue).replace(/"/g, '""'); 
+        
+        // Bungkus setiap kolom dengan kutip ganda agar aman jika ada koma di dalam teks
+        return `"${cleanCell}"`;
+      }).join(",");
+    });
+
+    // Satukan Header dan semua baris data dengan karakter pindah baris (\n)
+    const csvContent = [csvHeaderRow, ...csvDataRows].join("\n");
+
+    // 3. PROSES DOWNLOAD (BLOB)
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    const tgl = new Date().toISOString().slice(0, 10); 
+    
+    link.href = url;
+    link.download = `Data_User_Export_${tgl}.csv`;
+    
+    // 4. TRIGGER DOWNLOAD & CLEANUP
+    document.body.appendChild(link);
+    link.click();
+    
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      Swal.close();
+      
+      if (typeof speakSenor === "function") speakSenor("Laporan User berhasil diekspor, Señor.");
+      Swal.fire({ 
+        title: "Berhasil!", 
+        text: "12 data user telah diekspor ke CSV.", 
+        icon: "success", 
+        timer: 2000,
+        showConfirmButton: false 
+      });
+    }, 500);
+
+  } catch (err) {
+    console.error("Download Error:", err);
+    Swal.fire({ 
+      title: "Gagal Download", 
+      text: err.message, 
+      icon: "error",
+      background: "#0f172a", color: "#fff"
+    });
+  }
+}
 
 
 /**
  * [FUNGSI CLIENT: EKSPOR USER KE CSV - VERSI RAM WUZ!]
  * Membuat file CSV langsung dari memori tanpa ngetuk pintu Server.
  */
+/*
 async function downloadCSV() {
   try {
     Swal.fire({ 
@@ -4944,7 +5032,7 @@ async function downloadCSV() {
     Swal.fire({ title: "Gagal Download", text: err.message, icon: "error" });
   }
 }
-  
+  */
 /**
  * [FUNGSI CLIENT: SAVE ADMIN EDIT - VERSI RAM-SYNC]
  * Menyimpan perubahan user (siapapun) dari panel Admin ke GAS & RAM.
