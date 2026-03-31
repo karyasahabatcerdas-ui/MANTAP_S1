@@ -3192,10 +3192,12 @@ function renderAssetTableIncremental(sheetPass, data) {
   // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong
   //const newDataLength="";
   //if (!sheetPass)  {  newDataLength = data.length - 1; }
-  const newDataLength=(!sheetPass || sheetPass==="" ) ? data.length - 1 : data.length ;
+  const newDataLength=data.length - 1  ;
+
+  const x=(!sheetPass || sheetPass==="" ) ? 0 : 1 ;
 
   for (let i = 1; i < data.length; i++) {
-    const rowData = data[i];
+    const rowData = data[i-x];
     const rowIdx = i - 1;
     
     // cek jika sheetpass =""
@@ -3490,10 +3492,10 @@ function renderAssetTableIncrementalView(sheetPass, data) {
     // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong 
   //const newDataLength="";
   //if (!sheetPass)  {  const newDataLength = data.length - 1; }
-  const newDataLength=(!sheetPass || sheetPass==="" ) ? data.length - 1 : data.length ;
-
+  const newDataLength=data.length - 1 ;
+  const x=(!sheetPass || sheetPass==="" ) ? 0 : 1 ;
   for (let i = 1; i < data.length; i++) {
-    const rowData = data[i];
+    const rowData = data[i-x];
     const rowIdx = i - 1;
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
       // ini adalah value dari urutan Type Asset
