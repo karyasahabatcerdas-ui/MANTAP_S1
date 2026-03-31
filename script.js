@@ -3161,7 +3161,7 @@ try {
     if (masterCheck) masterCheck.checked = false; 
     console.log("data nya :", data)
     // 2. PANGGIL MESIN RENDER INCREMENTAL ANDA
-    renderAssetTableIncremental(sheetName, data);
+    renderAssetTableIncremental(sheetName_val, data);
 
   } catch (err) {
     console.error("Gagal load data aset:", err);
@@ -3189,8 +3189,8 @@ function renderAssetTableIncremental(sheetPass, data) {
   const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
   if (masterCheck) masterCheck.checked = false;
-  // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
-    const newDataLength = data.length - 1;
+  // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong
+  if (!sheetPass)  {  const newDataLength = data.length - 1; }
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
@@ -3485,8 +3485,8 @@ function renderAssetTableIncrementalView(sheetPass, data) {
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
   //const typeRefs = getRef("Type_Asset").slice(1); 
   const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
-    // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
-  const newDataLength = data.length - 1;
+    // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong 
+  if (!sheetPass)  {  const newDataLength = data.length - 1; }
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
