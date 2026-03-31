@@ -3393,8 +3393,8 @@ async function loadAssetDataView(sheetName_val) {
     }, []);
 
     // 2. Tampilkan hasilnya di console
-    console.log("Total baris gabungan:", semuaAsset.length);
-    console.table(semuaAsset);    
+    console.log("Total baris gabungan:", dataRaw.length);
+    console.table(dataRaw);    
     if (!sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
