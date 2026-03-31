@@ -4321,16 +4321,7 @@ async function loadUserList() {
 
     console.log("respon di user : ",res);
     //const data = getApp("Users").slice(1);
-    const data = res.user;
-    
-
-    // JIKA data ternyata masih String (akibat double stringify di server), 
-    // maka kita paksa jadi Object/Array
-    //if (typeof data === 'string') {
-       // data = JSON.parse(data);
-    //}
-
-    
+    const data = res.users;   
 
     if (!data || data.length <= 1) {
       tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Data terdeteksi kosong oleh sistem</td></tr>";
