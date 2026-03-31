@@ -3096,10 +3096,23 @@ async function loadAssetData(sheetName_val) {
   let sheetName=""; // Variabel untuk nama sheet yang akan dipakai di render
   const tbody = document.getElementById('assetBody');
 
+    let dataRaw = SHEETS.ASSET.reduce((hasil, sheetName, index) => {      
+      // Ambil data menggunakan fungsi kamu
+      const dataSheet = ambilDataSheet('ASSET', sheetName);
+
+      if (index === 0) {
+        // Jika ini array pertama (index 0), ambil semuanya (termasuk header)
+        return dataSheet;
+      } else {
+        // Jika array ke-2 dst, buang baris pertama (header) lalu gabungkan
+        return hasil.concat(dataSheet.slice(1));
+      }
+    }, []);
+
   if (!sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Mengambil data dan meratakannya
-    let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
+    //let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
 
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
      //data = dataRaw.filter(row => row[0] !== 'ID_Asset');
@@ -3111,16 +3124,23 @@ async function loadAssetData(sheetName_val) {
       return row[0] !== 'ID_Asset';
     });
 
-    sheetName = sheetName_val; //lempar value selector sheetName
+    //sheetName = sheetName_val; //lempar value selector sheetName
 
   } else {
     // 2. Jika ada value, cari nama sheet yang sesuai di Reference
-    const sheetRef = getRef("Type_Asset").slice(1);
-    const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
+    //const sheetRef = getRef("Type_Asset").slice(1);
+    //const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
+    const dataTanpaHeader = dataRaw.slice(1);
+      // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
+    let sheetRow = dataTanpaHeader.filter(baris => {
+      const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
+      return kolomPertama.toLowerCase().startsWith(sheetName_val);
+    });
     
     if (sheetRow) {
-      sheetName = sheetRow[1];
-      data = getAsset(sheetName);
+      //sheetName = sheetRow[1];
+      //data = getAsset(sheetName);
+      data = sheetRow;
     } else {
       data = []; // Jaga-jaga jika ID tidak ditemukan
     }
@@ -3165,7 +3185,8 @@ function renderAssetTableIncremental(sheetPass, data) {
   const masterCheck = document.getElementById('checkAllAsset');
   let idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
-  const typeRefs = getRef("Type_Asset").slice(1); 
+  //const typeRefs = getRef("Type_Asset").slice(1); 
+  const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
   // A. RESET CHECKBOX HEADER (Penting agar tidak nyangkut saat ganti Tipe Aset)
   if (masterCheck) masterCheck.checked = false;
   // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
@@ -3177,7 +3198,7 @@ function renderAssetTableIncremental(sheetPass, data) {
     
     // cek jika sheetpass =""
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
-    if (!sheetPass) {
+    //if (!sheetPass) {
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
       idName =rowData[0] ;
       const firstLetter = (idName || "").charAt(0).toLowerCase();
@@ -3187,10 +3208,10 @@ function renderAssetTableIncremental(sheetPass, data) {
       sheetName = match ? match[1] : "Unknown";
 
     
-    } else {
-      sheetName = sheetPass;
-      idName = rowData[0];
-    }
+   // } else {
+     // sheetName = sheetPass;
+     // idName = rowData[0];
+    //}
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
     // 2. Mapping Warna (Definisikan 4 kondisimu di sini)
@@ -3392,9 +3413,7 @@ async function loadAssetDataView(sheetName_val) {
       }
     }, []);
 
-    // 2. Tampilkan hasilnya di console
-    //console.log("Total baris gabungan:", dataRaw.length);
-    //console.table(dataRaw);    
+    // 2. Tampilkan hasilnya di console   
     if (!sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
@@ -3404,7 +3423,7 @@ async function loadAssetDataView(sheetName_val) {
       // Untuk baris selanjutnya, hapus jika kolom pertamanya adalah 'ID_Asset'
       return row[0] !== 'ID_Asset';
     });
-    sheetName = sheetName_val; //lempar value selector sheetName
+    //sheetName = sheetName_val; //lempar value selector sheetName
     
   } else {
     // 2. Pisahkan Header dan Data agar filter tidak membuang judul kolom
@@ -3420,7 +3439,7 @@ async function loadAssetDataView(sheetName_val) {
     //console.table(sheetRow);
     
     if (sheetRow) {
-      sheetName = sheetRow[1];
+      //sheetName = sheetRow[1];
       //data = getAsset(sheetName);
       data = sheetRow;
     } else {
@@ -3472,24 +3491,18 @@ function renderAssetTableIncrementalView(sheetPass, data) {
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const rowIdx = i - 1;
-
-       // cek jika sheetpass =""
-    // JIKA sheetPass kosong (Mode Gabungan/All Assets)
-    //if (!sheetPass) {
       // Ambil huruf pertama dari ID Asset (misal 'a' dari 'a.001')
+      // ini adalah value dari urutan Type Asset
       idName =rowData[0] ;
       const firstLetter = (idName  || "").charAt(0).toLowerCase();
       
       // Cari di Type_Asset mana yang kodenya cocok
       const match = typeRefs.find(ref => ref[0].toLowerCase() === firstLetter);
       sheetName = match ? match[1] : "Unknown"; 
-    
-    //} else {
-    //  sheetName = sheetPass;
-     // idName = rowData[0];
-    //}
+
     // 1. Ambil data dan paksa jadi huruf kecil + buang spasi ghaib
     const status = (rowData[4] || "").toLowerCase().trim();
+
     // 2. Mapping Warna (Definisikan 4 kondisimu di sini)
     const colors = {
       "baik":      "#27ae60", // Hijau
