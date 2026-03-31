@@ -4314,8 +4314,14 @@ async function loadUserList() {
     // 2. Ambil data JSON (Asumsi server mengembalikan array of array)
     //const data = await response.json();
 
-    const data = getApp("Users").slice(1);
-    //console.table(data);  
+    
+    const res = await panggilGAS("getAllUsers", {
+      kirimgithub: false
+        });
+
+    //const data = getApp("Users").slice(1);
+    const data = res.user;
+    console.table(data);  
 
     // JIKA data ternyata masih String (akibat double stringify di server), 
     // maka kita paksa jadi Object/Array
