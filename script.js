@@ -3430,7 +3430,8 @@ async function loadAssetDataView(sheetName_val) {
     
     if (sheetRow) {
       sheetName = sheetRow[1];
-      data = getAsset(sheetName);
+      //data = getAsset(sheetName);
+      data = sheetRow;
     } else {
       data = []; // Jaga-jaga jika ID tidak ditemukan
     }
