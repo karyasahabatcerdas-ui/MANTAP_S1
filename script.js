@@ -4328,7 +4328,7 @@ async function loadUserList() {
       // Akses menggunakan nama property (key), bukan index angka
       let username  = user.username || "Unknown";
       let role      = (user.role || "user").toLowerCase();
-      
+      user.index    = index+1 ; // menambahkan index+1 untuk row
       // Catatan: Di data yang kamu share tidak ada property 'status' & 'lastLogin'
       // Jika di data aslinya ada, tetap panggil user.status / user.lastLogin
       let status    = (user.userStatus || "aktif").toLowerCase(); 
@@ -4414,7 +4414,7 @@ async function loadUserList() {
 
 async function openEditModal(encodedUser) {
   //const urlGAS = APPSCRIPT_URL;
-
+  
 
   try {
     // 1. Ambil data user spesifik berdasarkan baris (row)
@@ -4434,7 +4434,7 @@ async function openEditModal(encodedUser) {
     }
 
     // 2. Isi Form Modal
-    document.getElementById('m_row_idx').value = row;
+    document.getElementById('m_row_idx').value = user.index || "";
     document.getElementById('m_user').value = user.username || "";
     document.getElementById('m_pass').value = ""; // Kosongkan demi keamanan
     document.getElementById('m_phone').value = user.phone || "";
