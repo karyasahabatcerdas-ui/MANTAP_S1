@@ -3092,8 +3092,8 @@ function renderAllTypeDropdowns(types) {
  * ====================================================================================================================
  */
 async function loadAssetData(sheetName_val) {
-  let data=[]; // Siapkan variabel penampung
-  let sheetName=""; // Variabel untuk nama sheet yang akan dipakai di render
+  let data; // Siapkan variabel penampung
+  let sheetName; // Variabel untuk nama sheet yang akan dipakai di render
   const tbody = document.getElementById('assetBody');
 
     let dataRaw = SHEETS.ASSET.reduce((hasil, sheetName, index) => {      
@@ -3192,7 +3192,8 @@ function renderAssetTableIncremental(sheetPass, data) {
   // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong
   //const newDataLength="";
   //if (!sheetPass)  {  newDataLength = data.length - 1; }
-  const newDataLength=!sheetPass? data.length - 1 : data.length ;
+  const newDataLength=(!sheetPass || sheetPass==="" ) ? data.length - 1 : data.length ;
+
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const rowIdx = i - 1;
@@ -3460,7 +3461,7 @@ async function loadAssetDataView(sheetName_val) {
     }
 
     // 2. PANGGIL MESIN RENDER KHUSUS VIEW (READ-ONLY)
-    renderAssetTableIncrementalView(sheetName, data);
+    renderAssetTableIncrementalView(sheetName_val, data);
 
   } catch (err) {
     console.error("Gagal load data aset view:", err);
@@ -3489,7 +3490,7 @@ function renderAssetTableIncrementalView(sheetPass, data) {
     // jika sheetPass  kosong artinya  data header belum dipotong, jadi nadk perlu dipotong 
   //const newDataLength="";
   //if (!sheetPass)  {  const newDataLength = data.length - 1; }
-  const newDataLength=!sheetPass? data.length - 1 : data.length ;
+  const newDataLength=(!sheetPass || sheetPass==="" ) ? data.length - 1 : data.length ;
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
