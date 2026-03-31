@@ -3425,8 +3425,8 @@ async function loadAssetDataView(sheetName_val) {
     //const dataFinal = [header, ...hasilFilter];
 
     // Lihat hasil akhir
-    console.log(`Ditemukan ${sheetRow.length} baris dengan awalan 'a'`);
-    console.table(sheetRow);
+    //console.log(`Ditemukan ${sheetRow.length} baris dengan awalan 'a'`);
+    //console.table(sheetRow);
     
     if (sheetRow) {
       sheetName = sheetRow[1];
@@ -3473,13 +3473,15 @@ function renderAssetTableIncrementalView(sheetPass, data) {
   const existingRows = tbody.rows;
   let idName ="" ; //ID_Asset
   let sheetName = ""; // Variabel untuk menyimpan nama sheet yang akan dipakai di render
-  const typeRefs = getRef("Type_Asset").slice(1); 
+  //const typeRefs = getRef("Type_Asset").slice(1); 
+  const typeRefs = ambilDataSheet('SELECT','Type_Asset').slice(1);
     // jika sheetPass  kosong artinya  data header suda dipotong, jadi nadk perlu dipotong 
-      const newDataLength = data.length - 1;
+  const newDataLength = data.length - 1;
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const rowIdx = i - 1;
+
        // cek jika sheetpass =""
     // JIKA sheetPass kosong (Mode Gabungan/All Assets)
     if (!sheetPass) {
