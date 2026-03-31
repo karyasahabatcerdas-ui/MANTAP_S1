@@ -4339,7 +4339,7 @@ async function loadUserList() {
       
       // Catatan: Di data yang kamu share tidak ada property 'status' & 'lastLogin'
       // Jika di data aslinya ada, tetap panggil user.status / user.lastLogin
-      let status    = (user.status || "aktif").toLowerCase(); 
+      let status    = (user.userStatus || "aktif").toLowerCase(); 
       let lastLogin = user.lastLogin || "-";
 
       html += `
