@@ -4319,9 +4319,10 @@ async function loadUserList() {
       kirimgithub: false
         });
 
+    console.log("respon di user : ",data);
     //const data = getApp("Users").slice(1);
     const data = res.user;
-    console.table(data);  
+    
 
     // JIKA data ternyata masih String (akibat double stringify di server), 
     // maka kita paksa jadi Object/Array
