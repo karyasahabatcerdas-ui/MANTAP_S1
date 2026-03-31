@@ -4306,14 +4306,6 @@ async function loadUserList() {
   if (tbody) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'><i class='fas fa-spinner fa-spin'></i> Menghubungi Server...</td></tr>";
 
   try {
-    // 1. Fetch ke doGet dengan action getAllUsers
-    //const response = await fetch(`${urlGAS}?action=getAllUsers`);
-    
-    //if (!response.ok) throw new Error("Gagal terhubung ke server (Status: " + //response.status + ")");
-
-    // 2. Ambil data JSON (Asumsi server mengembalikan array of array)
-    //const data = await response.json();
-
     
     const res = await panggilGAS("getAllUsers", {
       kirimgithub: false
@@ -4342,6 +4334,8 @@ async function loadUserList() {
       let status    = (user.userStatus || "aktif").toLowerCase(); 
       let lastLogin = user.lastLogin || "-";
 
+      const userString = encodeURIComponent(JSON.stringify(user));
+
       html += `
         <tr data-role="${role}">
           <td style="padding:5px;text-align: center;">
@@ -4354,7 +4348,7 @@ async function loadUserList() {
           </td>
           <td style="padding:5px; font-size:10px;">${lastLogin}</td>
           <td style="padding:5px;">
-            <button onclick="openEditModal(${index})"
+            <button onclick="openEditModal('${userString}')"
                     style="background:#2980b9; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:3px;">
               <i class="fa fa-address-card"></i> Edit
             </button>
@@ -4418,15 +4412,20 @@ async function loadUserList() {
  * = =========================================================================
  */  
 
-async function openEditModal(row) {
+async function openEditModal(encodedUser) {
   //const urlGAS = APPSCRIPT_URL;
-  
+
+
   try {
     // 1. Ambil data user spesifik berdasarkan baris (row)
-    const d = getApp("Users")[row];
+    //const d = getApp("Users")[row];
     // Debugging data di console
     //console.table(d);
     // 1. TAMPILKAN MODAL DULU (Agar elemen di dalamnya "bangun")
+
+    const user = JSON.parse(decodeURIComponent(encodedUser));
+    console.log("Data user yang diklik:", user);
+
     const modal = document.getElementById('editModal');
     if (modal) {
         modal.style.display = 'flex';
@@ -4434,7 +4433,16 @@ async function openEditModal(row) {
         throw new Error("Elemen 'editModal' tidak ditemukan di HTML!");
     }
 
-
+    // 2. Isi Form Modal
+    document.getElementById('m_row_idx').value = row;
+    document.getElementById('m_user').value = user.username || "";
+    document.getElementById('m_pass').value = ""; // Kosongkan demi keamanan
+    document.getElementById('m_phone').value = user.phone || "";
+    document.getElementById('m_role').value = (user.role || "user").toLowerCase();
+    document.getElementById('m_email').value = user.email || "";
+    document.getElementById('m_status').value = (user.userStatus || "aktif").toLowerCase();
+    document.getElementById('m_attempts').value = user.attempts || 0;
+    /*
     // 2. Isi Form Modal
     document.getElementById('m_row_idx').value = row;
     document.getElementById('m_user').value = d[0] || "";
@@ -4444,10 +4452,11 @@ async function openEditModal(row) {
     document.getElementById('m_email').value = d[4] || "";
     document.getElementById('m_status').value = (d[6] || "aktif").toLowerCase();
     document.getElementById('m_attempts').value = d[8] || 0;
-    
+    */
+
     // --- 3. LOGIKA LOAD GAMBAR (PHOTO) ---
-    const photoFromDB = d[5]; 
-    const nameFromDB = d[0] || "User"; 
+    const photoFromDB = user.photo; 
+    //const nameFromDB = d[0] || "User"; 
     const imgPreview = document.getElementById('admin_edit_photo');
     
     if (imgPreview) {
@@ -4456,7 +4465,8 @@ async function openEditModal(row) {
         imgPreview.src = photoFromDB + (photoFromDB.includes("?") ? "&" : "?") + "t=" + Date.now();
       } else {
         // Perbaikan format URL UI-Avatars agar lebih rapi
-        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nameFromDB)}&background=2980b9&color=fff&size=128`;
+        //const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=2980b9&color=fff&size=128`;
+        const avatarUrl = `https://ui-avatars.com/api/?name=${nameParam}&background=2980b9&color=fff&size=128`;
         imgPreview.src = avatarUrl;
       }
     }
