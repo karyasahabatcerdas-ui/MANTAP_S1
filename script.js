@@ -4331,7 +4331,7 @@ async function loadUserList() {
     let html = "";
 
     // Gunakan forEach atau loop biasa mulai dari 0 karena ini Array of Objects
-    users.forEach((user, index) => {
+    data.forEach((user, index) => {
       
       // Akses menggunakan nama property (key), bukan index angka
       let username  = user.username || "Unknown";
