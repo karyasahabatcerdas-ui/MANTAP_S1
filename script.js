@@ -3382,8 +3382,30 @@ async function loadAssetDataView(sheetName_val) {
     if (!sheetName_val) {
     // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
     // Mengambil data dan meratakannya
-    let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
-    //let dataRaw = getAsset()
+    //let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
+    // mengganti fungsi untuk baca vault ::
+    // 1. Satukan semua data ke dalam satu variabel 'semuaAsset'
+    const semuaAsset = SHEETS.ASSET.reduce((hasil, sheetName, index) => {
+      
+      // Ambil data menggunakan fungsi kamu
+      const dataSheet = ambilDataSheet('ASSET', sheetName);
+
+      if (index === 0) {
+        // Jika ini array pertama (index 0), ambil semuanya (termasuk header)
+        return dataSheet;
+      } else {
+        // Jika array ke-2 dst, buang baris pertama (header) lalu gabungkan
+        return hasil.concat(dataSheet.slice(1));
+      }
+    }, []);
+
+    let dataRaw = semuaAsset;
+    // 2. Tampilkan hasilnya di console
+    console.log("Total baris gabungan:", semuaAsset.length);
+    console.table(semuaAsset);
+
+
+    
 
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
     data = dataRaw.filter((row, index) => {
