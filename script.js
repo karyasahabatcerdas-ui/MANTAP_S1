@@ -4466,6 +4466,7 @@ async function openEditModal(encodedUser) {
       } else {
         // Perbaikan format URL UI-Avatars agar lebih rapi
         //const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=2980b9&color=fff&size=128`;
+        const nameParam = encodeURIComponent(user.username || "U");
         const avatarUrl = `https://ui-avatars.com/api/?name=${nameParam}&background=2980b9&color=fff&size=128`;
         imgPreview.src = avatarUrl;
       }
