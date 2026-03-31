@@ -4330,7 +4330,7 @@ async function loadUserList() {
       // Akses menggunakan nama property (key), bukan index angka
       let username  = user.username || "Unknown";
       let role      = (user.role || "user").toLowerCase();
-      user.index    = index+1 ; // menambahkan index+1 untuk row
+      user.index    = index ; // menambahkan index+1 untuk row
       // Catatan: Di data yang kamu share tidak ada property 'status' & 'lastLogin'
       // Jika di data aslinya ada, tetap panggil user.status / user.lastLogin
       let status    = (user.userStatus || "aktif").toLowerCase(); 
@@ -4536,8 +4536,89 @@ function openAddUserModal() {
 
 /**
  * [FUNGSI CLIENT: BULK UPDATE STATUS USER]
- * Mengubah status Aktif/Non-Aktif banyak user sekaligus lewat RAM & API
+ * Mengubah status Aktif/Non-Aktif banyak user sekaligus ke server
  */
+
+async function doBulkAction(status) {
+  // 1. AMBIL CHECKBOX YANG DICENTANG
+  const selectedCheckboxes = document.querySelectorAll('.userCheck:checked');
+  
+  if (selectedCheckboxes.length === 0) {
+    return Swal.fire({ 
+      title: "Pilih User", 
+      text: "Centang user yang ingin diubah dulu, Señor!", 
+      icon: "info",
+      background: "#0f172a", color: "#fff"
+    });
+  }
+
+  // 2. KONFIRMASI
+  const confirm = await Swal.fire({
+    title: `${status === "aktif" ? "Aktifkan" : "Non-aktifkan"} User`,
+    text: `Ubah status ${selectedCheckboxes.length} user sekaligus?`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Ya, Lanjutkan",
+    cancelButtonText: "Batal",
+    background: "#0f172a", color: "#fff"
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  // 3. UI LOADING
+  Swal.fire({ 
+    title: 'Processing...', 
+    text: 'Menyinkronkan status ke database...',
+    allowOutsideClick: false, 
+    didOpen: () => { Swal.showLoading(); },
+    background: "#0f172a", color: "#fff"
+  });
+
+  try {
+    // 4. SIAPKAN DATA MINIMALIS (Hanya kirim ID Baris)
+    // bulkPayload berisi: [{id: 2}, {id: 5}, ...]
+    const bulkPayload = Array.from(selectedCheckboxes).map(cb => {
+      return { id: parseInt(cb.value) };
+    });
+
+    // 5. TEMBAK KE GAS (Sesuai Standar panggilGAS kamu)
+    const res = await panggilGAS("bulkUpdateUsers", {
+      updates: bulkPayload,
+      status: status, // "aktif" atau "nonaktif"
+      kirimkegithub: false
+    });
+
+    // 6. HANDLING RESPON (Sesuai Standar status: "success")
+    if (res && res.status === "success") {
+      if (typeof speakSenor === 'function') speakSenor(res.message);
+      
+      await Swal.fire({ 
+        title: "Misión Cumplida!", 
+        text: res.message, 
+        icon: "success",
+        background: "#0f172a", color: "#fff" 
+      });
+      
+      // REFRESH DATA (Gunakan fungsi sinkronisasi kamu)
+      if (typeof syncDataGhoib === 'function') await syncDataGhoib(); 
+      if (typeof loadUserList === 'function') loadUserList();
+
+    } else {
+      throw new Error(res ? res.message : "Gagal update massal.");
+    }
+
+  } catch (err) {
+    console.error("Bulk Action Error:", err);
+    if (typeof speakSenor === 'function') speakSenor("Gagal Señor, sistem sedang mengalami kendala.");
+    Swal.fire({ 
+      title: "Error!", 
+      text: err.message, 
+      icon: "error",
+      background: "#0f172a", color: "#fff" 
+    });
+  }
+}
+/*
 async function doBulkAction(status) {
   // 1. AMBIL DAFTAR BARIS (Contoh: [2, 5, 10])
   const selectedRows = getSelectedRows(); 
@@ -4580,7 +4661,7 @@ async function doBulkAction(status) {
       // Ambil data asli dari RAM (Users ada di window.APP_STORE.assets.Users atau .app.Users)
       // Pastikan path-nya benar sesuai struktur APP_STORE kamu
       let rowData = [...window.APP_STORE.assets["Users"][rowIdx - 1]]; 
-      console.log("rowdata di dobulkaction",rowData)
+      //console.log("rowdata di dobulkaction",rowData)
       // Ubah Status di Kolom G (Index 6)
       rowData[6] = (status === "aktif") ? "Aktif" : "Nonaktif";
       
@@ -4627,8 +4708,7 @@ async function doBulkAction(status) {
     });
   }
 }
-
-
+*/
 
 function getSelectedRows() {
   let rows = [];
