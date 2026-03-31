@@ -4894,7 +4894,14 @@ async function downloadCSV() {
     });
 
     // 1. AMBIL DATA DARI RAM (Termasuk Header)
-    const rawData = APP_STORE.app["Users"]; 
+    //const rawData = APP_STORE.app["Users"]; 
+
+    const res = await panggilGAS("getAllUsers", {
+      kirimgithub: false
+        });
+
+    console.log("respon di user : ",res);
+    const rawData = res.users;  
 
     if (!rawData || rawData.length === 0) {
       throw new Error("Gudang RAM Kosong! Silakan Sinkron Data dulu.");
