@@ -4580,7 +4580,7 @@ async function doBulkAction(status) {
       // Ambil data asli dari RAM (Users ada di window.APP_STORE.assets.Users atau .app.Users)
       // Pastikan path-nya benar sesuai struktur APP_STORE kamu
       let rowData = [...window.APP_STORE.assets["Users"][rowIdx - 1]]; 
-      
+      console.log("rowdata di dobulkaction",rowData)
       // Ubah Status di Kolom G (Index 6)
       rowData[6] = (status === "aktif") ? "Aktif" : "Nonaktif";
       
