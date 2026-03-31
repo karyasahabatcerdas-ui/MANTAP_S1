@@ -4329,6 +4329,41 @@ async function loadUserList() {
     }
 
     let html = "";
+
+    // Gunakan forEach atau loop biasa mulai dari 0 karena ini Array of Objects
+    users.forEach((user, index) => {
+      
+      // Akses menggunakan nama property (key), bukan index angka
+      let username  = user.username || "Unknown";
+      let role      = (user.role || "user").toLowerCase();
+      
+      // Catatan: Di data yang kamu share tidak ada property 'status' & 'lastLogin'
+      // Jika di data aslinya ada, tetap panggil user.status / user.lastLogin
+      let status    = (user.status || "aktif").toLowerCase(); 
+      let lastLogin = user.lastLogin || "-";
+
+      html += `
+        <tr data-role="${role}">
+          <td style="padding:5px;text-align: center;">
+            <input type="checkbox" class="userCheck" value="${index}">
+          </td>
+          <td style="padding:5px;">
+            <b>${username}</b><br>
+            <small style="color:#666;">${role.toUpperCase()}</small><br>
+            <span style="color:${status === 'aktif' ? 'green' : 'red'}; font-weight:bold;">${status.toUpperCase()}</span>
+          </td>
+          <td style="padding:5px; font-size:10px;">${lastLogin}</td>
+          <td style="padding:5px;">
+            <button onclick="openEditModal(${index})"
+                    style="background:#2980b9; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:3px;">
+              <i class="fa fa-address-card"></i> Edit
+            </button>
+          </td>
+        </tr>`;
+    });
+
+    /*
+    let html = "";
     // 3. Loop mulai i=1 untuk melewati header (A=0, B=1, C=2, G=6, H=7, I=8)
     for (let i = 1; i < data.length; i++) {
       let row = data[i];
@@ -4355,7 +4390,7 @@ async function loadUserList() {
           </td>
         </tr>`;
     }
-    
+    */
     tbody.innerHTML = html;
     console.log("✅ User List berhasil diperbarui.");
 
