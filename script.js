@@ -1768,33 +1768,49 @@ async function saveLog(status) {
             },
             photoData: tempPhotos 
         };
+          await Swal.fire({
+                    title: "MENYIMPAN KE SERVER!",
+                    icon: "success",
+                    showConfirmButton : false,
+                    width: '80%'
+                });
+
 
         // --- 4. EKSEKUSI VIA panggilGAS ---
         try {
             // Kita kirim action "processMaintLogEnterprise" dan objek payloadData
             const result = await panggilGAS("processMaintLogEnterprise", {
               payloadData,
-              kirimkegithub:false
-            
+              kirimkegithub:false            
             });
 
-            console.log("pesan dari server : ", result);
 
             if (result && result.status === "success") {
-                await Swal.fire({
-                    title: "¡Misión Cumplida!",
-                    text: result.data || "Data berhasil disimpan!", 
+                await Swal.update({
+                    title: result.data || "Data berhasil disimpan!",
                     icon: "success",
+                    showConfirmButton : false,
                     width: '80%'
                 });
-
 
                 // Reset & Close
                 isSuccessSave = true; 
                 if (typeof closeMaintenanceMode === 'function') closeMaintenanceMode(); 
-                console.table("savelog payload :",payloadData );
-                console.log("savelog payload :",payloadData.payload );
-                console.log("savelog payload :",payloadData.photoData );
+                // 5.1. SYNC VAULT individual
+                if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan') && await pullToVault('MAINT','Logs')) {
+                  if (typeof loadJad === 'function') loadJad();
+                  if (typeof loadKel === 'function') loadKel();
+                  if (typeof loadAuditLogs === 'function') loadAuditLogs();
+                  if (typeof loadHist === 'function') loadHist();
+
+                        // Ganti loading dengan alert sukses
+                      await Swal.fire({ 
+                        title: "BERHASIL! - Jadwal Updated & Refreshed", 
+                        icon: "success", width: '80%',
+                        timer: 2000, 
+                        background: "#0f172a", color: "#fff" 
+                    });
+                }   
                 // Segera tarik data terbaru dari GitHub karena server sudah push ke sana
                 await syncDataGhoib(); 
                 
