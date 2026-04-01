@@ -1947,9 +1947,6 @@ async function openMaintModal(row = "") {
     if(btnSubmit) btnSubmit.innerHTML = '<i class="fas fa-plus"></i> CREATE';
 
     try {
-      // Ganti google.script.run dengan fetch GET
-      //const resp = await fetch(`${urlGAS}?action=getNextMaintId`);
-      //const nextId = await resp.json();
 
       //fungsi bantu mendapat Maint ID sementara
     // historyJadwal adalah array 2D [[A1, B1], [A2, B2], ...]
@@ -2000,6 +1997,12 @@ async function openMaintModal(row = "") {
     } catch (err) {
       console.error("Gagal mengambil ID baru:", err);
       alert("Koneksi ke server gagal saat mengambil ID baru.");
+      return{
+        status : "error",
+        message : "Koneksi ke server gagal saat mengambil ID baru."
+
+      }
+      
     }
 
   } else {
@@ -2386,9 +2389,6 @@ async function loadMaintDetail(row) {
   if (typeof speakSenor === "function") speakSenor("Mencari data, Señor...");
 
   try {
-    // 1. PANGGIL SERVER (GET) dengan parameter action dan row
-    //const response = await fetch(`${urlGAS}?action=getSingleMaintData&row=${row}`);
-    //const data = await response.json();
     //coba pakai daftar chace yg sdh ada saja
     const data = historyJadwal[row];
     //await initAssetDropdowns();
@@ -2470,6 +2470,11 @@ async function loadMaintDetail(row) {
   } catch (err) {
     console.error("Gagal load detail jadwal:", err);
     if (typeof speakSenor === "function") speakSenor("Koneksi bermasalah Señor.");
+    return{
+      status : "error",
+      message : "error loadMaintDetail" + e.toString
+
+    }
   }
 }
 
