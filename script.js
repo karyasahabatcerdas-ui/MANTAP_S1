@@ -2887,11 +2887,10 @@ async function processImport() {
   if (bar) bar.style.width = "50%"; // Indikator awal proses
   
   Swal.fire({
-    title: 'Sinking Data...',
-    text: `Menyuntikkan ${finalPayload.length} jadwal baru, Señor.`,
+    title: `Upload ${finalPayload.length} jadwal baru, Señor.`,
     allowOutsideClick: false,
-    background: "#0f172a",
-    color: "#fff",
+    showConfirmButton: false,
+    background: "#0f172a", color: "#fff",
     didOpen: () => { Swal.showLoading(); }
   });
 
@@ -2909,20 +2908,32 @@ async function processImport() {
       if (bar) bar.style.width = "100%";
       if (typeof speakSenor === 'function') speakSenor("Misión Cumplida! Data sudah mendarat di database, aman Señor!");
 
-      await Swal.fire({
-        title: "Import Berhasil!",
-        text: res.data || "Data berhasil disinkronkan.",
-        icon: "success",
-        width: '80%',
-        background: "#0f172a",
-        color: "#fff"
+      await Swal.update({
+        title: res.message || "DB Berhasil Updated.",
+        icon: "success", width: '80%',
+        showConfirmButton: false,
+        background: "#0f172a",  color: "#fff"
       });
       
       // 4. UPDATE RAM LOKAL & GITHUB
       // Sangat krusial agar 22 sheet di GitHub diperbarui dengan data impor baru
       await syncDataGhoib(); 
       
-      if (typeof closeImportModal === 'function') closeImportModal(); 
+      if (typeof closeImportModal === 'function') closeImportModal();
+      // 5.1. SYNC FAULT individual
+            if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan')) {
+              if (typeof loadJad === 'function') loadJad();
+              if (typeof loadKel === 'function') loadKel();
+                    // Ganti loading dengan alert sukses
+                  await Swal.fire({ 
+                    title: "BERHASIL!", 
+                    text: "Jadwal Updated & Refreshed", 
+                    icon: "success", 
+                    timer: 2000, 
+                    background: "#0f172a", color: "#fff",
+                    showConfirmButton: false
+                });
+            }
 
     } else {
       throw new Error(res ? res.message : "Gagal diproses server.");
