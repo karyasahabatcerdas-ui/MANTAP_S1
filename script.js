@@ -768,12 +768,11 @@ async function loadJad() {
     const keyword = document.getElementById('cari_jadwal')?.value.toUpperCase() || "";
 
     try {
-      // 2. Panggil Server (GET)getref
-      //const response = await fetch(`${urlGAS}?action=getJadwal`);
-      //const data = await response.json();
 
-      const data = getMaint("Maintenance"); //pengganti fungsi gas dilokal
-      historyJadwal = data ;
+      //const data = getMaint("Maintenance"); //pengganti fungsi gas dilokal
+
+      const data = ambilDataSheet('MAINT', 'Maintenance');
+      //historyJadwal = data ;
       
       if (!data || data.length < 2) return;
       
@@ -1836,7 +1835,9 @@ async function loadKel() {
     //const response = await fetch(`${urlGAS}?action=getJadwal`);
     //const data = await response.json();
 
-    const data = getMaint("Maintenance"); 
+    //const data = getMaint("Maintenance"); 
+
+    const data = ambilDataSheet('MAINT', 'Maintenance');
 
     if (!data || data.length < 2) {
       tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Belum ada jadwal maintenance.</td></tr>";
