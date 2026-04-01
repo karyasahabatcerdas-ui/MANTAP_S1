@@ -2774,6 +2774,7 @@ async function parseCSV(text) {
 
       // --- TARIK DATA MAINTENANCE SEKALI SAAT DI AWAL ---
       const dataMaint = ambilDataSheet('MAINT', 'Maintenance');
+
   try {
       const hasilValidasi = rawList.map(item => {
       // A. Cek Keberadaan di Master (Cari di array masterAssets kita)
@@ -2901,6 +2902,8 @@ async function processImport() {
         finalPayload,
         kirimkegas: false
     });
+
+    console.log('hasil fetch :', res);
 
     if (res && res.status === "success") {
       if (bar) bar.style.width = "100%";
