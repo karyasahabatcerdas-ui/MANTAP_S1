@@ -4335,13 +4335,13 @@ async function loadUserList() {
       // Jika di data aslinya ada, tetap panggil user.status / user.lastLogin
       let status    = (user.userStatus || "aktif").toLowerCase(); 
       let lastLogin = user.lastLogin || "-";
-
+      const rowNumber = (user.index !== undefined) ? user.index + 2 : index + 2;
       const userString = encodeURIComponent(JSON.stringify(user));
 
       html += `
         <tr data-role="${role}">
           <td style="padding:5px;text-align: center;">
-            <input type="checkbox" class="userCheck" value="${index}">
+            <input type="checkbox" class="userCheck" value="${rowNumber}">
           </td>
           <td style="padding:5px;">
             <b>${username}</b><br>
