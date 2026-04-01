@@ -2430,6 +2430,30 @@ async function loadMaintDetail(row) {
 
     // 3. LOGIKA TANGGAL (Plan) 
     // Format dari GAS: "dd/mm/yyyy hh:mm" -> Ubah ke: "yyyy-mm-ddThh:mm"
+    //  ini format ISO tidak peduli setting lokal jamnya dia akan menampilkan sesusi browser
+    const s = data[7]; // Contoh: "25/12/2024 14:30"
+    console.log("Format asli dari DB:", s);
+
+    if (s && s.length >= 10) { // Minimal ada tanggal dd/mm/yyyy
+      try {
+        // Memastikan kita mengambil bagian yang benar
+        const d = s.substring(0, 2);   // dd
+        const m = s.substring(3, 5);   // mm
+        const y = s.substring(6, 10);  // yyyy
+        const t = s.substring(11, 16); // hh:mm (ambil 5 karakter setelah spasi)
+
+        const formattedDate = `${y}-${m}-${d}T${t}`;
+        
+        // Set value ke input neon kamu
+        document.getElementById('m_plan').value = formattedDate;
+        
+        console.log("Berhasil diconvert ke format HTML:", formattedDate);
+      } catch (e) {
+        console.error("Gagal convert tanggal:", s, e);
+      }
+    }
+
+/*
     const s = data[7]; 
     console.log("format dari dB", data[7]);
     if (s && s.length >= 16) {
@@ -2442,6 +2466,7 @@ async function loadMaintDetail(row) {
         console.log(e.toString())
       }
     }
+*/
 
     // 4. TAMPILKAN MODAL
     const modal = document.getElementById('modalMaint');
