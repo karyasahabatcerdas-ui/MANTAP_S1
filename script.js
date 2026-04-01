@@ -129,7 +129,7 @@ function liveSearchRAM(keyword) {
           type: tipe,           // Untuk item.type
           id: row[0] || "-",    // Untuk item.id (Kolom A)
           nama: row[2] || "-",  // Untuk item.nama (Kolom B)
-          lokasi: row[2] || "-",// Untuk item.lokasi (Kolom C)
+          lokasi: row[3] || "-",// Untuk item.lokasi (Kolom C)
           row: i + 1            // Untuk item.row (Nomor baris asli)
         });
       }
