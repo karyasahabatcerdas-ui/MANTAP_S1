@@ -2391,7 +2391,8 @@ async function loadMaintDetail(row) {
 
   try {
     //coba pakai daftar chace yg sdh ada saja
-    const data = historyJadwal[row];
+    //const data = historyJadwal[row];
+     const data = ambilDataSheet('MAINT','Maintenance')[row];
     //await initAssetDropdowns();
     if (!data || data.length === 0) {
       if (typeof speakSenor === "function") speakSenor("Data ghoib Señor!");
