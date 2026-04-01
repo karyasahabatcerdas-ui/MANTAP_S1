@@ -2355,8 +2355,10 @@ function openMaintDetailView(row) {
   const btnCreate = document.getElementById('btnCreateMaint');
   const btnSearch = document.getElementById('btnMaintSearch');
   
+  
   if (btnCreate) btnCreate.style.display = "none";
   if (btnSearch) btnSearch.style.display = "none";
+  
 
   // 2. Gembok Semua Input (Disabled)
   const inputs = ['m_plan', 'm_shift_note', 'm_other_note', 'm_state'];
@@ -2429,12 +2431,15 @@ async function loadMaintDetail(row) {
     // 3. LOGIKA TANGGAL (Plan) 
     // Format dari GAS: "dd/mm/yyyy hh:mm" -> Ubah ke: "yyyy-mm-ddThh:mm"
     const s = data[7]; 
+    console.log("format dari dB", data[7]);
     if (s && s.length >= 16) {
       try {
         const formattedDate = `${s.substring(6,10)}-${s.substring(3,5)}-${s.substring(0,2)}T${s.substring(11,16)}`;
         setVal('m_plan', formattedDate);
+        console.log("format dari dB", formattedDate);
       } catch (e) {
         console.error("Format tanggal error:", s);
+        console.log(e.toString())
       }
     }
 
