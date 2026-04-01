@@ -2758,8 +2758,59 @@ async function parseCSV(text) {
     };
   }).filter(item => item.idJad && item.asId);
 
-  // 4. LOGIKA VALIDASI RAM (PENGGANTI FETCH KE GAS)
+  
+  // 4. LOGIKA VALIDASI RAM (PENGGANTI FETCH KE GAS - TERENKRIPSI)
+      //const ini akan menggantikan fungsi megasearch
+      // --- TARIK MASTER ASSET SEKALI SAAT DI AWAL ---
+      const masterAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
+          const dataSheet = ambilDataSheet('ASSET', sheetName);
+          const dataWithKeys = dataSheet.slice(1).map(row => ({
+              asId:      row[0], 
+              foundType: sheetName,
+              foundName: row[2]
+          }));
+          return hasil.concat(dataWithKeys);    
+      }, []);
+
+      // --- TARIK DATA MAINTENANCE SEKALI SAAT DI AWAL ---
+      const dataMaint = ambilDataSheet('MAINT', 'Maintenance');
   try {
+      const hasilValidasi = rawList.map(item => {
+      // A. Cek Keberadaan di Master (Cari di array masterAssets kita)
+      const master = masterAssets.find(a => 
+        String(a.asId).trim().toLowerCase() === String(item.asId).trim().toLowerCase()
+      );
+      
+      if (!master) {
+        return { ...item, status: "NG", msg: "ID Asset Tidak Terdaftar" };
+      }
+
+      // B. Cek Duplikat di Jadwal Maintenance (Gunakan dataMaint yang ditarik di awal)
+      const isDuplikat = dataMaint.some(row => {
+        const dbAsId = String(row[2]).trim().toLowerCase(); // Kolom C
+        const dbJadId = String(row[10]).trim().toLowerCase(); // Kolom K
+        return dbAsId === item.asId.toLowerCase() && dbJadId === item.idJad.toLowerCase();
+      });
+
+      if (isDuplikat) {
+        return { ...item, status: "NG", msg: "Jadwal Sudah Ada (Duplikat)" };
+      }
+
+      // C. LOLOS: Data sudah lengkap dari 'master' yang ditemukan tadi
+      return { 
+        ...item, 
+        status: "OK", 
+        msg: "Ready", 
+        foundType: master.foundType, 
+        foundName: master.foundName 
+      };
+    });
+
+
+
+  // 4. LOGIKA VALIDASI RAM (PENGGANTI FETCH KE GAS)
+  /*
+  try {  
     const hasilValidasi = rawList.map(item => {
       // A. Cek Keberadaan di Master (Pakai megaSearch RAM kita)
       const master = megaSearch("ALL", item.asId);
@@ -2767,9 +2818,9 @@ async function parseCSV(text) {
       if (master.status !== "success") {
         return { ...item, status: "NG", msg: "ID Asset Tidak Terdaftar" };
       }
-
       // B. Cek Duplikat di Jadwal Maintenance (RAM)
-      const dataMaint = getMaint("Maintenance");
+      //const dataMaint = getMaint("Maintenance");
+      const dataMaint = ambilDataSheet('MAINT','Maintenance');
       const isDuplikat = dataMaint.some(row => {
         const dbAsId = String(row[2]).trim().toLowerCase(); // Kolom C
         const dbJadId = String(row[10]).trim().toLowerCase(); // Kolom K
@@ -2789,6 +2840,8 @@ async function parseCSV(text) {
         foundName: master.results[0].data[2] // Kolom C (Nama)
       };
     });
+    */
+
 
     // 5. SELESAI & TAMPILKAN PREVIEW
     if (animasi) animasi.style.display = "none";
@@ -3235,7 +3288,7 @@ try {
    
     // Reset checkbox master jika ada
     if (masterCheck) masterCheck.checked = false; 
-    console.log("data nya :", data)
+    //console.log("data nya :", data)
     // 2. PANGGIL MESIN RENDER INCREMENTAL ANDA
     renderAssetTableIncremental(sheetName_val, data);
 
@@ -4387,7 +4440,7 @@ async function loadUserList() {
       kirimgithub: false
         });
 
-    console.log("respon di user : ",res);
+    //console.log("respon di user : ",res);
     //const data = getApp("Users").slice(1);
     const data = res.users;   
 
