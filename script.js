@@ -2993,6 +2993,58 @@ function filterPreview(mode) {
 
   let okCount = 0;
 
+
+  // --- BAGIAN INI TETAP (Dijalankan SEBELUM loop forEach agar efisien) ---
+    const masterAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
+        const dataSheet = ambilDataSheet('ASSET', sheetName);
+        const dataWithKeys = dataSheet.slice(1).map(row => ({
+            asId: row[0], 
+            foundType: sheetName, 
+            foundName: row[2] 
+        }));
+        return hasil.concat(dataWithKeys);    
+    }, []);
+
+    // --- START LOOPING TABEL ---
+lastValidatedData.forEach((item, index) => {
+    const isOK = (item.status === "OK");
+    if (isOK) okCount++;
+    
+    // Logic Filter (ALL / OK / NG)
+    if (mode !== 'ALL' && item.status !== mode) return;
+
+    // --- PERBAIKAN "MATA RAM" (TANPA megaSearch) ---
+    // Kita ambil data pendukung yang sudah "nempel" di item saat proses validasi tadi
+    // Jika karena suatu hal tidak ada, kita fallback ke "ID TIDAK TERDAFTAR"
+    const namaAsli = item.foundName || "⚠️ ID TIDAK TERDAFTAR";
+    const tipeAsli = item.foundType || "N/A";
+
+    html += `
+      <tr style="border-bottom:1px solid #eee; background:${isOK ? 'white' : '#fff5f5'}; transition: 0.2s;">
+        <td style="padding:10px; color:#adb5bd; font-size:10px; vertical-align:top;">${index + 1}</td>
+        
+        <td style="padding:10px; vertical-align:top;">
+          <div style="font-weight:bold; font-size:11px; color:#212529;">${item.idJad}</div>
+          <div style="font-size:10px; color:#0d6efd; margin-top:2px;">ID: ${item.asId}</div>
+          <div style="font-size:9px; color:#6c757d; margin-top:2px;"><i class="far fa-calendar-alt"></i> ${item.plan.split(" ")[0]}</div>
+        </td>
+
+        <td style="padding:10px; vertical-align:top;">
+          <div style="font-size:10px; font-weight:bold; color:${isOK ? '#198754' : '#dc3545'};">${namaAsli}</div>
+          <div style="font-size:9px; color:#6c757d;">Kategori: ${tipeAsli}</div>
+        </td>
+
+        <td style="padding:10px; text-align:right; vertical-align:middle;">
+          <span style="display:inline-block; padding:3px 8px; border-radius:10px; font-size:9px; font-weight:bold; 
+                background:${isOK ? '#d1e7dd' : '#f8d7da'}; color:${isOK ? '#0f5132' : '#842029'};">
+            ${isOK ? 'READY' : 'REJECT'}
+          </span>
+          <div style="font-size:8px; color:#dc3545; margin-top:4px; font-style:italic;">${isOK ? '' : item.msg}</div>
+        </td>
+      </tr>`;
+});
+
+/*
   lastValidatedData.forEach((item, index) => {
     const isOK = (item.status === "OK");
     if (isOK) okCount++;
@@ -3029,7 +3081,7 @@ function filterPreview(mode) {
         </td>
       </tr>`;
   });
-
+*/
   html += `</tbody></table>`;
   
   tableWrap.innerHTML = html;
