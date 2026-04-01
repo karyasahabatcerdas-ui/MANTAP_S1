@@ -2066,7 +2066,8 @@ async function saveMaintData() {
         // Kita bungkus data dan row ke dalam payload
         const res = await panggilGAS("saveMaintData", {
             data: [mId, mType, asId, mNama, "", "", user, mPlan, "", mstate, mIDjad, mShift, mOther, mlokasi],
-            row: row 
+            row: row,
+            kirimgithub: false 
         });
 
         if (res && res.status === "success") {
