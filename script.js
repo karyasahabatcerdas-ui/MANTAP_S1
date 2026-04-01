@@ -2038,7 +2038,7 @@ async function saveMaintData() {
     const btn = document.getElementById('btnCreateMaint'); 
 
     if (!asId || !mPlan) {
-      if (typeof speakSenor === 'function') speakSenor("Señor, data belum lengkap!");
+      if (typeof speakSenor === 'function') speakSenor("Data belum lengkap!");
       return Swal.fire({ title: "Warning", text: "Isi Aset & Plan Date!", icon: "warning", background: "#1e293b", color: "#fff" });
     }
 
@@ -2088,6 +2088,9 @@ async function saveMaintData() {
 
             // 5. SYNC GITHUB & RAM: Sangat penting agar tabel langsung update
             await syncDataGhoib(); 
+            // 5. SYNC FAULT individual
+            await pullToVault('MAINT','Maintenance');
+            await pullToVault('MAINT','Log_Kegiatan');
 
             if (typeof closeMaintModal === 'function') closeMaintModal();
             if (typeof loadJad === 'function') loadJad();
