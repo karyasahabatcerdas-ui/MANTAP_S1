@@ -2092,9 +2092,8 @@ async function saveMaintData() {
               if (typeof loadKel === 'function') loadKel();
                     // Ganti loading dengan alert sukses
                   await Swal.fire({ 
-                    title: "BERHASIL!", 
-                    text: "Jadwal Updated & Refreshed", 
-                    icon: "success", 
+                    title: "BERHASIL! - Jadwal Updated & Refreshed", 
+                    icon: "success", width: '80%',
                     timer: 2000, 
                     background: "#0f172a", color: "#fff" 
                 });
@@ -2645,20 +2644,29 @@ async function doBulkDeleteMaint() {
 
       if (res && res.status === "success") {
         // res.data.msg berasal dari return object di GS deleteSelectedMaint
-        await Swal.fire({ 
-          title: "Berhasil!", 
-          text: res.data.msg || "Data berhasil dihapus.", 
-          icon: "success", 
-          width: '80%',
+        await Swal.update({ 
+          title: res.data.msg || "Data Deleted.", 
+          icon: "success", width: '80%',
           background: "#0f172a", color: "#fff"
         });
         
         // 4. SINKRONISASI GITHUB & UI
         await syncDataGhoib(); 
-        
-        if (typeof loadJad === 'function') loadJad();
-        if (typeof loadKel === 'function') loadKel();
-        
+
+        // 5.1. SYNC FAULT individual
+            if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan')) {
+              if (typeof loadJad === 'function') loadJad();
+              if (typeof loadKel === 'function') loadKel();
+                    // Ganti loading dengan alert sukses
+                  await Swal.fire({ 
+                    title: "BERHASIL!", 
+                    text: "Jadwal Updated & Refreshed", 
+                    icon: "success", 
+                    timer: 2000, 
+                    background: "#0f172a", color: "#fff" 
+                });
+            }
+
         // Reset checkbox master agar tidak nyangkut
         const master = document.getElementById('selectAllMaint');
         if (master) master.checked = false;
@@ -2837,8 +2845,8 @@ async function processImport() {
   try {
     // Kita bungkus finalPayload ke dalam objek payload sesuai standar panggilGAS
     const res = await panggilGAS("processImportBulk", {
-        payload: finalPayload,
-        user: loggedInUser
+        finalPayload,
+        kirimkegas: false
     });
 
     if (res && res.status === "success") {
