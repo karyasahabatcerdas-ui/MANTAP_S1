@@ -2077,23 +2077,24 @@ async function saveMaintData() {
 
         if (res && res.status === "success") {
             if (typeof speakSenor === 'function') speakSenor("Misión Cumplida, Señor!");
-            
-            await Swal.fire({ 
-                title: "BERHASIL!", 
-                text: res.data || "Jadwal berhasil diperbarui", 
-                icon: "success", 
-                timer: 2000, 
-                background: "#0f172a", color: "#fff" 
-            });
 
             // 5. SYNC GITHUB & RAM: Sangat penting agar tabel langsung update
-            await syncDataGhoib(); 
-            // 5. SYNC FAULT individual
-            await pullToVault('MAINT','Maintenance');
-            await pullToVault('MAINT','Log_Kegiatan');
+            await syncDataGhoib();                   
 
             if (typeof closeMaintModal === 'function') closeMaintModal();
-            if (typeof loadJad === 'function') loadJad();
+            // 5.1. SYNC FAULT individual
+            if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan')) {
+              if (typeof loadJad === 'function') loadJad();
+              if (typeof loadKel === 'function') loadKel();
+                    // Ganti loading dengan alert sukses
+                  await Swal.fire({ 
+                    title: "BERHASIL!", 
+                    text: res.data || "Jadwal berhasil diperbarui", 
+                    icon: "success", 
+                    timer: 2000, 
+                    background: "#0f172a", color: "#fff" 
+                });
+            }            
 
         } else {
             throw new Error(res ? res.message : "Gagal menyimpan jadwal");
