@@ -4584,7 +4584,7 @@ async function doBulkAction(status) {
     // 5. TEMBAK KE GAS (Sesuai Standar panggilGAS kamu)
     const res = await panggilGAS("bulkUpdateUsers", {
       updates: bulkPayload,
-      status: status, // "aktif" atau "nonaktif"
+      status: status.toLowerCase(), // "aktif" atau "nonaktif"
       kirimkegithub: false
     });
 
@@ -4593,7 +4593,7 @@ async function doBulkAction(status) {
       if (typeof speakSenor === 'function') speakSenor(res.message);
       
       await Swal.fire({ 
-        title: "Misión Cumplida!", 
+        title: "SUKSES", 
         text: res.message, 
         icon: "success",
         background: "#0f172a", color: "#fff" 
