@@ -4542,7 +4542,7 @@ function openAddUserModal() {
 async function doBulkAction(status) {
   // 1. AMBIL CHECKBOX YANG DICENTANG
   const selectedCheckboxes = document.querySelectorAll('.userCheck:checked');
-  
+  console.log("yang dipilih :",selectedCheckboxes);
   if (selectedCheckboxes.length === 0) {
     return Swal.fire({ 
       title: "Pilih User", 
