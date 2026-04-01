@@ -2431,27 +2431,46 @@ async function loadMaintDetail(row) {
     // 3. LOGIKA TANGGAL (Plan) 
     // Format dari GAS: "dd/mm/yyyy hh:mm" -> Ubah ke: "yyyy-mm-ddThh:mm"
     //  ini format ISO tidak peduli setting lokal jamnya dia akan menampilkan sesusi browser
-    const s = data[7]; // Contoh: "25/12/2024 14:30"
+    const s = data[7]; // Contoh: "06/05/2026 9:00" atau "25/12/2024 14:30"
     console.log("Format asli dari DB:", s);
 
-    if (s && s.length >= 10) { // Minimal ada tanggal dd/mm/yyyy
+    if (s && s.includes("/") && s.includes(":")) {
       try {
-        // Memastikan kita mengambil bagian yang benar
-        const d = s.substring(0, 2);   // dd
-        const m = s.substring(3, 5);   // mm
-        const y = s.substring(6, 10);  // yyyy
-        const t = s.substring(11, 16); // hh:mm (ambil 5 karakter setelah spasi)
+        // 1. Pisahkan tanggal dan jam berdasarkan SPASI
+        const parts = s.trim().split(" ");
+        const tglPart = parts[0]; // "06/05/2026"
+        const jamPart = parts[1] || "00:00"; // "9:00" atau default jika jam kosong
 
-        const formattedDate = `${y}-${m}-${d}T${t}`;
+        // 2. Pecah komponen tanggal (Hari/Bulan/Tahun)
+        const [d, m, y] = tglPart.split("/");
+
+        // 3. Pecah komponen jam (Jam:Menit)
+        let [hh, mm] = jamPart.split(":");
+
+        // 4. STANDARISASI: Pastikan semua 2 digit agar input HTML mau menerima
+        const day   = d.padStart(2, '0');
+        const month = m.padStart(2, '0');
+        const year  = y;
+        const hour  = hh.padStart(2, '0');
+        const min   = mm.padStart(2, '0');
+
+        // 5. Gabungkan menjadi format ISO: YYYY-MM-DDThh:mm
+        const formattedDate = `${year}-${month}-${day}T${hour}:${min}`;
         
-        // Set value ke input neon kamu
-        document.getElementById('m_plan').value = formattedDate;
-        
-        console.log("Berhasil diconvert ke format HTML:", formattedDate);
+        // Set value ke input neon
+        const el = document.getElementById('m_plan');
+        if (el) {
+          el.value = formattedDate;
+          console.log("✅ Berhasil diconvert ke ISO:", formattedDate);
+        }
+
       } catch (e) {
-        console.error("Gagal convert tanggal:", s, e);
+        console.error("❌ Gagal convert tanggal:", s, e);
       }
+    } else {
+      console.warn("⚠️ Format tanggal tidak dikenali atau kosong:", s);
     }
+
 
 /*
     const s = data[7]; 
