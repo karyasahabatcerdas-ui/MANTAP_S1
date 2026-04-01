@@ -1772,7 +1772,13 @@ async function saveLog(status) {
         // --- 4. EKSEKUSI VIA panggilGAS ---
         try {
             // Kita kirim action "processMaintLogEnterprise" dan objek payloadData
-            const result = await panggilGAS("processMaintLogEnterprise", payloadData);
+            const result = await panggilGAS("processMaintLogEnterprise", {
+              payloadData,
+              kirimkegithub:false
+            
+            });
+
+            console.log("pesan dari server : ", result);
 
             if (result && result.status === "success") {
                 await Swal.fire({
@@ -1781,6 +1787,7 @@ async function saveLog(status) {
                     icon: "success",
                     width: '80%'
                 });
+
 
                 // Reset & Close
                 isSuccessSave = true; 
