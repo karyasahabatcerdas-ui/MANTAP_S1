@@ -2077,8 +2077,7 @@ async function saveMaintData() {
 
         if (res && res.status === "success") {
           Swal.update({
-              title: 'Step 2: Menghapus Foto di Drive...',
-              text: res.data || "DB Jadwal Updated" 
+              title: res.data || "DB Jadwal Updated"
             });
 
             if (typeof speakSenor === 'function') speakSenor("Misión Cumplida, Señor!");
@@ -2094,7 +2093,7 @@ async function saveMaintData() {
                     // Ganti loading dengan alert sukses
                   await Swal.fire({ 
                     title: "BERHASIL!", 
-                    text: "Jadwal Refreshed", 
+                    text: "Jadwal Updated & Refreshed", 
                     icon: "success", 
                     timer: 2000, 
                     background: "#0f172a", color: "#fff" 
