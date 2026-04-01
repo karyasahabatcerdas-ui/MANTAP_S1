@@ -1951,16 +1951,17 @@ async function openMaintModal(row = "") {
       //fungsi bantu mendapat Maint ID sementara
     // historyJadwal adalah array 2D [[A1, B1], [A2, B2], ...]
     let nextId;
+    const jadwal = ambilDataSheet('MAINT', 'Maintenance');
 
     // 1. Cek jumlah baris (length)
-    if (!historyJadwal || historyJadwal.length < 2) {
+    if (!jadwal || jadwal.length < 2) {
         // Jika kosong atau cuma ada Header (baris 1)
         nextId = "M-00001";
     } else {
         // 2. Ambil baris TERAKHIR (index: length - 1) 
         // dan kolom PERTAMA (index: 0)
-        const lastRowIndex = historyJadwal.length - 1;
-        const lastVal = String(historyJadwal[lastRowIndex][0]); 
+        const lastRowIndex = jadwal.length - 1;
+        const lastVal = String(jadwal[lastRowIndex][0]); 
 
         // 3. Belah (Replace), Tambah 1, dan Pad 5 Digit
         const num = parseInt(lastVal.replace("M-", "")) || 0;
