@@ -5230,3 +5230,75 @@ async function saveAdminEdit() {
 function closeModal() {
   document.getElementById('editModal').style.display = 'none';
 }
+
+async function doBulkDelete() {
+  const selectedCheckboxes = document.querySelectorAll('.userCheck:checked');
+  
+  if (selectedCheckboxes.length === 0) { 
+    return Swal.fire({
+      title: "Pilih Dulu!",
+      text: "Pilih user yang ingin dimusnahkan, Señor!",
+      icon: "warning", 
+      background: "#0f172a", color: "#fff"
+    });
+  }
+    
+  const result = await Swal.fire({
+    title: "Hapus User(s)",
+    text: `⚠️ HAPUS ${selectedCheckboxes.length} USER?\n\nSemua data dan foto profil di Drive akan dihapus secara permanen.`,
+    icon: "warning", 
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    confirmButtonText: "Ya, Hapus Permanen",
+    cancelButtonText: "Batal",
+    background: "#0f172a", color: "#fff"
+  });
+
+  if (!result.isConfirmed) return;
+
+  Swal.fire({
+    title: 'Mohon Tunggu',
+    text: 'Sedang membersihkan database...',
+    allowOutsideClick: false,
+    didOpen: () => { Swal.showLoading(); },
+    background: "#0f172a", color: "#fff"
+  });
+
+  try {
+    // Ambil daftar ID (nomor baris) dari checkbox
+    const ids = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value));
+
+    // Panggil GAS dengan parameter minimalis
+    const res = await panggilGAS("deleteSelectedUsers", {
+      ids: ids,
+      kirimkegithub: false
+    });
+
+    if (res && res.status === "success") {
+      if (typeof speakSenor === 'function') speakSenor(res.message);
+      
+      await Swal.fire({
+        title: "Berhasil!",
+        text: res.message,
+        icon: "success",
+        background: "#0f172a", color: "#fff"
+      });
+
+      // Refresh data UI
+      if (typeof syncDataGhoib === 'function') await syncDataGhoib();
+      if (typeof loadUserList === 'function') loadUserList(); 
+
+    } else {
+      throw new Error(res ? res.message : "Gagal menghapus data.");
+    }
+
+  } catch (err) {
+    console.error("Delete Error:", err);
+    Swal.fire({
+      title: "Gagal",
+      text: err.message,
+      icon: "error",
+      background: "#0f172a", color: "#fff"
+    });
+  }
+}
