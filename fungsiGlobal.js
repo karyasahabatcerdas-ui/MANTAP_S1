@@ -236,10 +236,10 @@ async function loadDefinitions() {
 
   if (res && res.status === "success") {
     SHEETS = res.data; 
-    console.log("✅ Gerbang Terbuka! Daftar Sheet diterima:", SHEETS);
+    //console.log("✅ Gerbang Terbuka! Daftar Sheet diterima:", SHEETS);
     return true;
   } else {
-    console.error("🚫 Akses Ditolak atau Sesi Habis:", res ? res.message : "No Response");
+    //console.error("🚫 Akses Ditolak atau Sesi Habis:", res ? res.message : "No Response");
     return false;
   }
 }
