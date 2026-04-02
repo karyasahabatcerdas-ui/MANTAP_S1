@@ -1788,7 +1788,6 @@ async function saveLog(status) {
             if (result && result.status === "success") {
                 await Swal.update({
                     title: result.data || "Data berhasil disimpan!",
-                    icon: "success",
                     showConfirmButton : false,
                     width: '80%'
                 });
