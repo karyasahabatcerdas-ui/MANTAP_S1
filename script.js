@@ -1734,9 +1734,11 @@ async function saveLog(status) {
         activeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
 
         Swal.fire({
-            title: 'Transmitting...',
-            text: 'Sedang memproses data & foto ke Google Drive...',
+            title: 'Processing...',
+            text: 'Menyiapkan data untuk disimpan di server...',
             allowOutsideClick: false,
+            width: '80%' ,
+            background: "#0f172a", color: "#fff" ,
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -1758,10 +1760,10 @@ async function saveLog(status) {
             photoData: tempPhotos 
         };
         Swal.update({
-              title: "MENYIMPAN KE SERVER!",
+              title: 'Transmitting...',
+              text: "Sedang memproses data & foto ke Google Drive...",
               icon: "success",
               showConfirmButton : false,
-              width: '80%'
         });
 
 
@@ -1777,14 +1779,20 @@ async function saveLog(status) {
 
             if (result && result.status === "success") {
                 await Swal.update({
-                    title: result.data || "Data berhasil disimpan!",
-                    showConfirmButton : false,
-                    width: '80%'
+                    title: "Berhasil.. !",
+                    text: ("Berhasil : " + result.message) || "Data berhasil disimpan!",
+                    icon: "success",
+                    showConfirmButton : false
                 });
 
                 // Reset & Close
                 isSuccessSave = true; 
-                if (typeof closeMaintenanceMode === 'function') closeMaintenanceMode(); 
+                if (typeof closeMaintenanceMode === 'function') {
+                  console.log("Menutup modal maintenance...");
+                  closeMaintenanceMode(); 
+                } else {
+                  console.warn("Fungsi closeMaintenanceMode() tidak ditemukan!");
+                }
                 // 5.1. SYNC VAULT individual
                 if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan') && await pullToVault('MAINT','Logs')) {
                   if (typeof loadJad === 'function') loadJad();
@@ -1802,6 +1810,8 @@ async function saveLog(status) {
                 }   
                 // Segera tarik data terbaru dari GitHub karena server sudah push ke sana
                 await syncDataGhoib(); 
+
+                //tutup modal
                 
             } else {
                 throw new Error(result ? result.message : "Gagal diproses server.");
