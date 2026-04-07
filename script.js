@@ -535,8 +535,8 @@ function openDetailLog(logId) {
   setEl('det_petugas',   data[5]); // F: Petugas
   setEl('det_asset_id',  data[6]); // G: Asset_ID
   setEl('det_note',      data[8]); // I: Note
+  setEl('det_id_jadwal', data[7]); // H: ID_Jadwal //select id_jadwal
 
-  document.getElementById('det_id_jadwal').value = data[7]; // H: ID_Jadwal //select id_jadwal
   // ISI THUMBNAIL FOTO (J, K, L, M)
   updateThumbnail('gal_before', data[9]);  // J: P_Before
   updateThumbnail('gal_on',     data[10]); // K: P_On
@@ -1620,7 +1620,7 @@ function closeMaintenanceMode() {
       document.activeElement.blur();
     }
 
-    modal.style.display = 'none';
+    //modal.style.display = 'none';
     
     // 2. MENGUNCI INTERAKSI (Aksesibilitas Modern)
     // Mencegah screen reader atau keyboard "melihat" ke dalam modal yang sudah tutup
@@ -1655,6 +1655,7 @@ function closeMaintenanceMode() {
     // Kembalikan fokus ke body atau tombol pemicu utama agar teknisi bisa lanjut scroll
     document.body.focus();
     console.log("🚪 Maintenance Mode Closed & Cleaned (A11y Fixed).");
+    modal.style.display = 'none';
   };
 
   if (isSuccessSave) {    //jika true artinnya tutup dari tombol savelog()
