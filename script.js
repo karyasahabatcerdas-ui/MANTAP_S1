@@ -2695,7 +2695,7 @@ async function doBulkDeleteMaint() {
       if (res && res.status === "success") {
         // res.data.msg berasal dari return object di GS deleteSelectedMaint
         await Swal.update({ 
-          title: res.data.msg || "Data Deleted.", 
+          title: res.data.message || "Data Deleted.", 
           icon: "success", width: '80%',
           background: "#0f172a", color: "#fff"
         });
