@@ -381,7 +381,9 @@ function stringKeUnix(str) {
 
 
 function updateJamDisplay() {
+  if (!loggedInUser) return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
   const userDataRaw = localStorage.getItem("userMaint");
+  if (!userDataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
   const serverTime = stringKeUnix(userDataRaw.serverTime); // Ubah string waktu server ke format Unix (ms)
   //const currentServerTime = new Date(baseServerTime + elapsed);
