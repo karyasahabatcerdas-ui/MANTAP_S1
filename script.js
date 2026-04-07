@@ -2233,9 +2233,10 @@ async function goMaint(rowIdx) {
   //const urlGAS = APPSCRIPT_URL;
 
   //data mentah 1 baris yang dipilih
-  const data = historyJadwal[rowIdx];
-  //console.log("Data rowIdx:", rowIdx);
-  //console.log("Data yang akan dimuat ke Maintenance Log:", data);
+  //const data = historyJadwal[rowIdx];
+  const data = ambilDataSheet('MAINT', 'Maintenance')[rowIdx]; //ambil langsung dari sheet untuk memastikan data terbaru, karena history jadwal tidak selalu update realtime setelah perubahan
+  console.log("Data rowIdx di gomaint:", rowIdx);
+  console.log("Data yang akan dimuat ke Maintenance Log:", data);
 
   // 1. VALIDASI DATA AWAL
   if (!data || data.length === 0) {
@@ -2499,22 +2500,6 @@ async function loadMaintDetail(row) {
     } else {
       console.warn("⚠️ Format tanggal tidak dikenali atau kosong:", s);
     }
-
-
-/*
-    const s = data[7]; 
-    console.log("format dari dB", data[7]);
-    if (s && s.length >= 16) {
-      try {
-        const formattedDate = `${s.substring(6,10)}-${s.substring(3,5)}-${s.substring(0,2)}T${s.substring(11,16)}`;
-        setVal('m_plan', formattedDate);
-        console.log("format dari dB", formattedDate);
-      } catch (e) {
-        console.error("Format tanggal error:", s);
-        console.log(e.toString())
-      }
-    }
-*/
 
     // 4. TAMPILKAN MODAL
     const modal = document.getElementById('modalMaint');

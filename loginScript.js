@@ -42,19 +42,40 @@ async function login() {
        throw new Error("Server Google merespons dengan error (Cek Login GAS kamu)");
     }
     
-
     const res = await response.json();
 
     if (res.status === "success" && res.data.success) {
       // --- LOGIKA PENYIMPANAN SESI ---
       const serverData = res.data; // Berisi role & sessionId dari GS
+
+      //getServerTime
+      timeServer = await getServerTime();
+      // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
+      const timeServerString = res.time; // Contoh: "02/04/2024 10:00:00"
+      const perfStart = performance.now(); // Stopwatch mulai di sini
+
+      // Simpan SEMUA ke userMaint
+      localStorage.setItem("userMaint", JSON.stringify({ 
+          name: u, 
+          role: serverData.role, 
+          sessionId: serverData.sessionId,
+          unlockCode: serverData.unlockCode,
+          serverTime: timeServerString, // Simpan string aslinya
+          perfBase: perfStart           // Simpan titik stopwatch-nya
+      }));
+
+      // Jalankan tampilan jam
+      tampilkanJamDiHeader();
+
+
       
       // Simpan objek lengkap ke localStorage
       localStorage.setItem("userMaint", JSON.stringify({ 
         name: u, 
         role: serverData.role, 
         sessionId: serverData.sessionId, // TOKEN SAKTI KITA
-        unlockCode: serverData.unlockCode // <--- BARIS INI WAJIB ADA!
+        unlockCode: serverData.unlockCode, // <--- BARIS INI WAJIB ADA!
+        serverTime : timeServer  // <--- AMBIL WAKTU SERVER WAKTU LOGIN!
       }));
 
       
@@ -331,6 +352,16 @@ function setTheme(themeName) {
     if (menu) menu.style.display = 'none';
 }
 
+function stringKeUnix(str) {
+    // Memecah "31/12/2023 13:50:00" menjadi bagian-bagian
+    const [tanggal, jam] = str.split(' ');
+    const [d, m, y] = tanggal.split('/');
+    const [hh, mm, ss] = jam.split(':');
+    
+    // Format standar: YYYY-MM-DDTHH:mm:ss
+    const isoFormat = `${y}-${m}-${d}T${hh}:${mm}:${ss}`;
+    return new Date(isoFormat).getTime(); // Menghasilkan Angka (ms)
+}
 
 // Jalankan otomatis saat halaman dimuat (Auto-Restore)
 (function() {
@@ -339,3 +370,20 @@ function setTheme(themeName) {
         setTheme(saved);
     }, 500); // Tunggu component load
 })();
+
+// 1. Ambil data string-nya dulu
+const userDataRaw = localStorage.getItem("userMaint");
+// 2. Parse string tadi jadi Object, lalu ambil serverTime-nya
+const baseServerTime = JSON.parse(userDataRaw).serverTime; 
+// 3. Catat performance.now() tepat saat variabel di atas dibuat
+const basePerformance = performance.now();
+function updateJamDisplay() {
+  const elapsed = performance.now() - basePerformance;
+  const currentServerTime = new Date(baseServerTime + elapsed);
+
+  // Format jam (HH:mm:ss)
+  const jamStr = currentServerTime.toLocaleTimeString('id-ID'); 
+  document.getElementById('serverClock').innerText = jamStr;
+}
+// Jalankan setiap 1 detik
+setInterval(updateJamDisplay, 1000);

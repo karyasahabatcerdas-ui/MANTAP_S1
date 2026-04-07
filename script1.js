@@ -253,3 +253,5 @@ function updateSyncUI(pct, msg) {
   if (pctText) pctText.innerText = pct + "%";
   if (text) text.innerText = msg;
 }
+
+
