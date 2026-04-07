@@ -590,7 +590,8 @@ function closeDetailHist() {
  */
 function initPhotoSlider(category) {
   var rawUrls = "";
-  var data = activeRowData;
+  //var data = activeRowData;
+  var data = ambilDataSheet('MAINT','Log_Kegiatan');
   
   if (!data) return alert("Data log belum termuat sempurna, Bro!");
 
@@ -1333,15 +1334,20 @@ function startMaintenanceMode() {
 
  async function startMaintenanceModeUpdate() {
   //const urlGAS = APPSCRIPT_URL;
-
+   const data = ambilDataSheet('MAINT','Log_Kegiatan');
   // 1. VALIDASI DATA AWAL
   
-  if (!activeRowData || activeRowData.length === 0) {
+ // if (!activeRowData || activeRowData.length === 0) {
+   // await Swal.fire({ title: "Data Tidak Ditemukan!", icon: "error" });
+   // return; 
+  //}
+
+    if (!data || data.length === 0) {
     await Swal.fire({ title: "Data Tidak Ditemukan!", icon: "error" });
     return; 
   }
 
-  const data = activeRowData; 
+  //const data = activeRowData; 
   Swal.fire({
     title: 'Mencari Detail Aset...',
     text: 'Membaca dari Database...',
@@ -1356,7 +1362,15 @@ function startMaintenanceMode() {
 
       // --- KODE BARU (KILAT WUZ!) ---
       // data[6] adalah ID Asset yang dikirim user
-      const results = searchAssetRAM(data[6]);
+      //const results = searchAssetRAM(data[6]);
+
+      const allAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
+        return hasil.concat(ambilDataSheet('ASSET', sheetName).slice(1));
+      }, []);
+
+      const results = allAssets.filter(row => String(row[0]) === String(data[6])); // Filter langsung di client untuk kecepatan kilat
+
+
 
     if (results && results.length > 0) {
       const res = results[0]; 
@@ -1644,12 +1658,35 @@ function closeMaintenanceMode() {
     
     modal.style.pointerEvents = "auto";
     modal.style.opacity = "1"; 
-    isSuccessSave = false; //reset status apakah ad kegiatan saving atau pending jik ay a= true
+    isSuccessSave = false; //reset status apakah ad kegiatan saving atau pending jika ya= true
     
     
     if (typeof prepareMaintenanceLogic === 'function') {
       prepareMaintenanceLogic(); 
     }
+
+    //reset data total
+        var setEl = function(id, val) {
+        var el = document.getElementById(id);
+        if (el) el.innerText = val || "-";
+      };
+     
+      setEl('det_log_id',    ""); // A: ID_Log
+      setEl('det_maint_id',  ""); // B: Maint_ID (Tambahkan di UI jika perlu)
+      setEl('det_start',     ""); // C: mulai
+      setEl('det_pending',   ""); // D: pending
+      setEl('det_selesai',   ""); // E: selesai
+      setEl('det_petugas',   ""); // F: Petugas
+      setEl('det_asset_id',  ""); // G: Asset_ID
+      setEl('det_note',      ""); // I: Note
+      setEl('det_id_jadwal', ""); // H: ID_Jadwal 
+
+      // ISI THUMBNAIL FOTO (J, K, L, M)
+      updateThumbnail('gal_before',"");  // J: P_Before
+      updateThumbnail('gal_on',     ""); // K: P_On
+      updateThumbnail('gal_after',  ""); // L: P_After
+      updateThumbnail('gal_check',  ""); // M: P_Check
+
     //reset kembali menjadi baru
     update_man_status = false; 
     // Kembalikan fokus ke body atau tombol pemicu utama agar teknisi bisa lanjut scroll
