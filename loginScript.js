@@ -43,6 +43,7 @@ async function login() {
     }
     
     const res = await response.json();
+    console.log("Respon JSON dari server:", res);
 
     if (res.status === "success" && res.data.success) {
       // --- LOGIKA PENYIMPANAN SESI ---
@@ -50,6 +51,7 @@ async function login() {
 
       //getServerTime
       timeServer = await getServerTime();
+      console.log("Waktu Server saat Login:", timeServer);
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
       const timeServerString = timeServer.time? timeServer.time : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
@@ -217,6 +219,7 @@ async function logout() {
   location.reload(); // Hard reset untuk memastikan memori benar-benar bersih
   console.log("🧹 Logout Sukses: Sesi dibersihkan.");
 }
+
 
 /* ----- script lama------------------*/
   if ('serviceWorker' in navigator) {
