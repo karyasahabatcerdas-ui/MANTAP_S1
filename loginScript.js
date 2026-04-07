@@ -383,8 +383,9 @@ function stringKeUnix(str) {
 function updateJamDisplay() {
   const userDataRaw = localStorage.getItem("userMaint");
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
+  const serverTime = stringKeUnix(userDataRaw.serverTime); // Ubah string waktu server ke format Unix (ms)
   //const currentServerTime = new Date(baseServerTime + elapsed);
-  const currentServerTime = new Date(userDataRaw.serverTime + elapsed);
+  const currentServerTime = new Date(serverTime + elapsed);
 
   // Format jam (HH:mm:ss)
   const jamStr = currentServerTime.toLocaleTimeString('id-ID'); 
