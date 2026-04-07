@@ -352,7 +352,8 @@ async function loadHist() {
   
   // 1. AKTIFKAN ANIMASI THINKING
 // Ganti isi if(tbody) kamu dengan logika Cek RAM ini:
-const isDataReady = window.APP_STORE && Object.keys(window.APP_STORE.assets).length > 0;
+//const isDataReady = window.APP_STORE && Object.keys(window.APP_STORE.assets).length > 0;
+const isDataReady = ambilDataSheet('MAINT','Log_Kegiatan').length > 0;
 
 if (!isDataReady) {
   tbody.innerHTML = `
@@ -373,7 +374,8 @@ if (!isDataReady) {
 
   try {
 
-    const res = getMaint("Log_Kegiatan").slice(1).reverse(); // Balik urutan agar yang 
+    //const res = getMaint("Log_Kegiatan").slice(1).reverse(); // Balik urutan agar yang 
+    const res = ambilDataSheet('MAINT','Log_Kegiatan').slice(1).reverse(); // Balik urutan agar yang
     // 3. HANDLING DATA
     if (!res || res.length === 0) {
       allHistoryData = [];
@@ -382,8 +384,8 @@ if (!isDataReady) {
     }
 
     // Simpan ke variabel global dan render tabel
-    allHistoryData = res;
-    applyHistoryFilter(); 
+    //allHistoryData = res;
+    applyHistoryFilter(res); 
 
 
   } catch (err) {
@@ -404,13 +406,13 @@ if (!isDataReady) {
  * ==================================================================
  */
 
-function applyHistoryFilter() {
-  if (!allHistoryData || allHistoryData.length === 0) return;
+function applyHistoryFilter(res) {
+  if (!res || res.length === 0) return;
 
   var statusVal = document.getElementById("filterStatusLog").value; // 'selesai' atau 'pending'
   var jadwalVal = document.getElementById("filterJadwalLog").value; // ID Jadwal
 
-  var filtered = allHistoryData.filter(function(row) {
+  var filtered = res.filter(function(row) {
     
     // --- KOREKSI INDEKS SULTAN ---
     // Index 4 = E (Selesai)
