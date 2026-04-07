@@ -373,8 +373,9 @@ function stringKeUnix(str) {
 
 function updateJamDisplay() {
   if (!loggedInUser || loggedInUser === "") return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
-  const userDataRaw = localStorage.getItem("userMaint");
-  if (!userDataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
+  const DataRaw = localStorage.getItem("userMaint");
+  if (!DataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
+  const userDataRaw = JSON.parse(raw);
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
   console.log("Elapsed ms since login:", elapsed);
   console.log("Base Server Time (ms):", userDataRaw.serverTime);
