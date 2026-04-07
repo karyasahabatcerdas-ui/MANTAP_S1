@@ -1696,6 +1696,7 @@ async function saveLog(status) {
     const btnPending = document.getElementById('btnLogPending');
     const modal = document.getElementById('modalMaintenanceLog');
     const piljadwal = document.getElementById('jenis_id_jadwal');
+    loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
 
     // --- 1. VALIDASI (Tetap Sama) ---
     let pesanError = "";
@@ -2056,7 +2057,8 @@ async function saveMaintData() {
     const mOther = document.getElementById('m_other_note').value || "";         
     const mstate = document.getElementById('m_state').value || "";              
     const mIDjad = document.getElementById('maint_id_jadwal').value || "";
-    const mlokasi = document.getElementById('m_lokasi').value || "";       
+    const mlokasi = document.getElementById('m_lokasi').value || "";
+    loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;       
 
     const user = typeof loggedInUser !== 'undefined' ? loggedInUser : "Unknown";
     const btn = document.getElementById('btnCreateMaint'); 
@@ -4932,6 +4934,7 @@ function toggleSelectAll() {
  * ===================================================================================================
  */
 async function loadProf() {
+  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   if (!loggedInUser) return;
 
   try {
@@ -4985,6 +4988,7 @@ async function saveProf() {
   const displayPhoto = document.getElementById('set_display_photo');
   const btn = document.getElementById('btnsaveprofile');
   const imgSidebar = document.getElementById('user_profile_shared');
+  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
 
   // 1. Susun Payload Utama (Intinya saja)
   let payload = {
@@ -5108,6 +5112,8 @@ function uploadOwnPhoto(input) {
 
 // Fungsi Pembantu untuk Payload (Update/Add)
 async function preparePayload(rowValue, usernameValue) {
+  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  userRole = (JSON.parse(localStorage.getItem('userMaint'))).role;
   let payload = {
     adminAktif: loggedInUser, // PIC yang bertanggung jawab
     roleAktor: userRole,      // Peran PIC saat ini
@@ -5323,6 +5329,7 @@ async function saveAdminEdit() {
   const rowIdx = document.getElementById('m_row_idx').value;
   const username = document.getElementById('m_user').value;
   const displayPhoto = document.getElementById('admin_edit_photo');
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
 
   // 1. VALIDASI AWAL
   if (!username) return Swal.fire("Peringatan", "Username harus diisi!", "warning");

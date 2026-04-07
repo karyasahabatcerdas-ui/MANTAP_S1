@@ -10,8 +10,8 @@ let currentImgIdx = 0;
 let temp_Asset_Files = []; 
 const mAX_IMG = 5;
 let Temp_Profile = [null,null]; 
-let loggedInUser = "";
-let userRole = "";
+//let loggedInUser = "";
+//let userRole = "";
 
 currentMaintData = null; // { maint_id, as_id, nama_aset, lokasi, jenis_jadwal }
 let allHistoryData = []; //variabel global history mentah

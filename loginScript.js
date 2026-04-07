@@ -72,7 +72,7 @@ async function login() {
      
 
       // Update Variabel Global
-      loggedInUser = u;
+      //loggedInUser = u;
       userRole = serverData.role;
 
       // --- PERBAIKAN: Pastikan Buka Gembok Berhasil ---
@@ -154,6 +154,7 @@ async function login() {
  */
 async function logout() {
   // 1. KIRIM SINYAL KE SERVER (OPSIONAL UNTUK LOG)
+  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   if (loggedInUser) {
     fetch(APPSCRIPT_URL, {
       method: 'POST',
@@ -185,8 +186,8 @@ async function logout() {
   // 4. RESET DATA GLOBAL & FORM
   document.getElementById('user').value = "";
   document.getElementById('pass').value = "";
-  loggedInUser = "";
-  userRole = "";
+  //loggedInUser = "";
+  //userRole = "";
   updateLockStatus(true); //status di gambar profile kalau data terenkripsi atau tidak
 
   // 5. BERSIHKAN DATA SENSITIF DARI TABEL
@@ -284,7 +285,7 @@ function showLoginForm() {
 function syncProfileUI(newUrl, isSelf) {
   var finalUrl = "";
   var timestamp = "?t=" + Date.now();
-
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   // 1. Logika Keamanan URL
   if (newUrl && newUrl.toString().startsWith("blob:")) {
     // JIKA BLOB: Gunakan URL murni tanpa modifikasi apa pun
@@ -372,6 +373,7 @@ function stringKeUnix(str) {
 
 
 function updateJamDisplay() {
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   if (!loggedInUser || loggedInUser === "") return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
   const dataRaw = localStorage.getItem("userMaint");
   if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
