@@ -18,9 +18,9 @@ async function getServerTime(dateform = null) {
     //const resp = await fetch(`${APPSCRIPT_URL}?action=getTime`);
     //const res = await resp.json();
     
-    res = await panggilGAS("getTime",
-        kirimkegithub=false
-
+    res = await panggilGAS("getTime",{
+        kirimkegithub:false
+      }
     )
 
     if (res.status === "success") {

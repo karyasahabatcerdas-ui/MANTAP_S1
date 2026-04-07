@@ -49,7 +49,7 @@ async function login() {
       const serverData = res.data; // Berisi role & sessionId dari GS
 
       //getServerTime
-      timeServer = await getTime();
+      timeServer = await getServerTime();
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
       const timeServerString = res.time; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
