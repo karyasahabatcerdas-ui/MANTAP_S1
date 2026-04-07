@@ -67,7 +67,7 @@ async function login() {
       }));
 
       // Jalankan tampilan jam
-      tampilkanJamDiHeader();
+      updateJamDisplay();
 
 
       
