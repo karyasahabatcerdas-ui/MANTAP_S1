@@ -1290,17 +1290,6 @@ function startMaintenanceMode() {
         return;
     }
     
-    // 1. Bersihkan sisa data & reset state
-    //kita taruh luar biar pemanggil yg tentukan urutan
-    /*
-    if (typeof prepareMaintenanceLogic === 'function') {
-        prepareMaintenanceLogic();
-    }
-        */
-
-    // 2. --- SISTEM GEMBOK (LOCKDOWN) ---
-    // Daftar ID yang harus dikunci di awal
-    //initAllJadwalDropdowns();
     const elementsToLock = [
         'log_pekerjaan', 'btn_PB', 'btn_PO', 'btn_PA', 'btn_PC', 
         'btnLogPending', 'btnLogSelesai', 'jenis_id_jadwal'
@@ -1768,12 +1757,12 @@ async function saveLog(status) {
             },
             photoData: tempPhotos 
         };
-          await Swal.fire({
-                    title: "MENYIMPAN KE SERVER!",
-                    icon: "success",
-                    showConfirmButton : false,
-                    width: '80%'
-                });
+        Swal.update({
+              title: "MENYIMPAN KE SERVER!",
+              icon: "success",
+              showConfirmButton : false,
+              width: '80%'
+        });
 
 
         // --- 4. EKSEKUSI VIA panggilGAS ---
@@ -1784,6 +1773,7 @@ async function saveLog(status) {
               kirimkegithub:false            
             });
 
+            console.log("Response SaveLog:", result);
 
             if (result && result.status === "success") {
                 await Swal.update({
