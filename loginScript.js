@@ -385,6 +385,8 @@ function updateJamDisplay() {
   const userDataRaw = localStorage.getItem("userMaint");
   if (!userDataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
+  console.log("Elapsed ms since login:", elapsed);
+  console.log("Base Server Time (ms):", userDataRaw.serverTime);
   const serverTime = stringKeUnix(userDataRaw.serverTime); // Ubah string waktu server ke format Unix (ms)
   //const currentServerTime = new Date(baseServerTime + elapsed);
   const currentServerTime = new Date(serverTime + elapsed);
