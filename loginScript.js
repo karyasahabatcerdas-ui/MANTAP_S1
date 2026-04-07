@@ -69,20 +69,7 @@ async function login() {
 
       // Jalankan tampilan jam
       updateJamDisplay();
-
-
-      
-      // Simpan objek lengkap ke localStorage
-      localStorage.setItem("userMaint", JSON.stringify({ 
-        name: u, 
-        role: serverData.role, 
-        sessionId: serverData.sessionId, // TOKEN SAKTI KITA
-        unlockCode: serverData.unlockCode, // <--- BARIS INI WAJIB ADA!
-        serverTime : timeServer,  // <--- AMBIL WAKTU SERVER WAKTU LOGIN!
-        awalTime: performance.now() // <--- CATAT WAKTU LOGIN UNTUK PERHITUNGAN OFFSET
-      }));
-
-      
+     
 
       // Update Variabel Global
       loggedInUser = u;
