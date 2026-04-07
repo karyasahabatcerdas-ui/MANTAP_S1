@@ -52,11 +52,11 @@ async function login() {
 
       //getServerTime
       timeServer = await getServerTime();
-      console.log("Waktu Server saat Login:", timeServer);
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
       const timeServerString = timeServer? timeServer : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
-
+      console.log("Waktu Server saat Login:", timeServer);
+      console.log("perfStart saat Login:", perfStart);
       // Simpan SEMUA ke userMaint
       localStorage.setItem("userMaint", JSON.stringify({ 
           name: u, 
@@ -372,7 +372,7 @@ function stringKeUnix(str) {
 
 
 function updateJamDisplay() {
-  if (!loggedInUser) return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
+  if (!loggedInUser || loggedInUser === "") return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
   const userDataRaw = localStorage.getItem("userMaint");
   if (!userDataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
