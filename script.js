@@ -1333,8 +1333,8 @@ function startMaintenanceMode() {
  */
 
  async function startMaintenanceModeUpdate() {
-  //const urlGAS = APPSCRIPT_URL;
-   const data = ambilDataSheet('MAINT','Log_Kegiatan');
+  //ambil data Log ID untuk tahu ID Assetnya 
+   const data = ambilDataSheet('MAINT','Log_Kegiatan').slice(1).find(row => String(row[0]) === String(document.getElementById('det_log_id').innerText));
   // 1. VALIDASI DATA AWAL
   
  // if (!activeRowData || activeRowData.length === 0) {
