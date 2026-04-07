@@ -373,7 +373,8 @@ function stringKeUnix(str) {
 
 
 function updateJamDisplay() {
-  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  let see = JSON.parse(localStorage.getItem('userMaint')); // check localstorage ada atau tidak?
+  const loggedInUser = see ? see.name : null; 
   if (!loggedInUser || loggedInUser === "") return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
   const dataRaw = localStorage.getItem("userMaint");
   if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
