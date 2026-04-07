@@ -2649,10 +2649,18 @@ async function exportToExcel() {
  * Menghapus banyak jadwal sekaligus dari Spreadsheet via Fetch POST
  */
 async function doBulkDeleteMaint() {
-  const selected = getSelectedRowsMaint(); // Memanggil fungsi pembantu (userCheckMaint)
+  //const selected = getSelectedRowsMaint(); // Memanggil fungsi pembantu (userCheckMaint)
+  let rows = [];
+  // Mengambil semua checkbox yang dicentang
+  document.querySelectorAll('.userCheckMaint:checked').forEach(cb => {
+    const val = parseInt(cb.value);
+    if (!isNaN(val)) rows.push(val+1);
+  }); console.log(rows);
+
+
 
   // 1. Validasi Pilihan
-  if (selected.length === 0) { 
+  if (rows.length === 0) { 
     Swal.fire({ 
       title: "Pilih Data!", 
       text: "Centang jadwal yang ingin dihapus.", 
@@ -2666,7 +2674,7 @@ async function doBulkDeleteMaint() {
   // 2. Konfirmasi Hapus Massal
   const konfirmasi = await Swal.fire({
     title: "Hapus Massal?",
-    text: `Kamu akan menghapus ${selected.length} data maintenance. Lanjutkan?`,
+    text: `Kamu akan menghapus ${rows.length} data maintenance. Lanjutkan?`,
     icon: "warning", 
     showCancelButton: true,
     confirmButtonColor: "#d33",
@@ -2681,27 +2689,29 @@ async function doBulkDeleteMaint() {
       title: 'Sedang Menghapus...',
       text: 'Membersihkan database, mohon tunggu...',
       allowOutsideClick: false,
-      didOpen: () => { Swal.showLoading(); },
-      background: "#0f172a", color: "#fff"
+      showConfirmButton: false,
+      width: '80%',
+      background: "#0f172a", color: "#fff",
+      didOpen: () => { Swal.showLoading(); }      
     });
 
     try {
       // 3. EKSEKUSI VIA panggilGAS (Otomatis kirim sessionId & username)
       const res = await panggilGAS("deleteSelectedMaint", {
-        type: "Maintenance", 
-        selected: selected
+        selected: rows,
+        kirimkegithub: false 
       });
 
       if (res && res.status === "success") {
         // res.data.msg berasal dari return object di GS deleteSelectedMaint
         await Swal.update({ 
-          title: res.data.message || "Data Deleted.", 
+          title: res.message || "Data Deleted.", 
           icon: "success", width: '80%',
           background: "#0f172a", color: "#fff"
         });
         
         // 4. SINKRONISASI GITHUB & UI
-        await syncDataGhoib(); 
+        //await syncDataGhoib(); 
 
         // 5.1. SYNC FAULT individual
             if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan')) {
