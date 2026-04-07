@@ -53,7 +53,7 @@ async function login() {
       timeServer = await getServerTime();
       console.log("Waktu Server saat Login:", timeServer);
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
-      const timeServerString = timeServer.time? timeServer.time : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
+      const timeServerString = timeServer? timeServer : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
 
       // Simpan SEMUA ke userMaint
