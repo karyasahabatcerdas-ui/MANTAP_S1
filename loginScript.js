@@ -44,6 +44,7 @@ async function login() {
     
     const res = await response.json();
     console.log("Respon JSON dari server:", res);
+    console.log("Respon JSON dari server:", res.data);
 
     if (res.status === "success" && res.data.success) {
       // --- LOGIKA PENYIMPANAN SESI ---
