@@ -35,7 +35,7 @@ async function login() {
       })
     });
 
-    console.log("respond dari fetch",response);
+    console.log("respond dari fetch login",response);
 
     // --- PERUBAHAN 3: Validasi Response ---
     if (!response.ok) {
@@ -51,7 +51,7 @@ async function login() {
       //getServerTime
       timeServer = await getServerTime();
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
-      const timeServerString = res.time; // Contoh: "02/04/2024 10:00:00"
+      const timeServerString = timeServer.time? timeServer.time : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
 
       // Simpan SEMUA ke userMaint
