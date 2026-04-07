@@ -14,7 +14,7 @@ let Temp_Profile = [null,null];
 //let userRole = "";
 
 currentMaintData = null; // { maint_id, as_id, nama_aset, lokasi, jenis_jadwal }
-let allHistoryData = []; //variabel global history mentah
+//let allHistoryData = []; //variabel global history mentah
 let activeRowData = []; // Global variable
 let dataToImport = []; // Memory penampung sementara
 let lastValidatedData = []; 

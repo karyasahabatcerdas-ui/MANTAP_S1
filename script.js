@@ -353,7 +353,7 @@ async function loadHist() {
   // 1. AKTIFKAN ANIMASI THINKING
 // Ganti isi if(tbody) kamu dengan logika Cek RAM ini:
 //const isDataReady = window.APP_STORE && Object.keys(window.APP_STORE.assets).length > 0;
-const isDataReady = ambilDataSheet('MAINT','Log_Kegiatan').length > 0;
+const isDataReady = ambilDataSheet('MAINT','Log_Kegiatan');
 
 if (!isDataReady) {
   tbody.innerHTML = `
@@ -378,7 +378,7 @@ if (!isDataReady) {
     const res = ambilDataSheet('MAINT','Log_Kegiatan').slice(1).reverse(); // Balik urutan agar yang
     // 3. HANDLING DATA
     if (!res || res.length === 0) {
-      allHistoryData = [];
+      //allHistoryData = [];
       if(tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">📭 Data Log Kosong.</td></tr>';
       return;
     }
@@ -512,7 +512,8 @@ function renderHistoryTable(data) {
  */
 function openDetailLog(logId) {
   // Pastikan allHistoryData sudah terisi dari server
-  var data = allHistoryData.find(function(row) { return row[0] === logId; });
+  //var data = allHistoryData.find(function(row) { return row[0] === logId; });
+  var data = ambilDataSheet('MAINT','Log_Kegiatan').find(function(row) { return row[0] === logId; }); //pengganti fungsi gas dilokal
   if (!data) return Swal.fire("Data Ghoib!", "ID Log tidak ditemukan, Señor!", "error");
 
   activeRowData = data; 
@@ -1696,7 +1697,7 @@ async function saveLog(status) {
     const btnPending = document.getElementById('btnLogPending');
     const modal = document.getElementById('modalMaintenanceLog');
     const piljadwal = document.getElementById('jenis_id_jadwal');
-    loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+    const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
 
     // --- 1. VALIDASI (Tetap Sama) ---
     let pesanError = "";
@@ -2058,7 +2059,7 @@ async function saveMaintData() {
     const mstate = document.getElementById('m_state').value || "";              
     const mIDjad = document.getElementById('maint_id_jadwal').value || "";
     const mlokasi = document.getElementById('m_lokasi').value || "";
-    loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;       
+    const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;       
 
     const user = typeof loggedInUser !== 'undefined' ? loggedInUser : "Unknown";
     const btn = document.getElementById('btnCreateMaint'); 
@@ -4934,7 +4935,7 @@ function toggleSelectAll() {
  * ===================================================================================================
  */
 async function loadProf() {
-  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   if (!loggedInUser) return;
 
   try {
@@ -4988,7 +4989,7 @@ async function saveProf() {
   const displayPhoto = document.getElementById('set_display_photo');
   const btn = document.getElementById('btnsaveprofile');
   const imgSidebar = document.getElementById('user_profile_shared');
-  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
 
   // 1. Susun Payload Utama (Intinya saja)
   let payload = {
@@ -5112,8 +5113,8 @@ function uploadOwnPhoto(input) {
 
 // Fungsi Pembantu untuk Payload (Update/Add)
 async function preparePayload(rowValue, usernameValue) {
-  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
-  userRole = (JSON.parse(localStorage.getItem('userMaint'))).role;
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  const userRole = (JSON.parse(localStorage.getItem('userMaint'))).role;
   let payload = {
     adminAktif: loggedInUser, // PIC yang bertanggung jawab
     roleAktor: userRole,      // Peran PIC saat ini

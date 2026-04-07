@@ -73,7 +73,7 @@ async function login() {
 
       // Update Variabel Global
       //loggedInUser = u;
-      userRole = serverData.role;
+      const userRole = serverData.role;
 
       // --- PERBAIKAN: Pastikan Buka Gembok Berhasil ---
       const isUnlocked = bukaGembokSakti(serverData.unlockCode);
@@ -154,7 +154,7 @@ async function login() {
  */
 async function logout() {
   // 1. KIRIM SINYAL KE SERVER (OPSIONAL UNTUK LOG)
-  loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
+  const loggedInUser = (JSON.parse(localStorage.getItem('userMaint'))).name;
   if (loggedInUser) {
     fetch(APPSCRIPT_URL, {
       method: 'POST',
@@ -230,8 +230,8 @@ async function checkSessionAndLogin() {
   if (savedUser) {
     try {
       const userObj = JSON.parse(savedUser);
-      loggedInUser = userObj.name;
-      userRole = userObj.role;
+      const loggedInUser = userObj.name;
+      const userRole = userObj.role;
 
       console.log("🔐 Sesi Ditemukan: Selamat Datang Kembali, " + loggedInUser);
 
@@ -375,7 +375,7 @@ function stringKeUnix(str) {
 function updateJamDisplay() {
   let see = JSON.parse(localStorage.getItem('userMaint')); // check localstorage ada atau tidak?
   const loggedInUser = see ? see.name : null; 
-  if (!loggedInUser || loggedInUser === "") return console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
+  if (!loggedInUser || loggedInUser === "") return ;//console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
   const dataRaw = localStorage.getItem("userMaint");
   if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
   const userDataRaw = JSON.parse(dataRaw);

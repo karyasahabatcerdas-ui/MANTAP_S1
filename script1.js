@@ -156,7 +156,7 @@ async function initialSyncAllParallel() {
     });
 
     // 4. SELESAI
-    console.log("✅ Vault Synchronized:", Vault);
+    console.log("✅ Vault Synchronized:");
     //Swal.fire({ icon: 'success', title: 'Vault Terkunci!', text: `${total} database aman di RAM.`, timer: 1500, showConfirmButton: false });
 
     Swal.fire({
