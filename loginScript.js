@@ -35,7 +35,7 @@ async function login() {
       })
     });
 
-    console.log("respond dari fetch login",response);
+    //console.log("respond dari fetch login",response);
 
     // --- PERUBAHAN 3: Validasi Response ---
     if (!response.ok) {
@@ -43,8 +43,8 @@ async function login() {
     }
     
     const res = await response.json();
-    console.log("Respon JSON dari server:", res);
-    console.log("Respon JSON dari server:", res.data);
+    //console.log("Respon JSON dari server:", res);
+    //console.log("Respon JSON dari server:", res.data);
 
     if (res.status === "success" && res.data.success) {
       // --- LOGIKA PENYIMPANAN SESI ---
@@ -55,8 +55,8 @@ async function login() {
       // Asumsi 'res' adalah hasil dari panggilGAS("getTime")
       const timeServerString = timeServer? timeServer : "00/00/2026 00:00:00"; // Contoh: "02/04/2024 10:00:00"
       const perfStart = performance.now(); // Stopwatch mulai di sini
-      console.log("Waktu Server saat Login:", timeServer);
-      console.log("perfStart saat Login:", perfStart);
+      //console.log("Waktu Server saat Login:", timeServer);
+      //console.log("perfStart saat Login:", perfStart);
       // Simpan SEMUA ke userMaint
       localStorage.setItem("userMaint", JSON.stringify({ 
           name: u, 
@@ -377,8 +377,8 @@ function updateJamDisplay() {
   if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
   const userDataRaw = JSON.parse(dataRaw);
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
-  console.log("Elapsed ms since login:", elapsed);
-  console.log("Base Server Time (ms):", userDataRaw.serverTime);
+  //console.log("Elapsed ms since login:", elapsed);
+  //console.log("Base Server Time (ms):", userDataRaw.serverTime);
   const serverTime = stringKeUnix(userDataRaw.serverTime); // Ubah string waktu server ke format Unix (ms)
   //const currentServerTime = new Date(baseServerTime + elapsed);
   const currentServerTime = new Date(serverTime + elapsed);

@@ -22,7 +22,7 @@ async function getServerTime(dateform = null) {
         kirimkegithub:false
       }
     )
-    console.log("Respon getTime:", res);
+    //console.log("Respon getTime:", res);
 
     if (res.status === "success") {
       return res.time;
