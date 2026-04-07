@@ -75,7 +75,8 @@ async function login() {
         role: serverData.role, 
         sessionId: serverData.sessionId, // TOKEN SAKTI KITA
         unlockCode: serverData.unlockCode, // <--- BARIS INI WAJIB ADA!
-        serverTime : timeServer  // <--- AMBIL WAKTU SERVER WAKTU LOGIN!
+        serverTime : timeServer,  // <--- AMBIL WAKTU SERVER WAKTU LOGIN!
+        awalTime: performance.now() // <--- CATAT WAKTU LOGIN UNTUK PERHITUNGAN OFFSET
       }));
 
       
@@ -372,14 +373,18 @@ function stringKeUnix(str) {
 })();
 
 // 1. Ambil data string-nya dulu
-const userDataRaw = localStorage.getItem("userMaint");
+//const userDataRaw = localStorage.getItem("userMaint");
 // 2. Parse string tadi jadi Object, lalu ambil serverTime-nya
-const baseServerTime = JSON.parse(userDataRaw).serverTime; 
+//const baseServerTime = JSON.parse(userDataRaw).serverTime ; 
 // 3. Catat performance.now() tepat saat variabel di atas dibuat
-const basePerformance = performance.now();
+//const basePerformance = performance.now();
+
+
 function updateJamDisplay() {
-  const elapsed = performance.now() - basePerformance;
-  const currentServerTime = new Date(baseServerTime + elapsed);
+  const userDataRaw = localStorage.getItem("userMaint");
+  const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
+  //const currentServerTime = new Date(baseServerTime + elapsed);
+  const currentServerTime = new Date(userDataRaw.serverTime + elapsed);
 
   // Format jam (HH:mm:ss)
   const jamStr = currentServerTime.toLocaleTimeString('id-ID'); 
