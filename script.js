@@ -974,7 +974,7 @@ async function capturePhoto(category) {
             stream = await navigator.mediaDevices.getUserMedia({ video: true });
         } catch (e) {
             console.error("Kamera Error:", e);
-            speakSenor("Kamera ghoib Señor, silakan pakai galeri.");
+            speakSenor("Kamera Tidak Terdeteksi, silahkan pakai galeri.");
             openGalleryFromCam(); // Auto-switch ke galeri jika kamera gagal
             return;
         }
@@ -1671,21 +1671,24 @@ function closeMaintenanceMode() {
         if (el) el.innerText = val || "-";
       };
      
-      setEl('det_log_id',    ""); // A: ID_Log
-      setEl('det_maint_id',  ""); // B: Maint_ID (Tambahkan di UI jika perlu)
-      setEl('det_start',     ""); // C: mulai
-      setEl('det_pending',   ""); // D: pending
-      setEl('det_selesai',   ""); // E: selesai
-      setEl('det_petugas',   ""); // F: Petugas
-      setEl('det_asset_id',  ""); // G: Asset_ID
-      setEl('det_note',      ""); // I: Note
-      setEl('det_id_jadwal', ""); // H: ID_Jadwal 
+      setEl('det_log_id',    "-"); // A: ID_Log
+      setEl('det_maint_id',  "-"); // B: Maint_ID (Tambahkan di UI jika perlu)
+      setEl('det_start',     "-"); // C: mulai
+      setEl('det_pending',   "-"); // D: pending
+      setEl('det_selesai',   "-"); // E: selesai
+      setEl('det_petugas',   "-"); // F: Petugas
+      setEl('det_asset_id',  "-"); // G: Asset_ID
+      setEl('det_note',      "-"); // I: Note
+      setEl('det_id_jadwal', "-"); // H: ID_Jadwal 
 
       // ISI THUMBNAIL FOTO (J, K, L, M)
-      updateThumbnail('gal_before',"");  // J: P_Before
-      updateThumbnail('gal_on',     ""); // K: P_On
-      updateThumbnail('gal_after',  ""); // L: P_After
-      updateThumbnail('gal_check',  ""); // M: P_Check
+      //updateThumbnail('gal_before',"");  // J: P_Before
+      //updateThumbnail('gal_on',     ""); // K: P_On
+      //updateThumbnail('gal_after',  ""); // L: P_After
+     // updateThumbnail('gal_check',  ""); // M: P_Check
+      
+      tempPhotos = { PB: [], PO: [], PA: [], PC: [] };
+      resetVisualPhotos();
 
     //reset kembali menjadi baru
     update_man_status = false; 
@@ -2110,10 +2113,10 @@ async function saveMaintData() {
     // 2. KONFIRMASI
     const confirm = await Swal.fire({
       title: (row === "") ? 'Buat Jadwal Baru?' : 'Simpan Perubahan?',
-      text: "Data akan ditembak ke API server.",
+      text: "Data akan dikirim ke server.",
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Ya, Tembak!',
+      confirmButtonText: 'Ya, Kirim!',
       background: "#0f172a",
       color: "#fff",
       width: '80%'
@@ -2123,7 +2126,7 @@ async function saveMaintData() {
 
     // 3. UI LOADING
     Swal.fire({
-      title: 'Update DB... \n ',      
+      title: 'Update DB...  ',      
       background: "#0f172a",
       color: "#fff",
       allowOutsideClick: false,
@@ -2145,8 +2148,9 @@ async function saveMaintData() {
 
         if (res && res.status === "success") {
           Swal.update({
-              title: res.data || "DB Jadwal Updated",
+              title: res.data || "DB Jadwal Updating",
               showConfirmButton: false,
+              didOpen: () => { Swal.showLoading(); }
             });
 
             if (typeof speakSenor === 'function') speakSenor("Misi Selesai!");
