@@ -194,7 +194,8 @@ async function navigateAsset() {
 
       //fungsi penganti fetch
       // 1. Ambil gudang sesuai tipe (misal: "AC_Split")
-      const gudangAsset = getAsset(type); 
+      //const gudangAsset = getAsset(type); 
+      const gudangAsset = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
       // 2. Ambil data baris tersebut (Ingat: Index = Baris - 1)
       const data = gudangAsset[row - 1];
 
@@ -220,7 +221,8 @@ async function navigateAsset() {
     //const resp = await fetch(`${urlGAS}?action=getSpecificAsset&sheetName=${type}`);
     //const data = await resp.json();
     //fungsi pengganti fetch
-    data = getAsset(type);
+    //data = getAsset(type);
+    data = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
 
     if (currentPage === 'page_lihat_aset') {
       document.getElementById('viewAssetTypeSelect').value = type;
@@ -2616,7 +2618,8 @@ async function exportToExcel() {
 
     try {
       // 1. Ambil data utuh dari RAM (Gak perlu slice karena butuh header)
-      const rawData = getMaint("Maintenance"); 
+      //const rawData = getMaint("Maintenance");
+      const rawData = ambilDataSheet('MAINT','Maintenance'); 
 
       if (!rawData || rawData.length === 0) throw new Error("Gudang RAM Kosong!");
 
@@ -3871,7 +3874,8 @@ async function openAssetDetail(sheetName, idName) {
 
   try {      
     
-    const dataRaw = getAsset(sheetName);
+    //const dataRaw = getAsset(sheetName);
+    const dataRaw = ambilDataSheet('ASSET', sheetName);
     //const data = dataRaw.filter(item => item[0] === idName);
      const data = dataRaw.find(item => item[0] === idName);
 
