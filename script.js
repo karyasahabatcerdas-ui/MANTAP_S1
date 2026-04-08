@@ -933,29 +933,36 @@ async function openCustomScanner() {
     ).catch(err => {
         console.error("Kamera Error:", err);
 
-        // Cek apakah error karena kamera tidak ada/tidak ditemukan
+        // Gabungkan semua kemungkinan pesan error "tidak ditemukan"
+        const errorStr = String(err).toLowerCase();
         const isNoCamera = err.name === "NotFoundError" || 
                            err.name === "DevicesNotFoundError" || 
-                           String(err).includes("Notfound");
+                           errorStr.includes("not found") || 
+                           errorStr.includes("notfound") ||
+                           errorStr.includes("requested device not found");
 
         if (isNoCamera) {
             // Skenario 1: Kamera tidak ada -> Langsung ke Galeri
+            // Skenario: Kamera tidak ada (PC/Laptop)
             Swal.fire({
                 title: "Kamera Tidak Terdeteksi",
-                text: "Gunakan fitur Upload Galeri untuk scan QR.",
+                text: "Kamera belakang tidak ditemukan. Silahkan gunakan fitur Upload Galeri.",
                 icon: "info",
                 background: "#0f172a", color: "#fff",
-                width: '80%'
+                width: '80%',
+                confirmButtonText: "Buka Galeri"
+            }).then((result) => {
+                // Hanya jalankan galeri jika user klik OK atau modal tertutup
+                openGalleryForQR();
             });
-            openGalleryForQR();
         } else {
             // Skenario 2: Error lain (Izin ditolak, dll) -> Tutup modal & Swal
             modal.style.display = 'none';
             if (html5QrCode) html5QrCode.clear(); // Hentikan instance jika ada
 
             Swal.fire({
-                title: "Gagal Mengakses Kamera",
-                text: "Pastikan izin kamera diberikan atau gunakan perangkat lain.",
+                title: "Gagal Akses Kamera",
+                text: "Pesan : " + err,
                 icon: "error",
                 background: "#0f172a", color: "#fff",
                 width: '80%'
