@@ -2159,21 +2159,21 @@ async function saveMaintData() {
             if (await pullToVault('MAINT','Maintenance') && await pullToVault('MAINT','Log_Kegiatan')) {
               if (typeof loadJad === 'function') loadJad();
               if (typeof loadKel === 'function') loadKel();
-                    // Ganti loading dengan alert sukses
-                  await Swal.fire({ 
-                    title: "BERHASIL! - Jadwal Updated & Refreshed", 
-                    icon: "success", width: '80%',
-                    timer: 2000, 
-                    background: "#0f172a", color: "#fff" 
-                });
+                      // Ganti loading dengan alert sukses
+                    await Swal.fire({ 
+                      title: "BERHASIL! - Jadwal Updated & Refreshed", 
+                      icon: "success", width: '80%',
+                      timer: 2000, 
+                      background: "#0f172a", color: "#fff" 
+                  });
             }            
 
         } else {
-            throw new Error(res ? res.message : "Gagal menyimpan jadwal");
+            throw new Error(res ? res.message : "Gagal Simpan Jadwal");
         }
 
     } catch (err) {
-        if (typeof speakSenor === 'function') speakSenor("Gagal tembak, Señor!");
+        if (typeof speakSenor === 'function') speakSenor("Gagal Proses Simpan!");
         Swal.fire({ 
             title: "API Error", 
             text: err.message, 
