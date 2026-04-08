@@ -2115,18 +2115,21 @@ async function saveMaintData() {
       showCancelButton: true,
       confirmButtonText: 'Ya, Tembak!',
       background: "#0f172a",
-      color: "#fff"
+      color: "#fff",
+      width: '80%'
     });
 
     if (!confirm.isConfirmed) return;
 
     // 3. UI LOADING
     Swal.fire({
-      title: 'Update DB... \n ',
-      didOpen: () => { Swal.showLoading(); },
+      title: 'Update DB... \n ',      
       background: "#0f172a",
       color: "#fff",
-      allowOutsideClick: false
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      width: '80%',
+      didOpen: () => { Swal.showLoading(); }
     });
 
     try {
@@ -2142,13 +2145,14 @@ async function saveMaintData() {
 
         if (res && res.status === "success") {
           Swal.update({
-              title: res.data || "DB Jadwal Updated"
+              title: res.data || "DB Jadwal Updated",
+              showConfirmButton: false,
             });
 
-            if (typeof speakSenor === 'function') speakSenor("Misión Cumplida, Señor!");
+            if (typeof speakSenor === 'function') speakSenor("Misi Selesai!");
 
             // 5. SYNC GITHUB & RAM: Sangat penting agar tabel langsung update
-            await syncDataGhoib();                   
+            //await syncDataGhoib();                   
 
             if (typeof closeMaintModal === 'function') closeMaintModal();
             // 5.1. SYNC FAULT individual
