@@ -1723,15 +1723,8 @@ function closeMaintenanceMode() {
       setEl('det_asset_id',  "-"); // G: Asset_ID
       setEl('det_note',      "-"); // I: Note
       setEl('det_id_jadwal', "-"); // H: ID_Jadwal 
-
-      // ISI THUMBNAIL FOTO (J, K, L, M)
-      //updateThumbnail('gal_before',"");  // J: P_Before
-      //updateThumbnail('gal_on',     ""); // K: P_On
-      //updateThumbnail('gal_after',  ""); // L: P_After
-     // updateThumbnail('gal_check',  ""); // M: P_Check
       
-      tempPhotos = { PB: [], PO: [], PA: [], PC: [] };
-      resetVisualPhotos();
+      resetTempPhotos();
 
     //reset kembali menjadi baru
     update_man_status = false; 
