@@ -591,7 +591,8 @@ function closeDetailHist() {
 function initPhotoSlider(category) {
   var rawUrls = "";
   //var data = activeRowData;
-  var data = ambilDataSheet('MAINT','Log_Kegiatan');
+  //var data = ambilDataSheet('MAINT','Log_Kegiatan');
+  var data = ambilDataSheet('MAINT','Log_Kegiatan').slice(1)[0];
   
   if (!data) return alert("Data log belum termuat sempurna, Bro!");
 
