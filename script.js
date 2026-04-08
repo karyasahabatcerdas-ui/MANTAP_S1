@@ -2156,7 +2156,7 @@ async function saveLog(status) {
                   title: 'Syncing Data...',
                   showConfirmButton: false,
                   text: 'Memperbarui database lokal (Vault)...'
-              });
+              });Swal.showLoading(); // PAKSA spinner tetap muncul
 
                 // Reset & Close
                 isSuccessSave = true; 
