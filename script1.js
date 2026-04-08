@@ -106,6 +106,7 @@ async function initialSyncAllParallel() {
   Swal.fire({
   title: `SYNC'ING VAULT`,
   html: `
+  <div style="overflow: hidden;"> <!-- Wrapper untuk bungkus semua agar scroll hilang -->
     <div id="sync-msg" style="margin-bottom:15px; color: #94a3b8; font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">
       Inisialisasi Port Data...
     </div>
@@ -115,6 +116,7 @@ async function initialSyncAllParallel() {
           0%
         </div>
       </div>
+     </div>
     </div>
   `,
   background: '#1e293b',         // Dark Background (Sesuai tema kamu)
