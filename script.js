@@ -2154,6 +2154,7 @@ async function saveLog(status) {
               // UPDATE TEKS LAGI SAAT SYNC VAULT
               Swal.update({
                   title: 'Syncing Data...',
+                  showConfirmButton: false,
                   text: 'Memperbarui database lokal (Vault)...'
               });
 
