@@ -112,6 +112,43 @@ function liveSearchRAM(keyword) {
     return;
   }
 
+  const keywordLower = keyword.toLowerCase();
+
+  // 1. Ambil & Gabungkan semua data dari 12 sheet (on-demand)
+  const hasilUntukTabel = SHEETS.ASSET.reduce((hasil, tipe) => {
+    const rows = ambilDataSheet('ASSET', tipe);
+    if (!rows) return hasil;
+
+    // Mulai dari i = 1 (Lompati Header)
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      // Gabung baris jadi string untuk pencarian global
+      const teksSatuBaris = row.join("|").toLowerCase();
+      
+      if (teksSatuBaris.includes(keywordLower)) {
+        hasil.push({
+          type: tipe,           
+          id: row[0] || "-",    
+          nama: row[2] || "-",  
+          lokasi: row[3] || "-",
+          row: i + 1            
+        });
+      }
+    }
+    return hasil;
+  }, []);
+
+  // 2. Lempar ke fungsi UI
+  fillGlobalTable(hasilUntukTabel);
+}
+/*
+function liveSearchRAM(keyword) {
+  const tbody = document.getElementById('globalResultBody');
+  if (!keyword || keyword.length < 2) {
+    tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Ketik min. 2 huruf...</td></tr>";
+    return;
+  }
+
   let hasilUntukTabel = [];
   const daftarTipe = Object.keys(window.APP_STORE.assets);
 
@@ -139,6 +176,7 @@ function liveSearchRAM(keyword) {
   // Lempar ke fungsi UI kamu yang sudah mantap itu
   fillGlobalTable(hasilUntukTabel);
 }
+*/
 
 function fillGlobalTable(results) {
   const tbody = document.getElementById('globalResultBody');
