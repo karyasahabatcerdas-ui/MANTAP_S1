@@ -50,18 +50,36 @@ async function getServerTime(dateform = null) {
  */
 async function getMMDDYY() {
   //const iframe = document.getElementById('iframeGAS');
-  const urlGAS = APPSCRIPT_URL;
+  //const urlGAS = APPSCRIPT_URL;
 
   try {
     // 1. Fetch ke server
-    const response = await fetch(`${urlGAS}?action=getServerTime`);
-    const fullTime = await response.json(); // Hasilnya: "19/02/2024 14:30:05"
+    //const response = await fetch(`${urlGAS}?action=getServerTime`);
+    //const fullTime = await response.json(); // Hasilnya: "19/02/2024 14:30:05"
+    // 1. Ambil teks asli dari elemen
+    const currentStr = document.getElementById('serverClock').innerText; 
+    // Isi currentStr: "Rabu 08/04/2026, 13:05:47"
+
+    // 2. Pecah berdasarkan spasi
+    // parts[0] = "Rabu"
+    // parts[1] = "08/04/2026,"
+    // parts[2] = "13:05:47"
+    const parts = currentStr.split(' ');
+
+    // 3. Ambil bagian tanggal (index 1) dan buang tanda koma jika ada
+    const datePart = parts[1].replace(',', '');
+
+    // 4. Bedah tanggal menjadi dd, mm, yy
+    const dateDetails = datePart.split('/');
+    const dd = dateDetails[0];
+    const mm = dateDetails[1];
+    const yy = dateDetails[2].slice(-2); // Ambil 2 angka terakhir (26)
 
     // 2. Bedah string menjadi "190224"
-    const parts = fullTime.split(' ')[0].split('/'); 
-    const dd = parts[0];
-    const mm = parts[1];
-    const yy = parts[2].slice(-2);
+    //const parts = fullTime.split(' ')[0].split('/'); 
+    //const dd = parts[0];
+    //const mm = parts[1];
+    //const yy = parts[2].slice(-2);
 
     return dd + mm + yy; 
 
