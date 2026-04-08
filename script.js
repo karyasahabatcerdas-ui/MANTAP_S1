@@ -1835,8 +1835,8 @@ async function saveLog(status) {
         Swal.update({
               title: 'Transmitting...',
               text: "Sedang memproses data & foto ke Google Drive...",
-              icon: "success",
               showConfirmButton : false,
+              didOpen: () => { Swal.showLoading(); }
         });
 
 
@@ -1854,8 +1854,8 @@ async function saveLog(status) {
                 await Swal.update({
                     title: "Berhasil.. !",
                     text: ("Berhasil : " + result.message) || "Data berhasil disimpan!",
-                    icon: "success",
-                    showConfirmButton : false
+                    showConfirmButton : false,
+                    didOpen: () => { Swal.showLoading(); }
                 });
 
                 // Reset & Close
