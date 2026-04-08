@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadComponent('modalImport-placeholder','modalImport.html'),
         loadComponent('modalEditUser-placeholder','modalEditUser.html'),
         loadComponent('modalGlobalSearch-placeholder', 'modalGlobalSearch.html'),
-        syncDataGhoib() // Sinkronisasi awal untuk data penting (jadwal, user list, dll)
+        //syncDataGhoib() // Sinkronisasi awal untuk data penting (jadwal, user list, dll)
         // Terakhir tidak perlu koma
     ]);
 

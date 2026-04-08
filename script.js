@@ -15,7 +15,7 @@ async function updateAssetData(sheetName, assetId, updatedArray) {
 
     if (res && res.status === "success") {
       // 3. SINKRONISASI DATA (Tarik data terbaru dari GitHub)
-      await syncDataGhoib(); 
+      //await syncDataGhoib(); 
       
       Swal.fire("Tersimpan!", "Data Aset & GitHub berhasil disinkronkan.", "success");
       return true;
@@ -39,7 +39,7 @@ async function tambahAset(sheetName, newRow) {
 
   if (res && res.status === "success") {
     // Tarik data terbaru agar unit baru muncul di tabel
-    await syncDataGhoib();
+    //await syncDataGhoib();
     Swal.fire("Berhasil!", "Unit baru telah terdaftar.", "success");
   }
   return res;
@@ -53,7 +53,7 @@ async function hapusAset(sheetName, assetId) {
 
   if (res && res.status === "success") {
     // Tarik data terbaru agar baris di tabel hilang
-    await syncDataGhoib();
+    //await syncDataGhoib();
     console.log("🗑️ Unit Terhapus dari Server & GitHub.");
   }
   return res;
@@ -516,7 +516,7 @@ function openDetailLog(logId) {
   var data = ambilDataSheet('MAINT','Log_Kegiatan').find(function(row) { return row[0] === logId; }); //pengganti fungsi gas dilokal
   if (!data) return Swal.fire("Data Ghoib!", "ID Log tidak ditemukan, Señor!", "error");
 
-  activeRowData = data; 
+  //activeRowData = data; 
   // console.log("🔍 Detail Log Ditemukan:", data); trap ok dan dan isinya
   //  console.table({allHistoryData, activeRowData: data}); //trap ok dan dan isinya
   //console.log("data dari opendetail.log :");
@@ -592,7 +592,7 @@ function initPhotoSlider(category) {
   var rawUrls = "";
   //var data = activeRowData;
   //var data = ambilDataSheet('MAINT','Log_Kegiatan');
-  var data = ambilDataSheet('MAINT','Log_Kegiatan').slice(1)[0];
+  var data = ambilDataSheet('MAINT','Log_Kegiatan').slice(1).filter(function(row) { return row[0] === document.getElementById('det_log_id').innerText; })[0]; // Ambil data log yang sesuai ID_Log
   
   if (!data) return alert("Data log belum termuat sempurna, Bro!");
 
@@ -1855,7 +1855,7 @@ async function saveLog(status) {
                     });
                 }   
                 // Segera tarik data terbaru dari GitHub karena server sudah push ke sana
-                await syncDataGhoib(); 
+                //await syncDataGhoib(); 
 
                 //tutup modal
                 
@@ -2406,7 +2406,7 @@ async function delJad(row) {
       });
 
       // Tarik data terbaru dari GitHub agar tabel terupdate
-      await syncDataGhoib();
+      //await syncDataGhoib();
 
       // Refresh tampilan tabel kelola
       if (typeof loadKel === 'function') loadKel();
@@ -2986,7 +2986,7 @@ async function processImport() {
       
       // 4. UPDATE RAM LOKAL & GITHUB
       // Sangat krusial agar 22 sheet di GitHub diperbarui dengan data impor baru
-      await syncDataGhoib(); 
+      //await syncDataGhoib(); 
       
       if (typeof closeImportModal === 'function') closeImportModal();
       // 5.1. SYNC FAULT individual
@@ -4258,7 +4258,7 @@ async function doBulkDeleteAsset() {
           
           // 5. SYNC GITHUB & RE-RENDER
           // Sangat krusial agar RAM lokal langsung bersih mengikuti data terbaru di GitHub
-          await syncDataGhoib(); 
+          //await syncDataGhoib(); 
           
           if (typeof loadAssetData === 'function') loadAssetData(type);
           
@@ -4370,7 +4370,7 @@ async function bulkUpdateQR() {
         });
         
         // 5. SINKRONISASI GITHUB & UI
-        await syncDataGhoib(); 
+        //await syncDataGhoib(); 
         
         if (typeof loadAssetData === 'function') loadAssetData(type);
         
@@ -4862,7 +4862,7 @@ async function doBulkAction(status) {
       });
       
       // REFRESH DATA (Gunakan fungsi sinkronisasi kamu)
-      if (typeof syncDataGhoib === 'function') await syncDataGhoib(); 
+     // if (typeof syncDataGhoib === 'function') await syncDataGhoib(); 
       if (typeof loadUserList === 'function') loadUserList();
 
     } else {
@@ -5552,7 +5552,7 @@ async function doBulkDelete() {
       });
 
       // Refresh data UI
-      if (typeof syncDataGhoib === 'function') await syncDataGhoib();
+      //if (typeof syncDataGhoib === 'function') await syncDataGhoib();
       if (typeof loadUserList === 'function') loadUserList(); 
 
     } else {
