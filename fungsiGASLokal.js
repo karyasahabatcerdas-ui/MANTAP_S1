@@ -62,7 +62,7 @@ function getAssetDetailForLogRAM(unitID) {
 
     // 4. Buat objek Date baru (Ganti 'const skrg = new Date()' dengan ini)
     const skrg = new Date(y, m, d, hh, mm, ss);
-    
+
     const rangeMilli = 14 * 24 * 60 * 60 * 1000; // 2 Minggu
 
     const openJadwal = mData.filter(r => {
@@ -165,6 +165,44 @@ function getAssetDetailForLogRAM(unitID) {
  * SEARCH ASSET RAM: Pengganti searchAllAssetsGo (GAS)
  * @param {string} keyword - ID Asset atau kata kunci (dari data[6])
  */
+
+function searchAssetRAM(keyword) {
+  if (!keyword) return [];
+
+  const searchKey = String(keyword).toLowerCase().trim();
+  
+  // 1. Gunakan reduce untuk menyisir ke-12 tipe sheet secara dinamis
+  const results = SHEETS.ASSET.reduce((hasil, sheetName) => {
+    const rows = ambilDataSheet('ASSET', sheetName);
+    if (!rows) return hasil;
+
+    // 2. Mulai dari index 1 (Lompati Header)
+    for (let i = 1; i < rows.length; i++) {
+      const rowData = rows[i];
+      const cellID = String(rowData[0]).toLowerCase().trim(); // Kolom A (ID)
+      const allText = rowData.join(" ").toLowerCase();       // Gabungan semua kolom
+
+      // LOGIKA: Cocok ID persis ATAU ada kata kunci di baris tersebut
+      if (cellID === searchKey || allText.indexOf(searchKey) > -1) {
+        hasil.push({
+          type:   sheetName,
+          row:    i + 1,       // Baris asli di Spreadsheet
+          id:     rowData[0],  // Kolom A
+          nama:   rowData[2],  // Kolom C
+          lokasi: rowData[3],  // Kolom D
+          status: rowData[4]   // Kolom E
+        });
+      }
+    }
+    return hasil;
+  }, []);
+
+  return results;
+}
+
+
+
+/*
 function searchAssetRAM(keyword) {
   if (!keyword) return [];
 
@@ -199,5 +237,6 @@ function searchAssetRAM(keyword) {
 
   return results;
 }
+  */
 
 

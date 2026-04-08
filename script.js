@@ -1405,15 +1405,7 @@ function startMaintenanceMode() {
 
       // --- KODE BARU (KILAT WUZ!) ---
       // data[6] adalah ID Asset yang dikirim user
-      //const results = searchAssetRAM(data[6]);
-
-      const allAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
-        return hasil.concat(ambilDataSheet('ASSET', sheetName).slice(1));
-      }, []);
-
-      const results = allAssets.filter(row => String(row[0]) === String(data[6])); // Filter langsung di client untuk kecepatan kilat
-
-
+      const results = searchAssetRAM(data[6]); 
 
     if (results && results.length > 0) {
       const res = results[0]; 
