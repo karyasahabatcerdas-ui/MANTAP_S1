@@ -81,6 +81,8 @@ async function getMMDDYY() {
     //const mm = parts[1];
     //const yy = parts[2].slice(-2);
 
+    // 5. Ambil bagian jam (index 2)
+    const timePart = parts[2];
     return dd + mm + yy; 
 
   } catch (err) {

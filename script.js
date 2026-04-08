@@ -285,12 +285,8 @@ async function fetchAssetDetailForLog(unitID) {
     // Memanggil server dengan parameter action dan unitID
     //const response = await fetch(`${urlGAS}?action=getAssetDetailForLog&unitID=${unitID}`);
     //const res = await response.json();
-    //const res = getAssetDetailForLogRAM(unitID);//pengganti fungsi gas dilokal
-      const allAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
-        return hasil.concat(ambilDataSheet('ASSET', sheetName).slice(1));
-      }, []);
-
-      const res = allAssets.filter(row => String(row[0]) === String(unitID));
+    const res = getAssetDetailForLogRAM(unitID);//pengganti fungsi gas dilokal
+  
 
     if (res && res.nama !== "TIDAK DITEMUKAN") {
       
@@ -321,7 +317,7 @@ async function fetchAssetDetailForLog(unitID) {
         const hit = res.openJadwal[0]; 
         dropdownJadwal.value = hit.idJadwal; 
         logKegId.value = hit.maintId; 
-        if(typeof speakSenor === "function") speakSenor("Jadwal terencana ditemukan Señor, silakan lanjut.");
+        if(typeof speakSenor === "function") speakSenor("Jadwal terencana ditemukan, silakan lanjut.");
       } else {
         logKegId.value = ""; 
         //dropdownJadwal.value = ""; 
