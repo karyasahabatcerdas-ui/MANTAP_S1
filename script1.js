@@ -104,14 +104,14 @@ async function initialSyncAllParallel() {
 
   // 2. Tampilkan UI Loading yang informatif
   Swal.fire({
-  title: 'SYNCING VAULT',
+  title: `SYNC'ING VAULT`,
   html: `
     <div id="sync-msg" style="margin-bottom:15px; color: #94a3b8; font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">
       Inisialisasi Port Data...
     </div>
     <div style="width: 100%; background: #334155; border-radius: 4px; overflow: hidden; height: 20px; border: 1px solid #475569;">
       <div id="sync-bar" style="width: 0%; height: 100%; background: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: width 0.4s ease-out; position: relative;">
-        <div id="sync-pct" style="position: absolute; width: 100%; text-align: center; color: #1e293b; font-size: 11px; line-height: 20px; font-weight: 800;">
+        <div id="sync-pct" style="position: absolute; width: 90%; text-align: center; color: #1e293b; font-size: 11px; line-height: 20px; font-weight: 800;">
           0%
         </div>
       </div>
@@ -137,7 +137,7 @@ async function initialSyncAllParallel() {
 
   try {
     // 3. Eksekusi dengan Pool Limit (Maksimal 6 Sesi Simultan)
-    const poolLimit = 6;
+    const poolLimit = 8; // Sesuaikan dengan batasan server kamu (Google Apps Script biasanya 6-10 koneksi bersamaan)
     await asyncPool(poolLimit, allTasks, async (task) => {
       
       // Ambil data dengan fitur Auto-Retry
