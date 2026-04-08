@@ -61,7 +61,7 @@ async function getMMDDYY() {
     const parts = fullTime.split(' ')[0].split('/'); 
     const dd = parts[0];
     const mm = parts[1];
-    const yy = parts[2].slice(-2); 
+    const yy = parts[2].slice(-2);
 
     return dd + mm + yy; 
 

@@ -277,7 +277,7 @@ async function fetchAssetDetailForLog(unitID) {
   if (!unitID) return;    
   const uiNama = document.getElementById('log_as_id');    
   //const iframe = document.getElementById('iframeGAS');
-  const urlGAS = APPSCRIPT_URL;
+  //const urlGAS = APPSCRIPT_URL;
   
   if(uiNama) uiNama.innerHTML = `<span class="text-gradient">Baca Database...</span>`;
 
@@ -285,7 +285,13 @@ async function fetchAssetDetailForLog(unitID) {
     // Memanggil server dengan parameter action dan unitID
     //const response = await fetch(`${urlGAS}?action=getAssetDetailForLog&unitID=${unitID}`);
     //const res = await response.json();
-    const res = getAssetDetailForLogRAM(unitID);//pengganti fungsi gas dilokal
+    //const res = getAssetDetailForLogRAM(unitID);//pengganti fungsi gas dilokal
+      const allAssets = SHEETS.ASSET.reduce((hasil, sheetName) => {      
+        return hasil.concat(ambilDataSheet('ASSET', sheetName).slice(1));
+      }, []);
+
+      const res = allAssets.filter(row => String(row[0]) === String(unitID));
+
     if (res && res.nama !== "TIDAK DITEMUKAN") {
       
       // 1. TAMPILKAN KONFIRMASI UNIT

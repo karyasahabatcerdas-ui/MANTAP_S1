@@ -376,12 +376,12 @@ function stringKeUnix(str) {
 
 
 function updateJamDisplay() {
-  let see = JSON.parse(localStorage.getItem('userMaint')); // check localstorage ada atau tidak?
-  const loggedInUser = see ? see.name : null; 
-  if (!loggedInUser || loggedInUser === "") return ;//console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
-  const dataRaw = localStorage.getItem("userMaint");
-  if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
-  const userDataRaw = JSON.parse(dataRaw);
+  const userDataRaw = JSON.parse(localStorage.getItem('userMaint')); // check localstorage ada atau tidak?
+  const loggedInUser = userDataRaw ? userDataRaw.name : null; 
+  if (!loggedInUser || loggedInUser === "") return ("local storage kosong atau belum login");//console.log("error : belum ada login"); // Hanya tampilkan jika sudah login
+  //const dataRaw = localStorage.getItem("userMaint");
+  //if (!dataRaw) return console.log("local storage kosong"); // Jika data tidak ditemukan, jangan tampilkan jam
+  //const userDataRaw = JSON.parse(dataRaw);
   const elapsed = performance.now() - userDataRaw.perfBase; // Hitung waktu yang sudah berlalu sejak login
   //console.log("Elapsed ms since login:", elapsed);
   //console.log("Base Server Time (ms):", userDataRaw.serverTime);
@@ -390,7 +390,25 @@ function updateJamDisplay() {
   const currentServerTime = new Date(serverTime + elapsed);
 
   // Format jam (HH:mm:ss)
-  const jamStr = currentServerTime.toLocaleTimeString('id-ID'); 
+  //const jamStr = currentServerTime.toLocaleTimeString('id-ID');
+  const opsi = { 
+    weekday: 'long', // Menampilkan nama hari secara lengkap (Senin, Selasa, dsb)
+    day: '2-digit', 
+    month: '2-digit', 
+    year: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: false 
+  };
+
+// Kita gunakan 'id-ID' agar nama harinya otomatis bahasa Indonesia
+let jamStr = currentServerTime.toLocaleString('id-ID', opsi);
+// Sedikit penyesuaian: id-ID biasanya pakai titik (.) untuk jam, 
+// kita ganti ke titik dua (:) agar sesuai permintaanmu
+jamStr = jamStr.replace(/\./g, ':').replace(',', '');
+
+  //const jamStr = currentServerTime.toLocaleString('id-ID');
   document.getElementById('serverClock').innerText = jamStr;
 }
 // Jalankan setiap 1 detik
