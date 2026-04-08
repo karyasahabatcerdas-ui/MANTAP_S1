@@ -332,6 +332,7 @@ async function initialSyncAll() {
     
     // Beri sedikit nafas untuk browser update tampilan
     //await new Promise(r => setTimeout(r, 1));
+    //Swal.close(); // Tutup swal setelah semua selesai
   }
 
   Swal.fire({ 

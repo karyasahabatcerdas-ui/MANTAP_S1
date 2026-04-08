@@ -76,13 +76,13 @@ async function login() {
       const userRole = serverData.role;
 
       // --- PERBAIKAN: Pastikan Buka Gembok Berhasil ---
-      const isUnlocked = bukaGembokSakti(serverData.unlockCode);
+      //const isUnlocked = bukaGembokSakti(serverData.unlockCode);
 
       // UI Switch
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('main-content').style.display = 'flex';
       document.getElementById('headerUser').innerText = `${u} (${userRole})`;
-      checkSessionAndLogin();
+      const isUnlocked = checkSessionAndLogin();
 
       //fungsi database baru
       if (isUnlocked){
@@ -253,18 +253,21 @@ async function checkSessionAndLogin() {
 
       // 3. Jalankan Sinkronisasi Data (Wuzzz!)
       //await syncDataGhoib(); 
-      await showPage('history'); // Halaman default setelah login
+      //await showPage('history'); // Halaman default setelah login
       //loadProf();
+      return true;
 
     } catch (e) {
       console.error("Sesi Rusak, silakan login ulang.");
       localStorage.removeItem("userMaint");
       showLoginForm();
+      return false;
     }
   } else {
     // Jika tidak ada sesi, pastikan Form Login muncul
     console.log("👋 Tidak ada sesi. Silakan Login.");
     showLoginForm();
+    return false;
   }
 }
 
