@@ -2106,12 +2106,13 @@ async function saveLog(status) {
         const activeBtn = (status === 'Selesai') ? btnSelesai : btnPending;
         activeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
 
+        // MULAI LOADING AWAL
         Swal.fire({
             title: 'Processing...',
-            text: 'Menyiapkan data untuk disimpan di server...',
+            text: 'Menyiapkan data...',
             allowOutsideClick: false,
-            width: '80%' ,
-            background: "#0f172a", color: "#fff" ,
+            background: "#0f172a", color: "#fff",
+            width: '80%',
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -2132,12 +2133,11 @@ async function saveLog(status) {
             },
             photoData: tempPhotos 
         };
-        Swal.update({
+          // UPDATE TEKS (Jangan pakai await)
+          Swal.update({
               title: 'Transmitting...',
-              text: "Sedang memproses data & foto ke Google Drive...",
-              showConfirmButton : false,
-              didOpen: () => { Swal.showLoading(); }
-        });
+              text: 'Sedang memproses data & foto ke Google Drive...'
+          });
 
 
         // --- 4. EKSEKUSI VIA panggilGAS ---
@@ -2151,12 +2151,11 @@ async function saveLog(status) {
             console.log("Response SaveLog:", result);
 
             if (result && result.status === "success") {
-                await Swal.update({
-                    title: "Berhasil.. !",
-                    text: ("Berhasil : " + result.message) || "Data berhasil disimpan!",
-                    showConfirmButton : false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
+              // UPDATE TEKS LAGI SAAT SYNC VAULT
+              Swal.update({
+                  title: 'Syncing Data...',
+                  text: 'Memperbarui database lokal (Vault)...'
+              });
 
                 // Reset & Close
                 isSuccessSave = true; 
@@ -2173,11 +2172,14 @@ async function saveLog(status) {
                   if (typeof loadAuditLogs === 'function') loadAuditLogs();
                   if (typeof loadHist === 'function') loadHist();
 
-                        // Ganti loading dengan alert sukses
-                      await Swal.fire({ 
-                        title: "BERHASIL! - Jadwal Updated & Refreshed", 
-                        icon: "success", width: '80%',
+                    // AKHIRI DENGAN FIRE (Bukan update) UNTUK PESAN SUKSES FINAL
+                    await Swal.fire({ 
+                        title: "BERHASIL!", 
+                        text: "Jadwal Updated & Refreshed",
+                        icon: "success", 
+                        width: '80%',
                         timer: 2000, 
+                        showConfirmButton: false,
                         background: "#0f172a", color: "#fff" 
                     });
                 }   
