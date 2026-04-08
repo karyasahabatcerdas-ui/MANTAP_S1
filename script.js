@@ -1214,6 +1214,21 @@ async function handleLogPhotoSelect(input) {
     const qrModal = document.getElementById('qrModal');
     const camModal = document.getElementById('camModal');
 
+    // 1. Tambahkan ini di bagian atas kode (Global) atau sebelum Swal.close()
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        background: "#1e293b",
+        color: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      });
+
     // JALUR 1: SCAN QR DARI GALERI (Tanpa Kompresi)
     if (currentCategory === 'SCAN') {        
         speakSenor("Proses Scan QR dan Baca DB");
