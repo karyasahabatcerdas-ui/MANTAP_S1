@@ -913,8 +913,59 @@ async function loadJad() {
  */
 
  //let html5QrCode;
+async function openCustomScanner() {
+    currentCategory = 'SCAN';
+    const modal = document.getElementById('qrModal');
+    modal.style.display = 'flex';
+
+    if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    html5QrCode.start(
+      { facingMode: "environment" }, 
+      config, 
+      (decodedText) => { 
+          if (navigator.vibrate) navigator.vibrate(150);
+          stopScannerAndProcess(decodedText);
+      }, 
+      (errorMessage) => { /* scanning... */ }
+    ).catch(err => {
+        console.error("Kamera Error:", err);
+
+        // Cek apakah error karena kamera tidak ada/tidak ditemukan
+        const isNoCamera = err.name === "NotFoundError" || 
+                           err.name === "DevicesNotFoundError" || 
+                           String(err).includes("Notfound");
+
+        if (isNoCamera) {
+            // Skenario 1: Kamera tidak ada -> Langsung ke Galeri
+            Swal.fire({
+                title: "Kamera Tidak Terdeteksi",
+                text: "Gunakan fitur Upload Galeri untuk scan QR.",
+                icon: "info",
+                background: "#0f172a", color: "#fff",
+                width: '80%'
+            });
+            openGalleryForQR();
+        } else {
+            // Skenario 2: Error lain (Izin ditolak, dll) -> Tutup modal & Swal
+            modal.style.display = 'none';
+            if (html5QrCode) html5QrCode.clear(); // Hentikan instance jika ada
+
+            Swal.fire({
+                title: "Gagal Mengakses Kamera",
+                text: "Pastikan izin kamera diberikan atau gunakan perangkat lain.",
+                icon: "error",
+                background: "#0f172a", color: "#fff",
+                width: '80%'
+            });
+        }
+    });
+}
 
 // --- A. LOGIKA SCANNER QR RESPONSIF ---
+/*
 async function openCustomScanner() {
     currentCategory = 'SCAN';
     const modal = document.getElementById('qrModal');
@@ -933,7 +984,7 @@ async function openCustomScanner() {
             if (navigator.vibrate) navigator.vibrate(150);
             stopScannerAndProcess(decodedText);
         }, 
-        (errorMessage) => { /* scanning... */ }
+        (errorMessage) => { // scanning... }
     ).catch(err => {
         // Jika Kamera Gagal/Tidak Ada
         console.error("Kamera Error:", err);
@@ -947,6 +998,7 @@ async function openCustomScanner() {
         });
     });
 }
+*/
 
 // --- B. STOP & PROSES ---
 function stopScannerAndProcess(decodedText) {
@@ -1083,14 +1135,117 @@ function closeCamModal() {
  * FUNGSI HANDLE FILE INPUT UNTUK SCAN QR & FOTO DOKUMENTASI
  * =================================================================================================================================
  */
-
+//fungsi ini sudah dengan kompresi WEBP
 async function handleLogPhotoSelect(input) {
     if (!input.files || !input.files[0]) return;
     const imageFile = input.files[0];
+    const qrModal = document.getElementById('qrModal');
+    const camModal = document.getElementById('camModal');
+
+    // JALUR 1: SCAN QR DARI GALERI (Tanpa Kompresi)
+    if (currentCategory === 'SCAN') {        
+        speakSenor("Proses Scan QR dan Baca DB");
+        const scannerFile = new Html5Qrcode("reader"); 
+        try {
+            const decodedText = await scannerFile.scanFile(imageFile, true);
+            if (decodedText.includes("-")) {
+                const unitID = decodedText.split("-")[1].trim();
+                if (navigator.vibrate) navigator.vibrate(150);
+                fetchAssetDetailForLog(unitID);
+                speakSenor("QR sukses Dibaca");
+            } else {
+                throw new Error("Format salah");
+            }
+        } catch (err) {
+            console.error("QR Error:", err);
+            speakSenor("Gagal Membaca QR !");
+            Swal.fire({ title: "Gagal!", text: "QR tidak terdeteksi di foto ini.", icon: "error" });
+        }
+        input.value = "";
+        if (qrModal) qrModal.style.display = 'none';                
+        return;
+    }
+
+    // JALUR 2: FOTO DOKUMENTASI (PB, PO, PA, PC) - Dengan Kompresi WebP
+    const cat = currentCategory;
+    const asId = document.getElementById('log_ui_asid').innerText.trim();
+    // 1. Tampilkan loading sebelum kompresi mulai
+      Swal.fire({ 
+          title: "Proses Kompresi", 
+          text: "Sedang mengecilkan ukuran foto...", 
+          icon: "info", 
+          allowOutsideClick: false, // Biar user gak klik sembarang
+          showConfirmButton: false, // Sembunyikan tombol OK
+          didOpen: () => {
+              Swal.showLoading(); // Tampilkan animasi loading spinner
+          },
+          width: '80%',
+          background: "#0f172a", color: "#fff"
+      });
+    
+    try {
+
+        // Tampilkan loading jika perlu, karena kompresi butuh waktu sepersekian detik
+        const dateTag = await getMMDDYY(); 
+
+        // 2. Panggil fungsi kompresi existing kamu
+        // Fungsi ini akan meresize ke 1200px dan convert ke WebP
+        const compressed = await compressToWebP(imageFile, 0.7);
+
+        // 3. Simpan hasil kompresi ke tempPhotos
+        tempPhotos[cat].push({
+            name: `${asId}_${dateTag}_${cat}_${tempPhotos[cat].length + 1}.webp`,
+            mimeType: 'image/webp',
+            // Kita ambil base64-nya saja tanpa prefix "data:image/webp;base64,"
+            data: compressed.base64.split(',')[1] 
+        });
+
+          // 4. TUTUP SWAL secara manual
+          Swal.close(); 
+          Toast.fire({
+              icon: 'success',
+              title: 'Foto berhasil dikompres!'
+            });
+
+        // 5. Update UI
+        renderPhotoPreview(cat);
+        if (camModal) camModal.style.display = 'none';
+        input.value = ""; 
+
+    } catch (err) {
+// 1. Tutup loading yang sedang berjalan
+    Swal.close(); 
+
+    // 2. Beri instruksi suara
+    speakSenor("Gagal Compresi foto ");
+
+    // 3. Tampilkan pesan error yang detail
+    Swal.fire({ 
+        title: "Gagal Proses Foto", 
+        // Kita masukkan pesan 'err' ke dalam text agar kamu tahu penyebab teknisnya
+        text: "Pesan Error: " + err.message || "Gagal memproses gambar dokumentasi", 
+        icon: "error", 
+        width: '80%',
+        background: "#0f172a", 
+        color: "#fff",
+        confirmButtonText: "Oke Siap"
+    });
+
+    // JANGAN panggil Swal.close() di sini, biar user yang klik tombol "Oke"
+       input.value = "";
+    }
+}
+
+/*
+async function handleLogPhotoSelect(input) {
+    if (!input.files || !input.files[0]) return;
+    const imageFile = input.files[0];
+    const qrModal = document.getElementById('qrModal');
+    const camModal = document.getElementById('camModal');
 
     // JALUR 1: SCAN QR DARI GALERI
     if (currentCategory === 'SCAN') {        
-        speakSenor("Lagi baca QR dari galeri Señor.");
+        speakSenor("Proses Baca QR dan Scan galeri !");
 
         const scannerFile = new Html5Qrcode("reader"); 
         try {
@@ -1108,7 +1263,9 @@ async function handleLogPhotoSelect(input) {
             speakSenor("Gagal baca QR Señor.");
             Swal.fire({ title: "Gagal!", text: "QR tidak terdeteksi di foto ini.", icon: "error" });
         }
-        input.value = ""; 
+        input.value = "";
+        if (qrModal) qrModal.style.display = 'none';
+        if (camModal) camModal.style.display = 'none';        
         return;
     }
 
@@ -1129,7 +1286,7 @@ async function handleLogPhotoSelect(input) {
     };
     reader.readAsDataURL(imageFile);
 }
-
+*/
 /** ==========================================================================================================
  * [FUNGSI: RENDER PREVIEW FOTO PADA UI MODAL MAINTENANCE]
  * Menampilkan thumbnail foto yang sudah dipilih dengan opsi klik untuk perbesar dan tombol hapus satuan.
@@ -1754,6 +1911,60 @@ function closeMaintenanceMode() {
   }
 }
 
+/**
+ * Memproses objek berisi array-array gambar secara fleksibel
+ * @param {Object} photoContainer - Objek seperti { PB: [], PO: [], ... }
+ * @param {number} quality - Kualitas WebP (0.1 - 1.0)
+ * @returns {Promise<Object>} - Objek dengan struktur yang sama tapi sudah terkompres
+ */
+async function processPhotosFlexibly(photoContainer, quality = 0.7) {
+  const resultContainer = {};
+
+  // 1. Loop semua Key yang ada di dalam objek (berapapun jumlahnya: PB, PO, dst)
+  const categories = Object.keys(photoContainer);
+
+  for (const cat of categories) {
+    const currentArray = photoContainer[cat];
+    
+    if (!Array.isArray(currentArray)) {
+      resultContainer[cat] = currentArray; // Lewati jika isinya bukan array
+      continue;
+    }
+
+    // 2. Tahap Flattening: Pecah string URL yang mengandung koma
+    let flattenedItems = [];
+    currentArray.forEach(item => {
+      if (typeof item === 'string') {
+        const splitUrls = item.split(',').map(s => s.trim()).filter(s => s !== "");
+        flattenedItems.push(...splitUrls);
+      } else {
+        flattenedItems.push(item);
+      }
+    });
+
+    // 3. Tahap Kompresi: Proses semua item yang sudah di-flatten
+    const processedFiles = await Promise.all(flattenedItems.map(async (item) => {
+      // Jika string (URL), jangan diapa-apain
+      if (typeof item === 'string') {
+        return item; 
+      }
+
+      // Jika Object (File), kompres ke WebP
+      try {
+        const result = await compressToWebP(item, quality);
+        return result.base64; 
+      } catch (err) {
+        console.error(`Gagal kompres di kategori ${cat}:`, err);
+        return item; // Balikkan file asli jika gagal agar tidak hilang
+      }
+    }));
+
+    // 4. Masukkan kembali ke hasil akhir dengan key yang sama
+    resultContainer[cat] = processedFiles;
+  }
+
+  return resultContainer;
+}
 
 /**=================================================================
  * [FUNGSI CLIENT GITHUB: SAVE LOG ENTERPRISE]
@@ -1779,9 +1990,10 @@ async function saveLog(status) {
     
     if (pesanError !== "") {
         await Swal.fire({
-            title: "STOP, SEÑOR!",
+            title: "STOP",
             html: `<ul style="text-align:left; color:#d33;">${pesanError}</ul>`,
             icon: "error",
+            background: "#0f172a", color: "#fff" ,
             width: '80%'
         });
         return; 
@@ -1794,6 +2006,7 @@ async function saveLog(status) {
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Ya, Kirim!",
+        background: "#0f172a", color: "#fff" ,
         width: '80%'
     });
 
