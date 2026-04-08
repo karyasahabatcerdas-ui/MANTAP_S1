@@ -1058,6 +1058,71 @@ function openGalleryForQR() {
  */ 
  let stream; //variabel global untuk menyimpan stream kamera agar bisa dimatikan saat modal ditutup
 
+
+ // --- 1. BUKA KAMERA DOKUMENTASI ---
+async function capturePhoto(category) {
+    currentCategory = category;
+    document.getElementById('camLabel').innerText = category;
+    const modal = document.getElementById('camModal');
+    const video = document.getElementById('videoFeed');
+
+    // Pastikan stream lama dimatikan sebelum memulai yang baru
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    try {
+        // Percobaan 1: Paksa kamera belakang
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } }
+        });
+    } catch (err) {
+        console.warn("Kamera belakang (exact) gagal, mencoba alternatif...");
+        try {
+            // Percobaan 2: Kamera apa saja yang tersedia (Webcam di laptop/PC)
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        } catch (e) {
+            console.error("Kamera Error:", e);
+            
+            // Logika pendeteksian error seperti di scanner
+            const errorStr = String(e).toLowerCase();
+            const isNoCamera = e.name === "NotFoundError" || 
+                               e.name === "DevicesNotFoundError" || 
+                               errorStr.includes("not found") || 
+                               errorStr.includes("requested device not found");
+
+            if (isNoCamera) {
+                speakSenor("Kamera tidak ditemukan Señor, gunakan galeri saja.");
+                Swal.fire({
+                    title: "Kamera Tidak Terdeteksi",
+                    text: "Sistem tidak menemukan perangkat kamera. Silahkan gunakan Galeri.",
+                    icon: "info",
+                    background: "#0f172a", color: "#fff",
+                    width: '80%',
+                    confirmButtonText: "Buka Galeri"
+                }).then((result) => {
+                    openGalleryFromCam();
+                });
+            } else {
+                speakSenor("Akses kamera ditolak Señor.");
+                Swal.fire({
+                    title: "Akses Kamera Gagal",
+                    text: "Pastikan izin kamera diberikan. Error: " + e.message,
+                    icon: "error",
+                    background: "#0f172a", color: "#fff",
+                    width: '80%'
+                });
+            }
+            return; // Hentikan fungsi jika semua percobaan gagal
+        }
+    }
+
+    // Jika berhasil mendapatkan stream
+    video.srcObject = stream;
+    modal.style.display = 'flex';
+}
+
+/*
 // --- 1. BUKA KAMERA DOKUMENTASI ---
 async function capturePhoto(category) {
     currentCategory = category;
@@ -1085,7 +1150,7 @@ async function capturePhoto(category) {
     video.srcObject = stream;
     modal.style.display = 'flex';
 }
-
+*/
 /**================================================================================================================================
  * FUNGSI TOMBOL JEPRET FOTO & LOGIKA PENYIMPANAN SEMENTARA
  * ================================================================================================================================
