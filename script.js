@@ -272,7 +272,7 @@ async function navigateAsset() {
       }
 
       renderAssetTableIncrementalView(type, data); 
-      executeHighlight(type, row, 'viewAssetBody', true);
+      executeHighlight(type, row, 'viewAssetBody', unitID, true);
     } else {
       //document.getElementById('assetTypeSelect').value = type;
       const selectElement = document.getElementById('assetTypeSelect');
@@ -287,14 +287,14 @@ async function navigateAsset() {
         selectElement.dispatchEvent(new Event('change'));
       }
       renderAssetTableIncremental(type, data);
-      executeHighlight(type, row, 'assetBody', false);
+      executeHighlight(type, row, 'assetBody', unitID, false);
     }
   } catch (err) {
     console.error("Error navigasi asset:", err);
   }
 }
 
-function executeHighlight(type, row, bodyId, isView) {
+function executeHighlight(type, row, bodyId, unitID, isView) {
   setTimeout(() => {
     const tbody = document.getElementById(bodyId);
     const targetRow = tbody.rows[parseInt(row) - 2]; 
@@ -308,11 +308,13 @@ function executeHighlight(type, row, bodyId, isView) {
       
       // 3. OKE GAS! Langsung buka modal detilnya
       //const type = isView ? document.getElementById('viewAssetTypeSelect').value : document.getElementById('assetTypeSelect').value;
-      
+
+
+      console.log("Navigasi ke:", { type, row, isView });
       if (isView) {
-        openAssetDetailView(type, row); // Mode Read-Only
+        openAssetDetailView(type, unitID); // Mode Read-Only
       } else {
-        openAssetDetail(type, row); // Mode Admin Edit
+        openAssetDetail(type, unitID); // Mode Admin Edit
       }
     }
   }, 600); // Delay 600ms biar tabel sempet ngerender dulu
