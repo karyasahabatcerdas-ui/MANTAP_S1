@@ -252,9 +252,7 @@ async function navigateAsset() {
   try {
 
     data = ambilDataSheet('ASSET', type).splice(1); //pengganti fungsi gas dilokal
-    console.log("type :",type);
-    console.log("data :",data);
-    console.log("row :",row);
+
 
     if (currentPage === 'page_lihat_aset') {
       //document.getElementById('viewAssetTypeSelect').value = type;
@@ -272,7 +270,7 @@ async function navigateAsset() {
       }
 
       renderAssetTableIncrementalView(type, data); 
-      executeHighlight(row, 'viewAssetBody', true);
+      executeHighlight(type, row, 'viewAssetBody', true);
     } else {
       //document.getElementById('assetTypeSelect').value = type;
       const selectElement = document.getElementById('assetTypeSelect');
@@ -287,14 +285,14 @@ async function navigateAsset() {
         selectElement.dispatchEvent(new Event('change'));
       }
       renderAssetTableIncremental(type, data);
-      executeHighlight(row, 'assetBody', false);
+      executeHighlight(type, row, 'assetBody', false);
     }
   } catch (err) {
     console.error("Error navigasi asset:", err);
   }
 }
 
-function executeHighlight(row, bodyId, isView) {
+function executeHighlight(type, row, bodyId, isView) {
   setTimeout(() => {
     const tbody = document.getElementById(bodyId);
     const targetRow = tbody.rows[parseInt(row) - 2]; 
@@ -307,7 +305,7 @@ function executeHighlight(row, bodyId, isView) {
       targetRow.classList.add('highlight-flash');
       
       // 3. OKE GAS! Langsung buka modal detilnya
-      const type = isView ? document.getElementById('viewAssetTypeSelect').value : document.getElementById('assetTypeSelect').value;
+      //const type = isView ? document.getElementById('viewAssetTypeSelect').value : document.getElementById('assetTypeSelect').value;
       
       if (isView) {
         openAssetDetailView(type, row); // Mode Read-Only
