@@ -4721,6 +4721,8 @@ async function bulkUpdateQR() {
         const master = document.getElementById('checkAllAsset');
         if (master) master.checked = false;
 
+        console.log("bulkdata :",bulkData);
+
       } else {
         throw new Error(res ? res.message : "Gagal simpan di server");
       }
