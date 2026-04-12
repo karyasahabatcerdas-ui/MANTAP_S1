@@ -86,8 +86,8 @@ function showPage(id) {
       'm_user': () => typeof loadUserList === 'function' && loadUserList(),
       'setting': () => typeof loadProf === 'function' && loadProf(),
       'log_book': () => typeof loadAuditLogs === 'function' && loadAuditLogs(),
-      'aset': () => typeof loadAssetTypes === 'function' && loadAssetTypes(),
-      'lihat_aset': () => typeof loadAssetTypesView === 'function' && loadAssetTypesView(),
+      'aset': () => typeof loadAssetData === 'function' && loadAssetData(),
+      'lihat_aset': () => typeof loadAssetDataView === 'function' && loadAssetDataView(),
       'maintenance': () => typeof showMaintenancePage === 'function' && showMaintenancePage()
       
     };
