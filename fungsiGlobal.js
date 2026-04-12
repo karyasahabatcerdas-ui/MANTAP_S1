@@ -255,6 +255,8 @@ async function pullToVault(group, sheetName) {
       sheetName: sheetName,
       kirimgithub: false // Pastikan ini dikirim agar GAS kencang
     });
+    
+    console.log(`📥 Menarik ${sheetName}...`, res);
 
     if (res && res.status === "success") {
       // Simpan data TERENKRIPSI ke dalam Vault
