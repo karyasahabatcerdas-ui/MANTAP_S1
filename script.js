@@ -3722,16 +3722,11 @@ async function loadAssetData(sheetName_val) {
     }, []);
 
   if (!sheetName_val) {
-    // 1. Jika value kosong, ambil SEMUA asset dari SEMUA sheet (Array 2D)
-    // Mengambil data dan meratakannya
-    //let dataRaw = Object.values(window.APP_STORE.assets).flat(1);
-
     // Filter: Hanya simpan baris yang kolom pertamanya BUKAN 'ID_Asset'
      //data = dataRaw.filter(row => row[0] !== 'ID_Asset');
      data = dataRaw.filter((row, index) => {
       // Jika ini baris pertama (index 0), JANGAN dihapus (return true)
       if (index === 0) return true;
-      if (row[1] === "") return false;
       
       // Untuk baris selanjutnya, hapus jika kolom pertamanya adalah 'ID_Asset'
       return row[0] !== 'ID_Asset';
