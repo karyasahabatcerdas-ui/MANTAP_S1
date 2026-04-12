@@ -244,8 +244,7 @@ async function navigateAsset() {
     }
     return; 
   }
-  console.log("type :",type);
-  console.log("data :",data);
+  
   // --- LOGIKA 3: NAVIGASI HALAMAN (GET SPECIFIC ASSET DATA) ---
   closeGlobalSearch();
   const currentPage = document.querySelector('.page:not(.hidden)').id;
@@ -253,6 +252,8 @@ async function navigateAsset() {
   try {
 
     data = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
+    console.log("type :",type);
+    console.log("data :",data);
 
     if (currentPage === 'page_lihat_aset') {
       document.getElementById('viewAssetTypeSelect').value = type;
