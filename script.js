@@ -317,9 +317,9 @@ function executeHighlight(type, row, bodyId, unitID, isView) {
         
         // Opsional: Hapus class setelah selesai agar bisa diulang nanti
         setTimeout(() => targetRow.classList.remove('highlight-flash'), 2500);
-      }, 800); // <-- Delay tambahan untuk "menikmati" efek flash
+      }, 1500); // <-- Delay tambahan untuk "menikmati" efek flash
     }
-  }, 1000);
+  }, 3000);
 }
 
 /*
