@@ -254,6 +254,7 @@ async function navigateAsset() {
     data = ambilDataSheet('ASSET', type).splice(1); //pengganti fungsi gas dilokal
     console.log("type :",type);
     console.log("data :",data);
+    console.log("row :",row);
 
     if (currentPage === 'page_lihat_aset') {
       //document.getElementById('viewAssetTypeSelect').value = type;
