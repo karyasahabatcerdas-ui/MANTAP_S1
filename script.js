@@ -4631,6 +4631,7 @@ async function bulkUpdateQR() {
       asId: asId
     });
   });
+  console.log("Aset terpilih untuk update QR:", selected);
 
   if (selected.length === 0) {
     return Swal.fire({ 
