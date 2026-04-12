@@ -316,10 +316,10 @@ function executeHighlight(type, row, bodyId, unitID, isView) {
         }
         
         // Opsional: Hapus class setelah selesai agar bisa diulang nanti
-        setTimeout(() => targetRow.classList.remove('highlight-flash'), 1500);
+        setTimeout(() => targetRow.classList.remove('highlight-flash'), 2500);
       }, 800); // <-- Delay tambahan untuk "menikmati" efek flash
     }
-  }, 600);
+  }, 1000);
 }
 
 /*
