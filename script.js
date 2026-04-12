@@ -3735,10 +3735,6 @@ async function loadAssetData(sheetName_val) {
     //sheetName = sheetName_val; //lempar value selector sheetName
 
   } else {
-    // 2. Jika ada value, cari nama sheet yang sesuai di Reference
-    //const sheetRef = getRef("Type_Asset").slice(1);
-    //const sheetRow = sheetRef.find(row => row[0] === sheetName_val);
-    //const dataTanpaHeader = dataRaw.slice(1);
       // 3. Filter data: ambil baris yang kolom pertamanya (index 0) diawali 'a'
     let sheetRow = dataRaw.filter(baris => {
       const kolomPertama = String(baris[0]); // Pastikan dikonversi ke string
@@ -3746,8 +3742,6 @@ async function loadAssetData(sheetName_val) {
     });
     
     if (sheetRow) {
-      //sheetName = sheetRow[1];
-      //data = getAsset(sheetName);
       data = sheetRow;
     } else {
       data = []; // Jaga-jaga jika ID tidak ditemukan
@@ -3758,8 +3752,6 @@ async function loadAssetData(sheetName_val) {
 
 try {
   // 3. Eksekusi pengecekan data
-  //console.table(data);
-  //console.log("Jumlah data yang diambil:", data.length);
   if (!data || data.length === 0) {
     if (tbody) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>📭 Data Kosong</td></tr>";    
     return;
@@ -4702,7 +4694,7 @@ async function bulkUpdateQR() {
         return {
           asId: item.asId,
           type: item.type, // Kirim tipe ke server
-          row: item.rowIdx,
+          //row: item.rowIdx,
           qrBase64: fullImageBase64 // Ambil data murni
         };
       });
