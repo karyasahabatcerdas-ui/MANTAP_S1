@@ -4720,7 +4720,8 @@ async function bulkUpdateQR() {
         });
         
         // Refresh tabel (mengambil tipe dari item pertama sebagai acuan refresh)
-        if (typeof loadAssetData === 'function') loadAssetData(selected[0].type);
+        //if (typeof loadAssetData === 'function') loadAssetData(selected[0].type);
+        if (typeof loadAssetData === 'function') loadAssetData("");
         
         const master = document.getElementById('checkAllAsset');
         if (master) master.checked = false;
