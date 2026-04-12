@@ -4593,7 +4593,7 @@ async function doBulkDeleteAsset() {
           // Sangat krusial agar RAM lokal langsung bersih mengikuti data terbaru di GitHub
           //await syncDataGhoib(); 
           
-          if (typeof loadAssetData === 'function') loadAssetData(type);
+          if (typeof loadAssetData === 'function') loadAssetData("");
           
           // Reset checkbox master
           const master = document.getElementById('checkAllAsset');
@@ -4615,8 +4615,130 @@ async function doBulkDeleteAsset() {
       }
   }
 }
+/*===============================================
+FUNGSI CLIENT GITHUB: UPDATE QR CODE MASSAL
+==========================================================
+*/
+
+async function bulkUpdateQR() {
+  let selected = [];
+  
+  // 1. AMBIL ASET YANG DICENTANG & BEDAH ONCLICK
+  document.querySelectorAll('.asetCheck:checked').forEach(cb => {
+    const row = cb.closest('tr');
+    // Asumsi tombol detail ada di kolom ke-4 (index 3)
+    const btn = row.cells[3].querySelector('button');
+    
+    if (btn) {
+      const teksOnclick = btn.getAttribute('onclick'); // openassetdetail('AC_Split','a.001')
+      const parts = teksOnclick.split("'");
+      
+      const typeDariOnclick = parts[1]; // 'AC_Split'
+      const idDariOnclick = parts[3];   // 'a.001'
+
+      if (typeDariOnclick && idDariOnclick) {
+        selected.push({
+          rowIdx: cb.value,
+          asId: idDariOnclick,
+          type: typeDariOnclick
+        });
+      }
+    }
+  });
+
+  if (selected.length === 0) {
+    return Swal.fire({ 
+      title: "Pilih aset dulu!", 
+      icon: "info", 
+      width: '80%',
+      background: "#0f172a", color: "#fff"
+    });
+  }
+
+  // 2. KONFIRMASI
+  const konfirmasi = await Swal.fire({
+    title: "Update QR Massal",
+    text: `Proses ${selected.length} aset sekaligus?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, Proses",
+    width: '80%',
+    background: "#0f172a", color: "#fff"
+  });
+
+  if (konfirmasi.isConfirmed) {
+    Swal.fire({
+      title: 'Menyiapkan Data...',
+      html: '<b id="progress-text" style="color:#3498db;">Konversi QR: 0%</b>',
+      allowOutsideClick: false,
+      background: "#0f172a", color: "#fff",
+      didOpen: () => { Swal.showLoading(); }
+    });
+
+    try {
+      const progEl = document.getElementById('progress-text');
+
+      // 3. PROSES QR SECARA PARALEL
+      const promises = selected.map(async (item, index) => {
+        const code = item.type + "-" + item.asId;
+        const fullImageBase64 = await generateCustomQR(code);
+
+        // Update progress UI
+        const progressVal = Math.round(((index + 1) / selected.length) * 100);
+        if (progEl) progEl.innerText = `Konversi QR: ${progressVal}% (${index + 1}/${selected.length})`;
+
+        return {
+          asId: item.asId,
+          type: item.type, // Kirim tipe ke server
+          row: item.rowIdx,
+          qrBase64: fullImageBase64.split(',')[1] // Ambil data murni
+        };
+      });
+
+      const bulkData = await Promise.all(promises);
+
+      // 4. KIRIM KE SERVER
+      if (progEl) progEl.innerText = "Mengirim ke Database (Server)...";
+
+      // Catatan: Pastikan variabel adminAktif tersedia di scope global Anda
+      const res = await panggilGAS("saveBulkQR_Optimized", {
+        bulkData: bulkData,
+        kirimkegithub: false
+      });
+
+      if (res && res.status === "success") {
+        await Swal.fire({ 
+          title: "Berhasil!", 
+          text: res.message, 
+          icon: "success", 
+          width: '80%',
+          background: "#0f172a", color: "#fff"
+        });
+        
+        // Refresh tabel (mengambil tipe dari item pertama sebagai acuan refresh)
+        if (typeof loadAssetData === 'function') loadAssetData(selected[0].type);
+        
+        const master = document.getElementById('checkAllAsset');
+        if (master) master.checked = false;
+
+      } else {
+        throw new Error(res ? res.message : "Gagal simpan di server");
+      }
+
+    } catch (err) {
+      console.error("Gagal Bulk Update QR:", err);
+      Swal.fire({ 
+        title: "Error", 
+        text: err.toString(), 
+        icon: "error",
+        background: "#0f172a", color: "#fff"
+      });
+    }
+  }
+}
 
 
+/*
 async function bulkUpdateQR() {
   const type = document.getElementById('assetTypeSelect')?.value;
   let selected = [];
@@ -4691,7 +4813,8 @@ async function bulkUpdateQR() {
 
       const res = await panggilGAS("saveBulkQR_Optimized", {
         bulkData: bulkData,
-        type: type
+        type: type,
+        kirimkegithub: false
       });
 
       if (res && res.status === "success") {
@@ -4727,6 +4850,7 @@ async function bulkUpdateQR() {
     }
   }
 }
+*/
 
 
 /**=========================================================================
