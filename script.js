@@ -213,7 +213,7 @@ async function navigateAsset() {
   
   const [type, row] = selected.value.split('|');
   const unitID = selected.getAttribute('data-asid');   
-  const urlGAS = APPSCRIPT_URL; //document.getElementById('iframeGAS').src; // URL Web App Anda
+  //const urlGAS = APPSCRIPT_URL; //document.getElementById('iframeGAS').src; // URL Web App Anda
 
   // --- LOGIKA 1: MODAL MAINTENANCE LOG (SEARCH UNIT ID) ---
   const modalMaintLog = document.getElementById('modalMaintenanceLog');
@@ -226,13 +226,7 @@ async function navigateAsset() {
   // --- LOGIKA 2: INPUT JADWAL (GET SINGLE ASSET) ---
   if (document.getElementById('modalMaint').style.display === 'flex') {
     try {
-      // Menggunakan GET dengan query parameter
-      //const resp = await fetch(`${urlGAS}?action=getSingleAssetData&sheetName=${type}&row=${row}`);
-      //const data = await resp.json();
-
-      //fungsi penganti fetch
       // 1. Ambil gudang sesuai tipe (misal: "AC_Split")
-      //const gudangAsset = getAsset(type); 
       const gudangAsset = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
       // 2. Ambil data baris tersebut (Ingat: Index = Baris - 1)
       const data = gudangAsset[row - 1];
@@ -250,16 +244,14 @@ async function navigateAsset() {
     }
     return; 
   }
-
+  console.log("type :",type);
+  console.log("data :",data);
   // --- LOGIKA 3: NAVIGASI HALAMAN (GET SPECIFIC ASSET DATA) ---
   closeGlobalSearch();
   const currentPage = document.querySelector('.page:not(.hidden)').id;
 
   try {
-    //const resp = await fetch(`${urlGAS}?action=getSpecificAsset&sheetName=${type}`);
-    //const data = await resp.json();
-    //fungsi pengganti fetch
-    //data = getAsset(type);
+
     data = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
 
     if (currentPage === 'page_lihat_aset') {
@@ -4721,7 +4713,7 @@ async function bulkUpdateQR() {
         const master = document.getElementById('checkAllAsset');
         if (master) master.checked = false;
 
-        console.log("bulkdata :",bulkData);
+        //console.log("bulkdata :",bulkData);
 
       } else {
         throw new Error(res ? res.message : "Gagal simpan di server");
