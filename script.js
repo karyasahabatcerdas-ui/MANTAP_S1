@@ -251,16 +251,40 @@ async function navigateAsset() {
 
   try {
 
-    data = ambilDataSheet('ASSET', type); //pengganti fungsi gas dilokal
+    data = ambilDataSheet('ASSET', type).splice(1); //pengganti fungsi gas dilokal
     console.log("type :",type);
     console.log("data :",data);
 
     if (currentPage === 'page_lihat_aset') {
-      document.getElementById('viewAssetTypeSelect').value = type;
+      //document.getElementById('viewAssetTypeSelect').value = type;
+      const selectElement = document.getElementById('viewAssetTypeSelect');
+      const targetText = type;
+
+      // Cari index berdasarkan teks
+      const optionToSelect = [...selectElement.options].find(opt => opt.text === targetText);
+
+      if (optionToSelect) {
+        selectElement.value = optionToSelect.value; // Set value-nya berdasarkan opsi yang teksnya cocok
+        
+        // Sangat penting: Picu event 'change' agar tabel otomatis refresh/loading
+        selectElement.dispatchEvent(new Event('change'));
+      }
+
       renderAssetTableIncrementalView(type, data); 
       executeHighlight(row, 'viewAssetBody', true);
     } else {
-      document.getElementById('assetTypeSelect').value = type;
+      //document.getElementById('assetTypeSelect').value = type;
+      const selectElement = document.getElementById('assetTypeSelect');
+      const targetText = type;
+      // Cari index berdasarkan teks
+      const optionToSelect = [...selectElement.options].find(opt => opt.text === targetText);
+
+      if (optionToSelect) {
+        selectElement.value = optionToSelect.value; // Set value-nya berdasarkan opsi yang teksnya cocok
+        
+        // Sangat penting: Picu event 'change' agar tabel otomatis refresh/loading
+        selectElement.dispatchEvent(new Event('change'));
+      }
       renderAssetTableIncremental(type, data);
       executeHighlight(row, 'assetBody', false);
     }
