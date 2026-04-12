@@ -34,7 +34,8 @@ async function tambahAset(sheetName, newRow) {
   // Panggil kurir panggilGAS
   const res = await panggilGAS("append", {
     sheetName: sheetName,
-    data: newRow
+    data: newRow,
+    kirimkegithub: false
   });
 
   if (res && res.status === "success") {
@@ -48,7 +49,8 @@ async function tambahAset(sheetName, newRow) {
 async function hapusAset(sheetName, assetId) {
   const res = await panggilGAS("delete", {
     sheetName: sheetName,
-    id: assetId
+    id: assetId,
+    kirimkegithub: false
   });
 
   if (res && res.status === "success") {
@@ -2737,7 +2739,8 @@ async function delJad(row) {
     // Payload disesuaikan dengan kebutuhan router doPost
     const res = await panggilGAS("delete", { 
       sheetName: 'maintenance', // Pastikan nama sheet sesuai di GS (case-sensitive)
-      id: row + 1 // Jika 'row' adalah index array, +1 untuk baris spreadsheet (asumsi tanpa header di data)
+      id: row + 1, // Jika 'row' adalah index array, +1 untuk baris spreadsheet (asumsi tanpa header di data)
+      kirimkegithub: false
     });
 
     if (res && res.status === "success") {
@@ -4581,7 +4584,8 @@ async function doBulkDeleteAsset() {
       try {
         const res = await panggilGAS("deleteSelectedAssets", {
           type: type,
-          selected: selected
+          selected: selected,
+          kirimkegithub: false
         });
 
         if (res && res.status === "success") {
