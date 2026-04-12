@@ -2483,6 +2483,7 @@ async function saveMaintData() {
               showConfirmButton: false,
               didOpen: () => { Swal.showLoading(); }
             });
+             Swal.showLoading();
 
             if (typeof speakSenor === 'function') speakSenor("Misi Selesai!");
 
