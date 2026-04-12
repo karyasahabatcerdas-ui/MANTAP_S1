@@ -3731,6 +3731,7 @@ async function loadAssetData(sheetName_val) {
      data = dataRaw.filter((row, index) => {
       // Jika ini baris pertama (index 0), JANGAN dihapus (return true)
       if (index === 0) return true;
+      if (row[1] === "") return false;
       
       // Untuk baris selanjutnya, hapus jika kolom pertamanya adalah 'ID_Asset'
       return row[0] !== 'ID_Asset';
