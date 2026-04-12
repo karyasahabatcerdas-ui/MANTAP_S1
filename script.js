@@ -4691,7 +4691,7 @@ async function bulkUpdateQR() {
           asId: item.asId,
           type: item.type, // Kirim tipe ke server
           row: item.rowIdx,
-          qrBase64: fullImageBase64.split(',')[1] // Ambil data murni
+          qrBase64: fullImageBase64 // Ambil data murni
         };
       });
 
