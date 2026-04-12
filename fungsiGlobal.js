@@ -21,9 +21,9 @@ let lastValidatedData = [];
 let assetImages = [];
 
 // 1. Variabel Utama (Hanya simpan bungkus Base64)
-window.APP_STORE_BLOB = ""; 
+//window.APP_STORE_BLOB = ""; 
 // Variable Global
-window._LOCKED_BLOB = "";
+//window._LOCKED_BLOB = "";
 //window.APP_STORE_BLOB = null; // Tempat penyimpanan Blob terenkripsi dari server (Base64 string)
 
 

@@ -5,8 +5,16 @@ async function login() {
   
   
   if (!u || !p) {
-    Swal.fire({ title: "Ops!", text: "User & Pass wajib diisi", icon: "warning" });
-    return;
+    return Swal.fire({
+        title: "Akses Ditolak!",
+        text: "User & Pass wajib diisi",
+        icon: "warning",
+        background: "#0f172a", // Deep Blue
+        color: "#fff",
+        confirmButtonColor: "#7a00ff", // Ungu Neon
+        width: '80%'
+        });
+
   }
 
   if (btn) {
@@ -124,6 +132,8 @@ async function login() {
       // GANTI: throw new Error(res.data.message || "Gagal Login");
 
         // MENJADI:
+        document.getElementById('user').value="";
+        document.getElementById('pass').value="";
         return Swal.fire({
         title: "Akses Ditolak!",
         text: res.data.message || "Username atau Password salah, Señor!",
