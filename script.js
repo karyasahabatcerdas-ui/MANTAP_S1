@@ -310,7 +310,7 @@ function executeHighlight(type, row, bodyId, unitID, isView) {
       //const type = isView ? document.getElementById('viewAssetTypeSelect').value : document.getElementById('assetTypeSelect').value;
 
 
-      console.log("Navigasi ke:", { type, row, isView });
+      //console.log("Navigasi ke:", { type, row, isView });
       if (isView) {
         openAssetDetailView(type, unitID); // Mode Read-Only
       } else {

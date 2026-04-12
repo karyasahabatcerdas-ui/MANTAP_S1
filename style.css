@@ -191,3 +191,20 @@ html {
 .swal2-timer-progress-bar {
   background: #7a00ff !important;
 }
+
+.highlight-flash {
+  animation: flashHighlight 1s ease-out;
+}
+
+/* Definisikan animasinya di sini */
+@keyframes flashHighlight {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: yellow; /* Efek "Highlight" menyala kuning */
+  }
+  100% {
+    background-color: transparent;
+  }
+}
