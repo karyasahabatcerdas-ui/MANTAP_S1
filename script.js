@@ -300,6 +300,35 @@ function executeHighlight(type, row, bodyId, unitID, isView) {
     const targetRow = tbody.rows[parseInt(row) - 2]; 
     
     if (targetRow) {
+      // 1. Scroll ke baris target
+      targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // 2. Tambahkan class animasi (durasi 1s)
+      targetRow.classList.add('highlight-flash');
+      
+      // 3. TUNDA pembukaan modal sampai animasi hampir selesai atau terlihat jelas
+      // Jika animasi flash-mu 1 detik, tunda sekitar 800ms - 1000ms
+      setTimeout(() => {
+        if (isView) {
+          openAssetDetailView(type, unitID);
+        } else {
+          openAssetDetail(type, unitID);
+        }
+        
+        // Opsional: Hapus class setelah selesai agar bisa diulang nanti
+        setTimeout(() => targetRow.classList.remove('highlight-flash'), 1500);
+      }, 800); // <-- Delay tambahan untuk "menikmati" efek flash
+    }
+  }, 600);
+}
+
+/*
+function executeHighlight(type, row, bodyId, unitID, isView) {
+  setTimeout(() => {
+    const tbody = document.getElementById(bodyId);
+    const targetRow = tbody.rows[parseInt(row) - 2]; 
+    
+    if (targetRow) {
       // 1. Geser layar sampai baris target ada di tengah (Smooth)
       targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
       
@@ -319,7 +348,7 @@ function executeHighlight(type, row, bodyId, unitID, isView) {
     }
   }, 600); // Delay 600ms biar tabel sempet ngerender dulu
 }
-
+*/
 
 function closeGlobalSearch() {
   document.getElementById('globalSearchModal').style.display = 'none';
