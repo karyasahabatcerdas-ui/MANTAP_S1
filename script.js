@@ -2669,7 +2669,7 @@ async function goMaint(rowIdx) {
     
   
       // --- TRANSISI UI ---
-      const modalDetail = document.getElementById('modalDetailHist');
+      const modalDetail = document.getElementById('modalMaint');
       if (modalDetail) modalDetail.style.display = 'none';
 
       // Buka modal maintenance log dengan data yang sudah terisi
