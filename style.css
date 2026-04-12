@@ -194,7 +194,7 @@ html {
 
 .highlight-flash td {
   /* Tambahkan transition agar saat animasi selesai, warnanya kembali halus */
-  transition: background-color 0.3s ease;
+  transition: background-color 1.0s ease;
   animation: flashHighlight 1.5s ease-out;
 }
 
