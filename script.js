@@ -4725,6 +4725,7 @@ async function bulkUpdateQR() {
         
         const master = document.getElementById('checkAllAsset');
         if (master) master.checked = false;
+        toggleAllAssets();
 
         //console.log("bulkdata :",bulkData);
 

@@ -25,7 +25,7 @@ async function loadAuditLogs() {
     //const logs = await response.json();
 
     //const logs = getMaint("Logs");
-    const logs=ambilDataSheet("MAINT", 'Logs');
+    const logs=ambilDataSheet("MAINT", 'Logs').slice(1).reverse(); // Ambil data tanpa header
     // 3. Cek jika data kosong
     if (!logs || logs.length === 0) {
       logContainer.innerHTML = "<tr><td colspan='3' class='text-center text-muted'>Belum ada aktivitas tercatat.</td></tr>";
@@ -39,7 +39,7 @@ async function loadAuditLogs() {
 let html = "";
 logs.forEach((log, index) => {
   // PENTING: Lewati baris pertama jika itu adalah judul/header (PIC, Timestamp, Aksi)
-  if (index === 0) return; 
+  //if (index === 0) return; 
 
   html += `
     <tr>
