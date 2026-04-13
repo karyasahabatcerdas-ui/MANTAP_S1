@@ -634,3 +634,36 @@ select option {
   background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
   pointer-events: none;
 }
+
+/*STYLING KHUSUS UNTUK HALAMAN GENERATE REPORT (KANVAS LAPORAN)*/
+/* Styling saat di Web (Screen) */
+#page_generate_report .paper-canvas {
+    background: white;
+    margin: 20px auto;
+    color: #333; /* Supaya teks laporan tetap hitam di tema dark */
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+/* Ukuran Dinamis */
+.a4 { width: 210mm; min-height: 297mm; padding: 10mm; }
+.letter { width: 215.9mm; min-height: 279.4mm; padding: 10mm; }
+.legal { width: 215.9mm; min-height: 355.6mm; padding: 10mm; }
+
+/* LOGIKA KRUSIAL: Hilangkan Sidebar & Header saat Print */
+@media print {
+    #leftbar, header, .no-print, .rightbar-action-bar, h3 { 
+        display: none !important; 
+    }
+    #page_generate_report, .paper-canvas {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        width: 100% !important;
+    }
+    /* Pastikan Rightbar tidak memiliki padding saat print */
+    .crightbar, .inner-content { padding: 0 !important; overflow: visible !important; }
+}
+
+
+

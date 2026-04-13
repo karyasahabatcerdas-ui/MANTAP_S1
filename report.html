@@ -1,0 +1,83 @@
+<div class="no-print" style="text-align:center; padding: 20px;">
+  <button onclick="window.print()">Print / Save PDF</button>
+  <select onchange="document.getElementById('mainPage').className = 'page ' + this.value">
+    <option value="a4">Ukuran A4</option>
+    <option value="letter">Ukuran Letter</option>
+    <option value="legal">Ukuran Legal</option>
+  </select>
+</div>
+
+<!-- Area Utama Laporan -->
+<div id="mainPage" class="page a4">
+  
+  <!-- Header -->
+  <table class="header-table">
+    <tr>
+      <td class="logo-box">REPORT</td>
+      <td class="info-box">
+        No : <span id="reportNo">...</span><br>
+        Tanggal : <span id="dateCreated">...</span><br>
+        Kontrak : <span id="contract">...</span><br>
+        Client : <span id="clientName">...</span>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Detail Unit & Kegiatan -->
+  <div style="display: flex; justify-content: space-between; border-top: 1px solid #000; padding-top: 5px;">
+    <div style="width: 48%;">
+       <strong>Unit:</strong>
+       <div style="display:flex">
+         <div class="qr-small" style="width:70px; height:70px;"></div>
+         <ul style="list-style:none; padding-left:10px; margin:0; font-size:8pt;">
+           <li>1 ID : <span id="sid">...</span></li>
+           <li>2 Type : <span id="stype">...</span></li>
+           <li>3 Nama : <span id="snama">...</span></li>
+         </ul>
+       </div>
+    </div>
+    <div style="width: 48%;">
+       <strong>Kegiatan:</strong>
+       <div style="display:flex">
+         <div class="qr-small" style="width:70px; height:70px;"></div>
+         <ul style="list-style:none; padding-left:10px; margin:0; font-size:8pt;">
+           <li>1 ID MAINT : <span id="maintId">...</span></li>
+           <li>2 ID KEGIATAN : <span id="logId">...</span></li>
+         </ul>
+       </div>
+    </div>
+  </div>
+
+  <div class="dark-bar">FOTO KEGIATAN</div>
+
+  <!-- Photo Grid -->
+  <div class="photo-container">
+    <div class="photo-label">Photo Before</div>
+    <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
+    
+    <div class="photo-label">Photo On Work</div>
+    <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
+    
+    <div class="photo-label">Photo After</div>
+    <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
+    
+    <div class="photo-label">Check List</div>
+    <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
+  </div>
+
+  <!-- Note Section -->
+  <div style="border-top: 1px dashed #ccc; padding: 10px 0;">
+    <strong>NOTE:</strong>
+    <div id="note1" style="min-height: 40px;">...</div>
+  </div>
+
+  <!-- Footer Approval -->
+  <div class="footer-grid">
+    <div class="sig-box">Created:<div class="qr-small"></div><b id="name1">NAME1</b></div>
+    <div class="sig-box">Checked:<div class="qr-small"></div><b id="name2">NAME2</b></div>
+    <div class="sig-box">Approved:<div class="qr-small"></div><b id="name3">NAME3</b></div>
+    <div class="sig-box">Reported To:<div class="qr-small"></div><b id="name4">NAME4</b></div>
+  </div>
+
+  <div style="position:absolute; bottom:10mm; font-size:8pt;">Form : F-001</div>
+</div>

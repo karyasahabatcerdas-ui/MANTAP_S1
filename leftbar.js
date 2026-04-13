@@ -88,7 +88,12 @@ function showPage(id) {
       'log_book': () => typeof loadAuditLogs === 'function' && loadAuditLogs(),
       'aset': () => typeof loadAssetData === 'function' && loadAssetData(),
       'lihat_aset': () => typeof loadAssetDataView === 'function' && loadAssetDataView(),
-      'maintenance': () => typeof showMaintenancePage === 'function' && showMaintenancePage()
+      'maintenance': () => typeof showMaintenancePage === 'function' && showMaintenancePage(),
+      'generate_report': () => {
+          console.log("📄 Menyiapkan Kanvas Laporan...");
+          // Fungsi untuk mengisi data dari sheet ke elemen HTML laporan
+          // loadReportData(); 
+      }
       
     };
 
@@ -98,6 +103,12 @@ function showPage(id) {
   } catch (err) {
     console.error(`⚠️ Terjadi kesalahan saat memuat data [${id}]:`, err);
   }
+}
+
+// Fungsi pembantu ganti ukuran
+function updatePaperSize(val) {
+    const canvas = document.getElementById('printArea');
+    canvas.className = 'paper-canvas ' + val;
 }
 
 

@@ -202,7 +202,7 @@ html {
   0% {
     background-color: transparent;
   }
-  30% {
+  50% {
     /* Warna Emas (Gold) dengan transparansi 40% */
     background-color: rgba(255, 215, 0, 0.4); 
     /* Opsional: Tambahkan sedikit bayangan dalam agar lebih berdimensi */

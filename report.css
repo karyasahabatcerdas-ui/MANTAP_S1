@@ -1,0 +1,55 @@
+  /* Reset & Base */
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  body { background: #ccc; font-family: Arial, sans-serif; font-size: 10pt; margin: 0; padding: 0; }
+
+  /* Pengaturan Ukuran Kertas */
+  .page {
+    background: white;
+    display: block;
+    margin: 10mm auto;
+    padding: 10mm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Kelas Ukuran Spesifik */
+  .a4 { width: 210mm; height: 297mm; }
+  .letter { width: 215.9mm; height: 279.4mm; }
+  .legal { width: 215.9mm; height: 355.6mm; }
+
+  @media print {
+    body { background: none; }
+    .page { margin: 0; box-shadow: none; }
+    .no-print { display: none; }
+  }
+
+  /* Layout Styling berdasarkan Gambar */
+  .header-table, .detail-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .logo-box { width: 40%; font-size: 24pt; font-weight: bold; }
+  .info-box { width: 60%; font-size: 9pt; }
+  
+  .dark-bar { background: #444; color: white; text-align: center; padding: 5px; font-weight: bold; margin: 10px 0; }
+  
+  /* Grid Foto 4x4 */
+  .photo-container { 
+    display: grid; 
+    grid-template-columns: 120px repeat(4, 1fr); 
+    grid-template-rows: repeat(4, 120px); 
+    gap: 5px; 
+    margin-bottom: 10px;
+  }
+  .photo-label { display: flex; align-items: center; font-weight: bold; font-size: 8pt; text-transform: uppercase; }
+  .photo-box { background: #4a7eba; border: 1px solid #333; }
+
+  /* Footer & Signatures */
+  .footer-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+    border-top: 2px solid #444; 
+    padding-top: 10px; 
+    margin-top: 20px;
+  }
+  .sig-box { text-align: center; font-size: 8pt; }
+  .qr-small { width: 50px; height: 50px; background: #eee; margin: 5px auto; }
