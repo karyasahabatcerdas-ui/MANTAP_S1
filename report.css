@@ -1,5 +1,5 @@
   /* Reset & Base */
-  * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
   body { background: #ccc; font-family: Arial, sans-serif; font-size: 10pt; margin: 0; padding: 0; }
 
   /* Pengaturan Ukuran Kertas */
