@@ -665,5 +665,46 @@ select option {
     .crightbar, .inner-content { padding: 0 !important; overflow: visible !important; }
 }
 
+/* Layout Template Khusus */
+.paper-canvas { background: white; color: black; position: relative; margin: 0 auto; overflow: hidden; }
+
+.rep-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 5px; }
+.rep-logo { font-size: 28pt; font-weight: 900; letter-spacing: -2px; }
+.rep-meta { font-size: 9pt; width: 200px; }
+.rep-qr-top { text-align: center; }
+
+.rep-row { display: flex; gap: 10px; margin-top: 10px; }
+.rep-info-box { flex: 1; border: 1px solid #000; }
+.rep-label { background: #eee; padding: 2px 5px; font-weight: bold; font-size: 8pt; border-bottom: 1px solid #000; }
+.rep-info-content { display: flex; padding: 5px; gap: 10px; }
+
+.rep-text-list { font-size: 8pt; line-height: 1.4; }
+.rep-dark-bar { background: #333; color: white; text-align: center; font-weight: bold; padding: 4px; margin: 10px 0; font-size: 10pt; }
+
+/* Grid Foto 4x4 */
+.rep-photo-grid { 
+    display: grid; 
+    grid-template-columns: 80px repeat(4, 1fr); 
+    gap: 4px; 
+    background: #4a7eba; /* Warna biru background seperti gambar */
+    padding: 4px;
+}
+.rep-side-label { 
+    color: white; font-weight: bold; font-size: 7pt; 
+    display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.rep-img { background: #fff; aspect-ratio: 1/1; border: 1px solid #000; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+.rep-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.rep-note-box { border: 1px solid #000; min-height: 50px; padding: 5px; font-size: 9pt; margin-top: 5px;}
+.rep-footer { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 15px; border-top: 1px solid #000; padding-top: 10px;}
+.rep-sig { text-align: center; font-size: 8pt; }
+
+/* Box Utility */
+.qr-box-small { width: 45px; height: 45px; border: 1px solid #ccc; margin: 2px auto; }
+.qr-box-med { width: 65px; height: 65px; border: 1px solid #ccc; }
+.rep-form-id { position: absolute; bottom: 5mm; left: 10mm; font-size: 7pt; }
+
+/* CSS Media Print seperti sebelumnya tetap digunakan */
 
 

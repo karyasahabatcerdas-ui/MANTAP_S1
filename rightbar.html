@@ -352,112 +352,111 @@
 
         <!-- [UI BLOCK: GENERATE REPORT VIEW] -->
         <div id="page_generate_report" class="page hidden">
-            <h3><i class="fa-solid fa-file-pdf"></i> Generate Report View</h3>
+            <h3 class="no-print"><i class="fa-solid fa-file-pdf"></i> Generate Report View</h3>
             
             <div class="rightbar-action-bar no-print">
-                <!-- Selector Ukuran Kertas -->
                 <select id="paperSizeSelector" class="btn-base" onchange="updatePaperSize(this.value)">
                     <option value="a4">UKURAN A4</option>
                     <option value="letter">UKURAN LETTER</option>
                     <option value="legal">UKURAN LEGAL</option>
                 </select>
-
                 <button onclick="window.print()" class="btn-base btn-gold">
                     <i class="fa-solid fa-print"></i> CETAK / PDF
                 </button>
             </div>
 
-            <!-- Wrapper Khusus untuk Kertas Laporan -->
+            <!-- Kanvas Utama Template -->
             <div id="printArea" class="paper-canvas a4">
-                <!-- Isi Laporan (dari kode sebelumnya) Masuk Sini -->
-                <div class="no-print" style="text-align:center; padding: 20px;">
-                    <button onclick="window.print()">Print / Save PDF</button>
-                    <select onchange="document.getElementById('mainPage').className = 'page ' + this.value">
-                        <option value="a4">Ukuran A4</option>
-                        <option value="letter">Ukuran Letter</option>
-                        <option value="legal">Ukuran Legal</option>
-                    </select>
-                    </div>
-
-                    <!-- Area Utama Laporan -->
-                    <div id="mainPage" class="page a4">
-                        
-                        <!-- Header -->
-                        <table class="header-table">
-                            <tr>
-                            <td class="logo-box">REPORT</td>
-                            <td class="info-box">
-                                No : <span id="reportNo">...</span><br>
-                                Tanggal : <span id="dateCreated">...</span><br>
-                                Kontrak : <span id="contract">...</span><br>
-                                Client : <span id="clientName">...</span>
-                            </td>
-                            </tr>
+                
+                <!-- HEADER SECTION -->
+                <div class="rep-header">
+                    <div class="rep-logo">REPORT</div>
+                    <div class="rep-meta">
+                        <table style="width:100%">
+                            <tr><td>No</td><td>: <span id="view_no"></span></td></tr>
+                            <tr><td>Tanggal</td><td>: <span id="view_tgl"></span></td></tr>
+                            <tr><td>Kontrak</td><td>: <span id="view_kontrak"></span></td></tr>
+                            <tr><td>Client</td><td>: <span id="view_client"></span></td></tr>
                         </table>
-
-                        <!-- Detail Unit & Kegiatan -->
-                        <div style="display: flex; justify-content: space-between; border-top: 1px solid #000; padding-top: 5px;">
-                            <div style="width: 48%;">
-                            <strong>Unit:</strong>
-                            <div style="display:flex">
-                                <div class="qr-small" style="width:70px; height:70px;"></div>
-                                <ul style="list-style:none; padding-left:10px; margin:0; font-size:8pt;">
-                                <li>1 ID : <span id="sid">...</span></li>
-                                <li>2 Type : <span id="stype">...</span></li>
-                                <li>3 Nama : <span id="snama">...</span></li>
-                                </ul>
-                            </div>
-                            </div>
-                            <div style="width: 48%;">
-                            <strong>Kegiatan:</strong>
-                            <div style="display:flex">
-                                <div class="qr-small" style="width:70px; height:70px;"></div>
-                                <ul style="list-style:none; padding-left:10px; margin:0; font-size:8pt;">
-                                <li>1 ID MAINT : <span id="maintId">...</span></li>
-                                <li>2 ID KEGIATAN : <span id="logId">...</span></li>
-                                </ul>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div class="dark-bar">FOTO KEGIATAN</div>
-
-                        <!-- Photo Grid -->
-                        <div class="photo-container">
-                            <div class="photo-label">Photo Before</div>
-                            <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
-                            
-                            <div class="photo-label">Photo On Work</div>
-                            <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
-                            
-                            <div class="photo-label">Photo After</div>
-                            <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
-                            
-                            <div class="photo-label">Check List</div>
-                            <div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div><div class="photo-box"></div>
-                        </div>
-
-                        <!-- Note Section -->
-                        <div style="border-top: 1px dashed #ccc; padding: 10px 0;">
-                            <strong>NOTE:</strong>
-                            <div id="note1" style="min-height: 40px;">...</div>
-                        </div>
-
-                        <!-- Footer Approval -->
-                        <div class="footer-grid">
-                            <div class="sig-box">Created:<div class="qr-small"></div><b id="name1">NAME1</b></div>
-                            <div class="sig-box">Checked:<div class="qr-small"></div><b id="name2">NAME2</b></div>
-                            <div class="sig-box">Approved:<div class="qr-small"></div><b id="name3">NAME3</b></div>
-                            <div class="sig-box">Reported To:<div class="qr-small"></div><b id="name4">NAME4</b></div>
-                        </div>
-
-                        <div style="position:absolute; bottom:10mm; font-size:8pt;">Form : F-001</div>
                     </div>
+                    <div class="rep-qr-top">
+                        <div id="qr_format" class="qr-box-small"></div>
+                        <span style="font-size: 7pt;">timed_report</span>
+                    </div>
+                </div>
 
-                <!-- akhir kode Isi Laporan -->
-                <div id="reportContent"> Memuat data... </div>
+                <!-- INFO UNIT & KEGIATAN -->
+                <div class="rep-row">
+                    <!-- Box Kiri: Unit -->
+                    <div class="rep-info-box">
+                        <div class="rep-label">DATA UNIT</div>
+                        <div class="rep-info-content">
+                            <div id="qr_unit" class="qr-box-med"></div>
+                            <div class="rep-text-list">
+                                <div>1 ID: <b id="view_unit_id"></b></div>
+                                <div>2 Type: <b id="view_unit_type"></b></div>
+                                <div>3 Nama: <b id="view_unit_nama"></b></div>
+                                <div>4 Lokasi: <b id="view_unit_lokasi"></b></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Box Kanan: Kegiatan -->
+                    <div class="rep-info-box">
+                        <div class="rep-label">KEGIATAN</div>
+                        <div class="rep-info-content">
+                            <div id="qr_maint" class="qr-box-med"></div>
+                            <div class="rep-text-list">
+                                <div>1 MAINT: <b id="view_maint_type"></b></div>
+                                <div>2 ID: <b id="view_maint_id"></b></div>
+                                <div>3 Tgl Rencana: <b id="view_maint_tgl"></b></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rep-dark-bar">FOTO KEGIATAN</div>
+
+                <!-- PHOTO GRID (Sesuai Gambar 4 Baris) -->
+                <div class="rep-photo-grid">
+                    <!-- Row Before -->
+                    <div class="rep-side-label">PHOTO BEFORE</div>
+                    <div class="rep-img" id="img_b1"></div><div class="rep-img" id="img_b2"></div>
+                    <div class="rep-img" id="img_b3"></div><div class="rep-img" id="img_b4"></div>
+                    
+                    <!-- Row On Work -->
+                    <div class="rep-side-label">PHOTO ON WORK</div>
+                    <div class="rep-img" id="img_w1"></div><div class="rep-img" id="img_w2"></div>
+                    <div class="rep-img" id="img_w3"></div><div class="rep-img" id="img_w4"></div>
+                    
+                    <!-- Row After -->
+                    <div class="rep-side-label">PHOTO AFTER</div>
+                    <div class="rep-img" id="img_a1"></div><div class="rep-img" id="img_a2"></div>
+                    <div class="rep-img" id="img_a3"></div><div class="rep-img" id="img_a4"></div>
+                    
+                    <!-- Row Checklist -->
+                    <div class="rep-side-label">CHECK LIST</div>
+                    <div class="rep-img" id="img_c1"></div><div class="rep-img" id="img_c2"></div>
+                    <div class="rep-img" id="img_c3"></div><div class="rep-img" id="img_c4"></div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="rep-notes">
+                    <b>NOTES:</b>
+                    <div id="view_note" class="rep-note-box"></div>
+                </div>
+
+                <!-- FOOTER / APPROVAL -->
+                <div class="rep-footer">
+                    <div class="rep-sig">Created:<div id="qr_sig1" class="qr-box-small"></div><b id="view_user1"></b></div>
+                    <div class="rep-sig">Checked:<div id="qr_sig2" class="qr-box-small"></div><b id="view_user2"></b></div>
+                    <div class="rep-sig">Approved:<div id="qr_sig3" class="qr-box-small"></div><b id="view_user3"></b></div>
+                    <div class="rep-sig">Reported To:<div id="qr_sig4" class="qr-box-small"></div><b id="view_user4"></b></div>
+                </div>
+
+                <div class="rep-form-id">Form : F-001</div>
             </div>
         </div>
+
 
 
         <!-- [UI BLOCK: HALAMAN PROFILE] -->
