@@ -1661,6 +1661,22 @@ function startMaintenanceMode() {
     
 }
 
+/**=================================================================
+ * [FUNGSI CLIENT GITHUB: EKSEKUSI MAINTENANCE UPDATE]
+ * Mengambil data baris Pending dan memuatnya ke form via Fetch
+ * ===================================================================
+ */
+async function createReporte() {
+
+  console.log("membuat reprot");
+
+}
+
+
+
+
+
+
 
 /**=================================================================
  * [FUNGSI CLIENT GITHUB: EKSEKUSI MAINTENANCE UPDATE]
