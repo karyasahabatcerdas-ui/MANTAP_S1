@@ -80,11 +80,13 @@
         </div>
     </div>
   </div>
-      <button id="btnupdateMaintenance" onclick="startMaintenanceModeUpdate()" class="btn-base btn-gold">
-            <span class="status-badge-indicator" > ${statusLabel} </span>
-      </button>
-      <button id="btnReport" onclick="createReport()" class="btn-base btn-blue">
-            <span class="status-badge-indicator" > Create Report </span> 
-      </button>
+    <div style="display: flex; justify-content: center; gap: 10px; width: 100%;">
+        <button id="btnupdateMaintenance" onclick="startMaintenanceModeUpdate()" class="btn-base btn-gold" style="flex: 1; max-width: 200px;">
+            <span class="status-badge-indicator">${statusLabel}</span>
+        </button>
+        <button id="btnReport" onclick="createReport()" class="btn-base btn-blue" style="flex: 1; max-width: 200px;">
+            <span class="status-badge-indicator">Create Report</span> 
+        </button>
+    </div>
 </div>
 </div>
