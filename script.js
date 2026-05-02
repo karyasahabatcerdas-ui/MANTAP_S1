@@ -1666,9 +1666,9 @@ function startMaintenanceMode() {
  * Mengambil data baris Pending dan memuatnya ke form via Fetch
  * ===================================================================
  */
-async function createReporte() {
+async function createReport() {
 
-  console.log("membuat reprot");
+  console.log("membuat report");
 
 }
 
